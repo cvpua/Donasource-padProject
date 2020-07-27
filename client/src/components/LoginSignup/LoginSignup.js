@@ -27,7 +27,7 @@ class LoginSignup extends Component {
                 { this.state.login ? 
                     <div className="loginSignup">
                         <div className="logside">
-                            <Inputlog toggle={this.signupToggle}/>
+                            <Inputlog toggle={this.signupToggle} event={this.props.event}/>
                         </div>
                         <div className="logsideb">
                             Welcome Back! Haha Wala pa ako maisip ilagay dito 

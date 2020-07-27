@@ -8,8 +8,7 @@ class Inputlog extends Component {
     }
     handleFormSubmit = (e) => {
         e.preventDefault();
-        console.log(e)
-        console.log(this.state)
+        this.props.event();
     }
     handleFormChange = (e) => {
         this.setState ({
