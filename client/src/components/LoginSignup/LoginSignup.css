@@ -1,0 +1,43 @@
+.loginSignup {
+    height: 100vh;
+}
+
+.logside {
+    height: 100%;
+    width: 40%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #4292db;
+}
+
+.logsideb {
+    height: 100%;
+    width: 60%;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #4292db;
+}
+
+.signside {
+    height: 100%;
+    width: 60%;
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #4292db;
+}
+
+.signsideb {
+    height: 100%;
+    width: 40%;
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #4292db;
+}

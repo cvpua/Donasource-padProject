@@ -1,0 +1,59 @@
+.Log{
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 80%;
+    height: 40px;
+}
+
+.userLog {
+    border-radius: 25px;
+    text-align: center;
+    height: 70vh;
+    width: 50vh;
+    padding-top:30px;
+    background: #fbfbfb;
+}
+
+.aBut {
+    border-radius: 25px;
+    margin: auto;   
+    margin-top: 30px;
+    width: 80%;
+    height: 40px;
+    cursor: pointer;
+    background-color: #4292db;
+    color: #fbfbfb;
+    border: 0;
+}
+.bBut {
+    border-radius: 25px;
+    margin: auto;
+    width: 80%;
+    height: 40px;
+    cursor: pointer;
+}
+
+.sign {
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    width: 80%;
+    height: 40px;
+}
+
+.signLog {
+    border-radius: 25px;
+    text-align: center;
+    height: 60vh;
+    padding-top: 30px;
+    background: #fbfbfb;
+}
+
+.titleLogSign{
+    text-align: left;
+    margin-left: 10%;
+    margin-right: 10%;
+}
