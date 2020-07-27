@@ -1,12 +1,19 @@
-import React from 'react';
+import React,{Component} from 'react';
+import PostButton from './components/post-component/PostButton';
 import './App.css';
+class App extends Component{
 
-function App() {
-  return (
-    <div className="App">
-      Hello World
-    </div>
-  );
+  render(){
+
+    return(
+      <div>
+        {/* <PostButton/> */}
+        Hello World
+      </div>
+    )
+  }
 }
+
+
 
 export default App;
