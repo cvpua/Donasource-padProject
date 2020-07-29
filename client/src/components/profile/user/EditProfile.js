@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import "./EditProfile.css"
 import ChangePassword from "./ChangePassword";
 
 class EditProfile extends Component {
@@ -21,28 +21,30 @@ class EditProfile extends Component {
   render() {
     return (
       <div className="editingHolder">
-        <form className="editForm">
-          <input type="text" placeholder="user name" />
-          <br />
-          <input type="text" placeholder="first name" />
-          <input type="text" placeholder="last name" />
-          <br />
-          <input type="text" placeholder="location" />
-          <br />
-          <input type="text" placeholder="email" />
-          <br />
-          <input type="text" placeholder="contact number" />
-          <br />
-          {/* TODO: bigger text box */}
-          <input type="text" placeholder="bio" />
-          <br />
-          <button type="submit">Confirm</button>
-        </form>
-        <div className="changePassHolder">
-          <button className="edit" onClick={this.changePassword}>
-            Change Password
-          </button>
-          {this.state.changePass ? <ChangePassword /> : null}
+        <div className="popUp">
+          <form className="editForm">
+            <input className= "editProf" type="text" placeholder="User Name" />
+            <br />
+            <input className= "editProf" type="text" placeholder="First Name" />
+            <input className= "editProf" type="text" placeholder="Last Name" />
+            <br />
+            <input className= "editProf" type="text" placeholder="Location" />
+            <br />
+            <input className= "editProf" type="text" placeholder="Email" />
+            <br />
+            <input className= "editProf" type="text" placeholder="Contact Number" />
+            <br />
+            {/* TODO: bigger text box */}
+            <input className= "editProf" type="text" placeholder="Bio" />
+            <br />
+            <button className="butSub" type="submit">Confirm</button>
+          </form>
+          <div className="changePassHolder">
+            <button className="butSub" onClick={this.changePassword}>
+              Change Password
+            </button>
+            {this.state.changePass ? <ChangePassword /> : null}
+          </div>
         </div>
       </div>
     );

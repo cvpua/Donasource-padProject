@@ -8,7 +8,7 @@ class PostButton extends Component {
     showPostForm = () => {
         const formModal = document.getElementById("postModal");
         formModal.style.display = 'block';
-       
+        
         const postButtonContainer = document.getElementById('post-button-container');
         postButtonContainer.style.display = 'none';
     }

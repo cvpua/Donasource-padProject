@@ -1,14 +1,13 @@
 import React,{Component} from 'react';
 import PostButton from './components/post-component/PostButton';
 import LoginSignup from "./components/LoginSignup/LoginSignup.js";
-import UserProfile from "./components/profile/user/UserProfile";
 import Layout from './Layout/Layout.js'
 import Main from './Layout/Main.js'
 import './App.css';
 
 class App extends Component{
   state = {
-    user: null,
+    user: true,
   }
   login = () => {
     this.setState ({

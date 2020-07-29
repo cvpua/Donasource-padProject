@@ -1,0 +1,112 @@
+.mainProfile {
+    height: 500px;
+    width: 1000px;
+    margin-top: 20px;
+    background: white;
+    border: 1px solid grey;
+    font-size: 16px;
+}
+
+.headerHolder {
+    background: #00A896;
+    height: 250px;
+    width: 100%;
+}
+
+.leftHolder {
+    float: left;
+    height: 250px;
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 20px;
+}
+
+.photoHolder {
+    margin: auto;
+    height: 70%;
+    width: 70%;
+    background: white;
+    border-radius: 50%;
+    overflow: auto;
+    overflow: hidden;
+}
+
+.photo {
+    max-height: 100%;
+    cursor: pointer;
+}
+
+.rightHolder {
+    float: left;
+    height: 250px;
+    width: 670px;
+}
+
+.names {
+    float: left;
+    height: 100px;
+    width: 300px;
+    text-align: left;
+    margin-left: 90px;
+    margin-bottom: 30px;
+}
+
+.displayName {
+    font-size: 28px;   
+    margin-top:40px;
+}
+
+.editHolder {
+    float: right;
+    margin: 40px;
+}
+
+.edit {
+    border-radius: 20px;
+    text-align: center;
+    width: 200px;
+    height: 40px;
+    color: white;
+    background: #00A896;
+    border: 1px solid;
+    cursor: pointer;
+}
+
+
+.credibility {
+    width: 670px;
+    font-size: 24px;
+}
+
+.donations {
+    display: inline-block;
+    height: 60px;
+    width: 300px;
+}
+
+.donationsB {
+    display: inline-block;
+    height: 60px;
+    width: 300px;
+    border-left: 2px solid grey;
+}
+
+.location {
+    
+}
+
+.email {
+    
+}
+
+.contact {
+    
+}
+
+.bio {
+    
+}
+
+

@@ -1,9 +1,10 @@
 import React from 'react'
+import UserProfile from "../components/profile/user/UserProfile";
 
 const Profile = () => {
 	return (
 		<div>
-			Profile Section
+			<UserProfile />
 		</div>
 	)
 }
