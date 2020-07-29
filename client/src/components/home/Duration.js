@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import Typography from './Typography.js'
 
 const StyledDuration = styled.div`
 	width: 115px;
@@ -11,12 +12,15 @@ const StyledDuration = styled.div`
 	border-radius: 44px;
 	color: #05668D;
 	margin-left: 10px;
+	font-size: 14px;
 `
 
 const Duration = (props) => {
 	return (
 		<StyledDuration>
-			{props.duration} days left		
+			<Typography variant="button-text" weight={700}>
+				{props.duration} days left
+			</Typography>		
 		</StyledDuration>
 	)
 }

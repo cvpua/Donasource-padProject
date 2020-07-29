@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 
 const StyledAvatar = styled.img`
-	width: 70px;
+	width: 50px;
 	border-radius: 50%;
 `
 

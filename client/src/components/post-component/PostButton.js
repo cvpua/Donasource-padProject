@@ -15,7 +15,6 @@ class PostButton extends Component {
 
 
     render(){
-
         return(
             <div>
                 <div id="post-button-container" onClick={this.showPostForm}>

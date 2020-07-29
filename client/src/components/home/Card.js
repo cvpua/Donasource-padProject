@@ -1,24 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
-import {Avatar, Badge, Button, Duration, Items, Name, Title } from '../home'
+import {
+	Avatar, Badge, Button, 
+	Duration, Items, theme, 
+	Typography 
+} from '../home'
 
 
 const StyledCard = styled.div`
-	width: 950px;
-	background-color: #FFF;
+	width: ${theme.spacing(70)};
+	min-height: ${theme.spacing(1)};
+	background-color: ${theme.color.white};
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
+	border-radius: ${theme.spacing(1)};
 `
 
 const StyledCardHeader = styled.div`
 	display: flex;
-	height: 100px;
-	background-image: linear-gradient(#00A896, #028090);
+	height: 70px;
 	align-items: center;
 	justify-content: space-between;
 	padding: 0px 20px;
+	border-bottom: 1px solid #DDD;
 `
 
 const StyledCardInfo = styled.div`
@@ -44,14 +48,14 @@ const StyledCardBadge = styled.div`
 `
 
 const StyledCardMain = styled.div`
-	padding: 20px 30px;
+	padding: 20px 20px 10px 20px;
 `
 
 const StyledCardContent = styled.div`
 	display: flex;
 	padding-bottom: 20px;
 	justify-content: space-between;
-	min-height: 60px;
+	min-height: 30px;
 `
 
 const StyledCardAction = styled.div`
@@ -60,7 +64,6 @@ const StyledCardAction = styled.div`
 `
 
 const StyledDetails = styled.div`
-	width: 75%;
 `
 
 const Card = ({avatar,title,author,type,status,content,items}) => {
@@ -71,24 +74,30 @@ const Card = ({avatar,title,author,type,status,content,items}) => {
 					<Avatar src={avatar}/>
 					<StyledCardInfo>
 						<StyledTitle>
-							<Title title={title} />
+							<Typography variant="h3" weight={700} color={theme.color.jetBlack}>
+								{title}
+							</Typography>
 							<Duration duration={2}/>
 						</StyledTitle>
-						<Name name={author} />
+							<Typography variant="h5" color={theme.color.dimGray}>
+								{author}
+							</Typography>
 					</StyledCardInfo>
 				</StyledAvatar>
 				<StyledCardBadge>
-					<Badge type name={type}/>
-					<Badge name={status}/>
+					<Badge type="type" name={type}/>
+					<Badge type="status" name={status}/>
 				</StyledCardBadge>
 			</StyledCardHeader>
 			<StyledCardMain>
 				<StyledCardContent>
 					<StyledDetails>
-						{content}
+						<Typography color={theme.color.jetBlack}>
+							{content}
+						</Typography>
 					</StyledDetails>
-					<Items />
 				</StyledCardContent>
+				<Items />
 				<StyledCardAction>
 					<Button name="donate"/> 
 					<Button name="see thread"/>

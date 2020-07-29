@@ -1,22 +1,25 @@
 import React from 'react'
 import styled from 'styled-components'
+import Typography from '../components/home/Typography.js'
+import theme from '../components/home/theme.js'
 
 const StyledHeader = styled.div`
-	background-color: #00A896;
-	height: 70px;
+	background-color: ${theme.color.persianGreen};
+	height: ${theme.spacing(8)};
 	display: flex;
 	justify-content: center;
 	align-items: center;
 `
 
-const StyledTitle = styled.h1`
-	color: #FFF;
-`
-
 const Header = (props) => {
 	return (
 		<StyledHeader>
-			<StyledTitle>{props.title}</StyledTitle>
+			<Typography 
+				variant="h1" 
+				color={theme.color.beige}
+			>
+				{props.title}
+			</Typography>
 		</StyledHeader>
 	)
 }
