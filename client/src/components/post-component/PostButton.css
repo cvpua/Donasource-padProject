@@ -5,8 +5,8 @@
     height: 50px;
     width: 50px;
     text-align: center;
-    left: 50%;
-    top: 40%
+    right: 5%;
+    bottom: 10%;
     
 }
 
@@ -17,7 +17,7 @@
 }
 
 #post-button-container:hover{
-    background-color: gray; 
+    background-color: #00A896; 
     cursor: pointer;
 }
 

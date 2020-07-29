@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import {Feed,Profile,Donation,Request,Avail} from '../Sections'
 
+import PostButton from '../components/post-component/PostButton';
+
 
 const StyledMain = styled.div`
 	display: flex;
@@ -44,7 +46,8 @@ const Main = () => {
 					<Route path="/avail" component={Avail} />
 				</Switch>
 				</StyledSection>
-				<StyledFab />
+				{/* <StyledFab /> */}
+				<PostButton/>
 			</StyledMain>
 		</Router>
 	)

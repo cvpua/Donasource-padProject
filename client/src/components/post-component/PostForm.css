@@ -5,7 +5,7 @@
     height: 100%;
     width: 100%;
     z-index: 2;
-
+    background-color: rgba(0,0,0,0.2);
     display: none;
     position: fixed;
     z-index: 2;
@@ -17,38 +17,52 @@
 #postContainer{
     border: solid;
     display: inline-block;
+    background-color: white;
     margin: 20px;
     width: 500px;
     border-radius: 10px;
+    position: relative;
+    top: 15%;
       
 }
 
 /* Upper part of the container */
 #form-buttons{
+    
     padding: 10px;
     border-bottom: solid;
     position: relative;
+    height: 35px;
+    
     
 }
+
 #postBtn{
     position: absolute;
-    top:40%;
+    top:35%;
     right: 5%;  
 }
 
 #closeBtn{
     font-size: 30px;
+    position: absolute;
+    top: 15%;
+    left: 5%;
 }
 
 #closeBtn:hover{
-    color: gray;
+    color: #00A896;
     cursor: pointer;
 }
 /* Lower part of the container */
 #postForm{
     display: table;
     padding:  0px 30px;
-    border-spacing: 0px 15px;
+    border-spacing: 10px 20px;
+    justify-content: center ;
+    
+    
+    
 }
 
 #request,#donate{
@@ -64,13 +78,21 @@
     box-shadow:  0 5px 8px 0 rgba(0,0,0,0.2), 0 7px 20px 0 rgba(0,0,0,0.17) ;
 }
 
+.formType{
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    
+}
 
 #request-span:hover, #donate-span:hover{
-    background-color: lightgray;
+    background-color: #00A896;
 }
 
 .formInput{
     display: table-row;
+    text-align: left;
+    
 }
 
 .formInput label, input{

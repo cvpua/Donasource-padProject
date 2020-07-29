@@ -73,7 +73,7 @@ class PostForm extends Component{
 
             this.setState({isRequest : true})
             this.setState({isDonate : false})
-            requestSpan.style.backgroundColor = 'darkgray';
+            requestSpan.style.backgroundColor = '#00A896';
             donateSpan.style.backgroundColor = 'white';
         }
 
@@ -81,7 +81,7 @@ class PostForm extends Component{
             this.setState({isRequest : false})
             this.setState({isDonate : true})
             requestSpan.style.backgroundColor = 'white';
-            donateSpan.style.backgroundColor = 'darkgray';
+            donateSpan.style.backgroundColor = '#00A896';
         }
     }
 
