@@ -2,10 +2,10 @@ import React,{useState} from 'react'
 import Sidebar from './Sidebar.js'
 import styled from 'styled-components'
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
-import {Feed,Profile,Donation,Request,Avail} from '../Sections'
+import {Feed,Donation,Request,Avail} from '../Sections'
 import UserProfile from '../components/profile/user/UserProfile.js'
-import PostButton from '../components/post-component/PostButton.js'
 import PostForm from '../components/home/PostForm.js'
+import theme from '../components/home/theme.js';
 
 const StyledMain = styled.div`
 	display: flex;
@@ -21,8 +21,9 @@ const StyledFab = styled.button`
 	height:60px;
 	bottom:30px;
 	right:30px;
-	background-color:#F0F3BD;
-	color:#FFF;
+	background-color: ${theme.color.paleSpringBud};
+	color: ${theme.color.persianGreen};
+	font-weight: 700;
 	border-radius:50px;
 	box-shadow: 2px 2px 3px #999;
 	border: none;
@@ -50,13 +51,12 @@ const Main = () => {
 					<Route path="/avail" component={Avail} />
 				</Switch>
 				</StyledSection>
-				{/*<PostButton />*/}
 				<StyledFab onClick={() => setOpen(true)}>
 					<div>
 					<span id="post-button">&#43;</span>
 					</div>
 				</StyledFab>
-				<PostForm open={open} />
+				<PostForm open={open} handleClose={() => setOpen(false)}/>
 			</StyledMain>
 		</Router>
 	)
