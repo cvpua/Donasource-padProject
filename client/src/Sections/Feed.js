@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import Card from '../components/home/Card.js';
 import styled from 'styled-components'
-
 import axios from 'axios';
 
 const StyledFeed = styled.div`
@@ -10,9 +9,23 @@ const StyledFeed = styled.div`
 
 const Feed = () => {
 	
+	const [post,setPosts] = useState([])
+	
+	useEffect( () => {
+		const fetchData = async () => {
+			try{
+				const {data} = await axios.get('/api/posts');
+				setPosts(data);
+			}catch(e){
+				alert(e);
+			}
+		}
+		fetchData();
+	},[])
+
 	return (
 		<StyledFeed>
-			<Card 
+			{/* <Card 
 				avatar="{MarcoPic}" 
 				title="I need alcohol pls guys"
 				author="Marco Mirandilla"
@@ -20,7 +33,23 @@ const Feed = () => {
 				status="fulfilled"
 				content="hahahaha"
 				items="4"
-			/>
+			/> */}
+		   {post.map(post=>{
+			   return(
+				<div key = {post.postId}>
+					<Card
+						avatar = {post.avatar} 
+						title = {post.title}
+						author = {post.author}
+						postType = {post.request}
+						status = {post.status}
+						content = {post.content}
+						items = {post.items}
+					/>
+				</div>
+			   )}
+			)}
+			
 		</StyledFeed>
 	)
 }
