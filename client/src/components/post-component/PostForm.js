@@ -39,7 +39,7 @@ class PostForm extends Component{
        console.log(req_location)
        console.log(req_image)
 
-       this.setState(INITIAL_STATE)
+       this.showPostButton();
 
       };  
 
@@ -62,6 +62,7 @@ class PostForm extends Component{
             document.getElementById('donate').checked = false;
             document.getElementById('donate-span').style.backgroundColor = 'white';
         }
+        this.setState(INITIAL_STATE)
     }
 
     postTypeIdentifier = (event) => {
