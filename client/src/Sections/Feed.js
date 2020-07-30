@@ -1,17 +1,19 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import Card from '../components/home/Card.js';
 import styled from 'styled-components'
-import MarcoPic from '../assets/dp.jpg'
+
+import axios from 'axios';
 
 const StyledFeed = styled.div`
 	padding: 20px 30px;
 `
 
 const Feed = () => {
+	
 	return (
 		<StyledFeed>
 			<Card 
-				avatar={MarcoPic} 
+				avatar="{MarcoPic}" 
 				title="I need alcohol pls guys"
 				author="Marco Mirandilla"
 				type="request"
