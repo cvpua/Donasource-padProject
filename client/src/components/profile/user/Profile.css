@@ -1,4 +1,8 @@
-.mainProfile {
+.profile {
+    width: 1000px;
+}
+
+.aboveProfile {
     height: 500px;
     width: 1000px;
     margin-top: 20px;
@@ -10,7 +14,7 @@
 .headerHolder {
     background: #00A896;
     height: 250px;
-    width: 100%;
+    width: 1000px;
 }
 
 .leftHolder {
@@ -25,8 +29,8 @@
 
 .photoHolder {
     margin: auto;
-    height: 70%;
-    width: 70%;
+    height: 200px;
+    width: 200px;
     background: white;
     border-radius: 50%;
     overflow: auto;
@@ -34,7 +38,7 @@
 }
 
 .photo {
-    max-height: 100%;
+    max-height: 200px;
     cursor: pointer;
 }
 
@@ -98,7 +102,7 @@
 }
 
 .intel {
-    width: 33.2%;
+    width: 333.3px;
     height: 100px;
     float: left;
     display: flex;
@@ -108,11 +112,6 @@
     font-size: 18px;
 }
 
-#mid {
-    border-left: 1px solid grey;
-    border-right: 1px solid grey;
-}
-
 .bio {
     font-size: 22px;
     width: 1000px;
@@ -120,4 +119,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.profileContent {
+    margin-top: 20px;
+    width: 1000px;
+    height: 800px; /* Eto muna nilagay kong height*/
+    border: 1px solid grey;
 }
