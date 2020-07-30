@@ -17,7 +17,7 @@ const INIT_STATE = {
   contact: "09487621698",
   donations: 56,
   requests: 40,
-  bio: "Iskolar ng Bayan",
+  bio: "Iskolar ng Bayan || YSES || ELBI || tarashot || boss mapagmahalzxczxczxczxcz",
   edit: false,
 }; //must check validity
 
@@ -41,7 +41,7 @@ class UserProfile extends Component {
       contact,
       donations,
       requests,
-      photo,
+      // photo,
       edit,
     } = this.state;
 
@@ -70,9 +70,11 @@ class UserProfile extends Component {
             </div>
           </div>
         </div>
-        <div className="location">{location}</div>
-        <div className="email">{email}</div>
-        <div className="contact">{contact}</div>
+        <div className="info">
+          <div className="intel">{location}</div>
+          <div className="intel" id="mid">{email}</div>
+          <div className="intel">{contact}</div>
+        </div>
         <div className="bio">{bio}</div>
       </div>
     );

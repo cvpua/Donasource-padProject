@@ -54,8 +54,8 @@
 }
 
 .displayName {
-    font-size: 28px;   
-    margin-top:40px;
+    font-size: 28px;
+    margin-top: 40px;
 }
 
 .editHolder {
@@ -73,7 +73,6 @@
     border: 1px solid;
     cursor: pointer;
 }
-
 
 .credibility {
     width: 670px;
@@ -93,20 +92,32 @@
     border-left: 2px solid grey;
 }
 
-.location {
-    
+.info {
+    width: 1000px;
+    height: 100px;
 }
 
-.email {
-    
+.intel {
+    width: 33.2%;
+    height: 100px;
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid grey;
+    font-size: 18px;
 }
 
-.contact {
-    
+#mid {
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
 }
 
 .bio {
-    
+    font-size: 22px;
+    width: 1000px;
+    height:150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
-
