@@ -1,0 +1,16 @@
+Dependencies installed in backend
+1. Nodemon - para automatic update yung server, no need for ctrl + C then running it again
+2. Concurrently - to execute multiple scripts in one command, running server and client at the same time.
+3. Express 
+
+Dependencies installed in client
+1. axios
+
+
+File changes
+1. Feed.js - axios is used and mapping of the data
+2. Assets - deleted. Transfered in static folder
+
+Proxy is also added in package.json of client folder
+- proxy is used to shorten the file path when using an http request
+- example :  axios.get('/api/posts'); instead of axios.get('http:localhost:5000/api/posts');

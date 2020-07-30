@@ -7,9 +7,4 @@ router.get('/api/posts',(req,res) => {
     res.json(posts);
 })
 
-
-
-
-
-
 module.exports = router;
