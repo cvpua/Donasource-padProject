@@ -1,5 +1,3 @@
-// const url = require('file!../static/dp.jpg');
-
 
 const posts = [
     {
