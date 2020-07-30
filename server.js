@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-const postsApi = require('./api/posts/posts');
+const postsApi = require('./routes/api/posts/posts');
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
