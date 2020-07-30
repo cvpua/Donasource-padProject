@@ -112,7 +112,7 @@ const PostForm = ({open, handleClose}) => {
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-// not yet done    
+
    const {req_title,req_description,req_quantity,req_duration_date,req_duration_time,req_location,req_image} = state;
 
    console.log(req_title)
