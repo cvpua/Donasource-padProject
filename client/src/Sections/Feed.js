@@ -46,7 +46,7 @@ const Feed = () => {
 								avatar = {post.avatar} 
 								title = {post.title}
 								author = {post.author}
-								postType = {post.request}
+								type = {post.postType}
 								status = {post.status}
 								content = {post.content}
 								items = {post.items}
