@@ -14,3 +14,8 @@ File changes
 Proxy is also added in package.json of client folder
 - proxy is used to shorten the file path when using an http request
 - example :  axios.get('/api/posts'); instead of axios.get('http:localhost:5000/api/posts');
+
+To run
+ 1. server only - node server.js
+ 2. client only - go to client folder then npm start
+ 3. server and client - npm run dev

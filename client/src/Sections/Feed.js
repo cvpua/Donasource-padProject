@@ -10,12 +10,14 @@ const StyledFeed = styled.div`
 const Feed = () => {
 	
 	const [post,setPosts] = useState([])
+	const [isLoading,setLoading] = useState(true)
 	
 	useEffect( () => {
 		const fetchData = async () => {
 			try{
 				const {data} = await axios.get('/api/posts');
 				setPosts(data);
+				setLoading(false)
 			}catch(e){
 				alert(e);
 			}
@@ -34,20 +36,23 @@ const Feed = () => {
 				content="hahahaha"
 				items="4"
 			/> */}
-		   {post.map(post=>{
-			   return(
-				<div key = {post.postId}>
-					<Card
-						avatar = {post.avatar} 
-						title = {post.title}
-						author = {post.author}
-						postType = {post.request}
-						status = {post.status}
-						content = {post.content}
-						items = {post.items}
-					/>
-				</div>
-			   )}
+		   {
+		   isLoading ? 
+		   		<div>Loading... </div> :
+				post.map(post=>{
+					return(
+						<div key = {post.postId}>
+							<Card
+								avatar = {post.avatar} 
+								title = {post.title}
+								author = {post.author}
+								postType = {post.request}
+								status = {post.status}
+								content = {post.content}
+								items = {post.items}
+							/>
+						</div>
+					)}
 			)}
 			
 		</StyledFeed>
