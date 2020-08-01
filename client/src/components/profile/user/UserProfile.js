@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import EditProfile from "./EditProfile";
 
 //TODO: must get from the database
+//TODO: function that gets user data and verification of the user
 // FIXME: birthdate of the user?
 const INIT_STATE = {
   id: "sample1",
@@ -67,7 +68,7 @@ class UserProfile extends Component {
           <button className="edit" onClick={this.editProfile}>
             Edit Profile
           </button>
-          {edit ? <EditProfile /> : null}
+          {edit ? <EditProfile credentials={this.state} /> : null}
         </div>
       </div>
     );
