@@ -4,25 +4,39 @@ import Typography from './Typography.js'
 import theme from './theme.js'
 
 const StyledButton = styled.button`
-	width: 250px;
+	width: 30%;
 	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	border: none;
-	border-radius: 10px;
 	background-color: #FFF;
 	text-transform: uppercase;
 	color: ${theme.color.dimGray};
 	&:hover {
 		cursor: pointer;
-		background-image: linear-gradient(to right, #028090, #02C39A);
-		color: ${theme.color.paleSpringBud};
+		color: ${theme.color.persianGreen};
+		background: linear-gradient(to right, #028090, #02C39A);
+		-webkit-background-clip: text;
+ 		-webkit-text-fill-color: transparent;
 	}
+`
+
+const StyledIcon = styled.div`
+	padding-right: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 20px;
 `
 
 const Button = (props) => {
 	return (
 		<StyledButton>
-			<Typography variant="button-text" weight={700}>
-				{props.name}
+			<StyledIcon>
+				{props.children}
+			</StyledIcon>
+			<Typography variant="button-text" weight={900}>
 			</Typography>
 		</StyledButton>
 	)

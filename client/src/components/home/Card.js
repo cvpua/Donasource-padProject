@@ -5,16 +5,14 @@ import {
 	Duration, Items, theme, 
 	Typography 
 } from '../home'
-
+import {FaDonate,FaCommentDots,FaHeart} from 'react-icons/fa'
 
 const StyledCard = styled.div`
-	width: ${theme.spacing(70)};
-	min-height: ${theme.spacing(1)};
 	background-color: ${theme.color.white};
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 	border-radius: ${theme.spacing(1)};
-	margin: ${theme.spacing(3)};
+	margin-top: 10px;
 `
 
 const StyledCardHeader = styled.div`
@@ -24,6 +22,9 @@ const StyledCardHeader = styled.div`
 	justify-content: space-between;
 	padding: 0px 20px;
 	border-bottom: 1px solid #DDD;
+	border-top-left-radius: ${theme.spacing(1)};
+	border-top-right-radius: ${theme.spacing(1)};
+	background-image: linear-gradient(to right, #028090, #02C39A);
 `
 
 const StyledCardInfo = styled.div`
@@ -45,7 +46,6 @@ const StyledCardBadge = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
-	height: inherit;
 `
 
 const StyledCardMain = styled.div`
@@ -56,18 +56,19 @@ const StyledCardContent = styled.div`
 	display: flex;
 	padding-bottom: 20px;
 	justify-content: space-between;
-	min-height: 30px;
 `
 
 const StyledCardAction = styled.div`
 	display: flex;
 	justify-content: space-evenly;
+	padding-top: 5px;
+	border-top: 1px solid ${theme.color.gainsboro};
 `
 
 const StyledDetails = styled.div`
 `
 
-const Card = ({avatar,title,author,type,status,content,items}) => {
+const Card = ({avatar,title,author,type,description}) => {
 	return (
 		<StyledCard>
 			<StyledCardHeader>
@@ -75,34 +76,36 @@ const Card = ({avatar,title,author,type,status,content,items}) => {
 					<Avatar src={avatar}/>
 					<StyledCardInfo>
 						<StyledTitle>
-							<Typography variant="h3" weight={700} color={theme.color.jetBlack}>
+							<Typography variant="h4" weight={700} color={theme.color.beige}>
 								{title}
 							</Typography>
-							<Duration duration={2}/>
 						</StyledTitle>
-							<Typography variant="h5" color={theme.color.dimGray}>
+							<Typography variant="h5" color={theme.color.white}>
 								{author}
 							</Typography>
 					</StyledCardInfo>
 				</StyledAvatar>
-				<StyledCardBadge>
-					<Badge type="type" name={type}/>
-					<Badge type="status" name={status}/>
-				</StyledCardBadge>
+				<Duration duration={2}/>
 			</StyledCardHeader>
 			<StyledCardMain>
 				<StyledCardContent>
 					<StyledDetails>
 						<Typography color={theme.color.jetBlack}>
-							{content}
+							{description}
 						</Typography>
 					</StyledDetails>
 				</StyledCardContent>
-				<Items />
+				{/*<Items />*/}
 				<StyledCardAction>
-					<Button name="donate"/> 
-					<Button name="see thread"/>
-					<Button name= "like"/>
+					<Button name="donate">
+						<FaDonate/>
+					</Button> 
+					<Button name="comment">
+						<FaCommentDots/>
+					</Button>
+					<Button name= "like">
+						<FaHeart/>
+					</Button>
 				</StyledCardAction>
 			</StyledCardMain>
 		</StyledCard>

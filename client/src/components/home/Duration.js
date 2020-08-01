@@ -19,7 +19,8 @@ const Duration = (props) => {
 	return (
 		<StyledDuration>
 			<Typography variant="button-text" weight={700}>
-				{props.duration} days left
+				{props.duration}
+				{ props.duration === 1 ? " day left" : " days left" }
 			</Typography>		
 		</StyledDuration>
 	)

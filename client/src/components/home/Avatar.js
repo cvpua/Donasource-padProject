@@ -2,15 +2,18 @@ import React from 'react'
 import styled from 'styled-components'
 
 
-const StyledAvatar = styled.img`
-	width: 50px;
-	border-radius: 50%;
+const StyledAvatar = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-image: url(${props => props.src});
+  background-size: cover;
+  background-position: top center;
 `
 
 const Avatar = (props) => {
 	return (
-		<StyledAvatar src={props.src}>
-		</StyledAvatar>
+		<StyledAvatar src={props.src}/>
 	)
 }
 

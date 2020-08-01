@@ -4,11 +4,12 @@ import Typography from '../components/home/Typography.js'
 import theme from '../components/home/theme.js'
 
 const StyledHeader = styled.div`
-	background-color: ${theme.color.persianGreen};
 	height: ${theme.spacing(8)};
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	border-bottom: 1px solid ${theme.color.gainsboro};
+	background-color: ${theme.color.persianGreen};
 `
 
 const Header = (props) => {
@@ -17,6 +18,7 @@ const Header = (props) => {
 			<Typography 
 				variant="h1" 
 				color={theme.color.beige}
+				weight={900}
 			>
 				{props.title}
 			</Typography>
