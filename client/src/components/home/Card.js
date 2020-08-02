@@ -17,10 +17,10 @@ const StyledCard = styled.div`
 
 const StyledCardHeader = styled.div`
 	display: flex;
-	height: 70px;
+	min-height: 70px;
 	align-items: center;
 	justify-content: space-between;
-	padding: 0px 20px;
+	padding: 20px 20px;
 	border-bottom: 1px solid #DDD;
 	border-top-left-radius: ${theme.spacing(1)};
 	border-top-right-radius: ${theme.spacing(1)};
@@ -32,14 +32,18 @@ const StyledCardInfo = styled.div`
 	flex-direction: column;
 	justify-content: center;
 	margin-left: 15px;
+	max-width: 350px;
 `
 
 const StyledAvatar = styled.div`
 	display: flex;
+	overflow-wrap: break-word;
 `
 
 const StyledTitle = styled.div`
 	display: flex;
+	max-width: 200px;
+	overflow: auto;
 `
 
 const StyledCardBadge = styled.div`
@@ -75,11 +79,9 @@ const Card = ({avatar,title,author,type,description}) => {
 				<StyledAvatar>
 					<Avatar src={avatar}/>
 					<StyledCardInfo>
-						<StyledTitle>
 							<Typography variant="h4" weight={700} color={theme.color.beige}>
 								{title}
 							</Typography>
-						</StyledTitle>
 							<Typography variant="h5" color={theme.color.white}>
 								{author}
 							</Typography>

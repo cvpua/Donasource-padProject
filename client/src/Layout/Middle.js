@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Row from './Row.js'
+import Row from '../components/home/Row.js'
 import theme from '../components/home/theme.js'
 
 const Middle = styled(Row)`

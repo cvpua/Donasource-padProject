@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Row from './Row.js'
+import Row from '../components/home/Row.js'
 
 const Ads = styled(Row)`
 	display: none;

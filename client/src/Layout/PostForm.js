@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
-import theme from './theme.js'
-import Typography from './Typography.js'
+import theme from '../components/home/theme.js'
+import Typography from '../components/home/Typography.js'
 import { FaPlus } from 'react-icons/fa'
-import { FeedContext } from '../../App.js'
+import { FeedContext } from '../App.js'
 
 const INITIAL_STATE = {
     req_title: "",
