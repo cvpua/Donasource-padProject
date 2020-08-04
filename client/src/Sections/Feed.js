@@ -16,7 +16,6 @@ const Feed = () => {
 
 	return (
 		<React.Fragment>
-			<SectionHeader title="Home" />
 			<StyledFeed>
 				{posts.map((post) => (
 					<Card 

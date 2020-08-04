@@ -6,6 +6,8 @@ import MarcoPic from './assets/dp.jpg'
 import {Feed,Notification,Avail,Profile} from './Sections'
 import {Typography, theme} from './components/home'
 import {Switch, Route} from 'react-router-dom'
+import UserProfile from './components/profile/user/UserProfile.js'
+import Section from './Sections/Section.js'
 
 export const FeedContext = React.createContext()
 
@@ -66,10 +68,26 @@ const App = () => {
       {user ?
         <Layout>
           <Switch>
-            <Route path="/home" component={Feed} />
-            <Route path="/notification" exact component={Notification} />
-            <Route path="/avail" exact component={Avail} />
-            <Route path="/profile" exact component={Profile} />
+            <Route path="/home">
+              <Section title="Home">
+                <Feed />
+              </Section>
+            </Route>
+            <Route path="/notification">
+              <Section title="Notification">
+                <Notification />
+              </Section>
+            </Route>
+            <Route path="/avail">
+              <Section title="Avails">
+                <Avail />
+              </Section>
+            </Route>
+            <Route path="/profile">
+              <Section title="Profile">
+                <Profile />
+              </Section>
+            </Route>
           </Switch>
         </Layout>
       : <LoginSignup event = {login}/>
