@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const RequestPost = require('./requestPost'); 
+
 
 const user = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -11,10 +13,9 @@ const user = new Schema({
     password : {type : String, required : true},
     contactNumber : {type : String, required : true},
     description : {type : String, required : true},
-    requestCount : {type : Number, default : 0},
-    requestPosts : [{type : Schema.Types.ObjectId, ref: "RequestPost"}]
+    requestCount : {type : Number, default : 0, required : 0},
+    requestPosts : [RequestPost.schema]
 
 })
-
 
 module.exports = mongoose.model('User',user);

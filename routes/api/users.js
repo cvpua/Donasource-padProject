@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 
 
-const User = require('../../models/user');
+const User = require('../../models/userProfile');
 const users = []
 
 
@@ -26,7 +26,7 @@ router.post('/api/users',(req,res) => {
         requestCount : req.body.requestCount,
         requestPosts : [...req.body.requestPosts]
     })
-    res.json(user)
+    res.json(user.requestPosts[0])
 
 }) 
 
