@@ -16,35 +16,56 @@ router.get('/api/signup',(req,res) => {
 
 router.post('/api/signup',(req,res) => {
    
-    const newUser = new UserSignup({
-        _id: new mongoose.Types.ObjectId(),
-        username : req.body.username,
-        password : req.body.password,
-        firstName : req.body.firstName,
-        lastName : req.body.lastName,
-        email : req.body.email,
-        contactNumber : req.body.contactNumber
+ 
+
+    UserSignup.find({email : req.body.email})
+    .exec()
+    .then( user => {
+        if(user.length >= 1){
+            return res.status(409).json({
+                message : "Email is already used"
+            })
+        }else{
+                const newUser = new UserSignup({
+                _id: new mongoose.Types.ObjectId(),
+                username : req.body.username,
+                password : req.body.password,  //saving of password is stills shit (no encryption)
+                firstName : req.body.firstName,
+                lastName : req.body.lastName,
+                email : req.body.email,
+                contactNumber : req.body.contactNumber
+            })
+            newUser.save()
+            .then(result => {
+                res.status(201).json('User created')
+            })
+            .catch(err =>{
+                console.log(err._message)
+            })
+
+            const user = new UserProfile({
+                _id: new mongoose.Types.ObjectId(),
+                username : req.body.username,
+                password : req.body.password,
+                firstName : req.body.firstName,
+                lastName : req.body.lastName,
+                email : req.body.email,
+                contactNumber : req.body.contactNumber,
+                description : " ",
+                requestCount : 0,
+                requestPosts : []
+            })
+            user.save()
+            .then()
+            .catch(err =>{
+                console.log(err)
+            })
+        }
     })
+
+   
+        
     
-
-
-    const user = new UserProfile({
-        _id: new mongoose.Types.ObjectId(),
-        username : req.body.username,
-        password : req.body.password,
-        firstName : req.body.firstName,
-        lastName : req.body.lastName,
-        email : req.body.email,
-        contactNumber : req.body.contactNumber,
-        description : "",
-        requestCount : 0,
-        requestPosts : []
-    })
-    
-    localdb.push(newUser);
-    localdb.push(user);
-
-    res.json(localdb);
 }) 
 
 module.exports = router;
