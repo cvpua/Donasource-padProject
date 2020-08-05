@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const RequestPost = require('./requestPost'); 
 
-
-const userProfile = new Schema({
+const userSignup = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
     username : {type: String, required : true},
     password : {type : String, required : true},
@@ -12,10 +10,6 @@ const userProfile = new Schema({
     email : {type: String, required : true},
     password : {type : String, required : true},
     contactNumber : {type : String, required : true},
-    description : {type : String, required : true},
-    requestCount : {type : Number, default : 0, required : 0},
-    requestPosts : [RequestPost.schema]
-
 })
 
-module.exports = mongoose.model('UserProfile',userProfile);
+module.exports = mongoose.model('UserSignup',userSignup);

@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 
 
 
-const User = require('../../models/userProfile');
-const users = []
+const UserProfile = require('../../models/userProfile');
+const users = require('../../LocalDB/Posts');
 
 
 router.get('/api/users',(req,res) => {
@@ -14,7 +14,7 @@ router.get('/api/users',(req,res) => {
 
 router.post('/api/users',(req,res) => {
    
-    const user = new User({
+    const user = new UserProfile({
         _id: new mongoose.Types.ObjectId(),
         username : req.body.username,
         password : req.body.password,
