@@ -1,12 +1,12 @@
 const express = require('express');
 const app = express();
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const db = require('./config/keys').mongoURI;
 
 
-const postsApi = require('./routes/api/posts');
-const usersApi = require('./routes/api/users');
-const signupApi = require('./routes/api/signup');
+const postsApi = require('./api/routes/posts');
+const usersApi = require('./api/routes/users');
+const signupApi = require('./api/routes/signup');
 
 
 mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
@@ -20,6 +20,7 @@ app.use(express.urlencoded({extended:false}))
 app.use('/', postsApi);
 app.use('/',usersApi);
 app.use('/',signupApi);
+app.use('/uploads',express.static('uploads'))
 
 
 const port = process.env.PORT || 5000;
