@@ -12,7 +12,7 @@ const user = new Schema({
     password : {type : String, required : true},
     contactNumber : {type : String, required : true},
     description : {type : String, required : true},
-    requestCount : {type : Number, default : 0, required : 0},
+    requestCount : {type : Number, default : 0},
     requestPosts : [RequestPost.schema]
 })
 

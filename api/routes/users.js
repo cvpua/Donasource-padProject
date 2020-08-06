@@ -7,6 +7,7 @@ const upload = multer({dest : 'uploads/'});
 
 
 
+
 const User = require('../models/user');
 
 
@@ -16,29 +17,32 @@ router.get('/api/users',(req,res) => {
 
 
 router.post('/api/login',(req,res) => {
-    User.find({username : req.body.username})
+    
+    User.findOne({username : req.body.username})
     .exec()
     .then(user => {
-        if (user.length < 1){
+        if (!user){
+            console.log(req.body.username)
             return res.status(401).json({
                 message : "Username/password does not exist"
             })
         }
-        if (user[0].password === req.body.password){
+        if (user.password === req.body.password){
             const token = 
             jwt.sign({
-                email : user[0].email,
-                userId : user[0]._id 
+                email : user.email,
+                userId : user._id 
             },
             process.env.JWT_KEY,
             {
                 expiresIn : "1h"
             })
 
-
             return res.status(200).json({
                 message : "Logged in",
+                email : user.email,
                 token : token
+                
             })
         }else{
             return res.status(401).json({
