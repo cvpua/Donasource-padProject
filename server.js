@@ -8,11 +8,12 @@ const postsApi = require('./api/routes/posts');
 const usersApi = require('./api/routes/users');
 const signupApi = require('./api/routes/signup');
 
-
+// connect to db
 mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
 
+// body-parser
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
 
