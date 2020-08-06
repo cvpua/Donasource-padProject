@@ -10,21 +10,56 @@ const upload = multer({dest : 'uploads/'});
 
 const User = require('../models/user');
 
-
+// get all user
 router.get('/api/users',(req,res) => {
-    res.json(users);
+    User.find()
+    .select("firstName lastName email")
+    .exec()
+    .then((users) =>{
+    
+    const response =  
+    users.map(user =>{
+            return (
+                {
+                    userId: user._id,
+                    email : user.email,
+                    name : user.firstName + " " + user.lastName,
+                }
+            )
+        })
+        res.status(200).json(response)
+    })
 })
 
 
+// get one user
+router.get('/api/users/:userId',(req,res) =>{
+    User.findOne({_id : req.params.userId})
+    .exec()
+    .then( user => {
+        if (!user){
+            // console.log(req.body.username)
+            return res.status(401).json({
+                message : "Username/password does not exist"
+            })
+        }else{
+            return res.status(200).json({
+                user
+            })
+        }
+    })
+})
+
+// login user
 router.post('/api/login',(req,res) => {
     
     User.findOne({username : req.body.username})
     .exec()
     .then(user => {
         if (!user){
-            console.log(req.body.username)
+            // console.log(req.body.username)
             return res.status(401).json({
-                message : "Username/password does not exist"
+                message : "Username/password is invalid"
             })
         }
         if (user.password === req.body.password){

@@ -15,8 +15,6 @@ router.get('/api/signup',(req,res) => {
 
 router.post('/api/signup',(req,res) => {
    
- 
-
     UserSignup.find({email : req.body.email})
     .exec()
     .then( user => {
@@ -38,18 +36,21 @@ router.post('/api/signup',(req,res) => {
                 requestPosts : []
             })
             newUser.save()
-            .then(
-                res.status(201).json('User created'))
-            .catch(err =>{
-                console.log(err._message)
+            .then( user => {
+                if (user){
+                    res.status(200).json({
+                        message : "User created!"
+                    })
+                }
             })
-
+            .catch(err =>{
+                const message = err.keyValue ? "Username is already used" : "Invalid email format"
+                    res.status(401).json({
+                        message
+                    })
+            })
         }
     })
-
-   
-        
-    
 }) 
 
 module.exports = router;
