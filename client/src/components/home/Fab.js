@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import React from 'react'
-import theme from '../components/home/theme.js'
+import theme from './theme.js'
 
 const Fab = styled.button`
 	position:fixed;

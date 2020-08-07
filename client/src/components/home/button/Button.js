@@ -1,7 +1,7 @@
-import React from 'react'
+import React,{useState} from 'react'
 import styled from 'styled-components'
-import Typography from './Typography.js'
-import theme from './theme.js'
+import Typography from '../Typography.js'
+import theme from '../theme.js'
 
 const StyledButton = styled.button`
 	width: 30%;
@@ -31,6 +31,7 @@ const StyledIcon = styled.div`
 `
 
 const Button = (props) => {
+
 	return (
 		<StyledButton>
 			<StyledIcon>

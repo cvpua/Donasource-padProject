@@ -8,6 +8,7 @@ const StyledSectionHeader = styled.div`
 	top: 0;
 	border-bottom: 1px solid ${theme.color.gainsboro};
 	background-color: #f0efeb;
+	z-index: 3;
 `
 
 const SectionHeader = (props) => {

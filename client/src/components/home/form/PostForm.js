@@ -1,9 +1,11 @@
 import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
-import theme from '../components/home/theme.js'
-import Typography from '../components/home/Typography.js'
+import theme from '../theme.js'
+import Typography from '../Typography.js'
 import { FaPlus } from 'react-icons/fa'
-import { FeedContext } from '../App.js'
+import Modal from './Modal.js'
+import FormContainer from './FormContainer.js'
+import FormButton from './FormButton.js'
 
 const INITIAL_STATE = {
     req_title: "",
@@ -14,33 +16,6 @@ const INITIAL_STATE = {
     req_location: "",
     req_image: ""
 }
-
-const Modal = styled.div `
-	display: ${props => props.open ? 'flex' : 'none'};
-  position: fixed;
-  z-index: 3;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.6);
-`
-
-const PostContainer = styled.div `
-  width: 90%;
-  max-width: 600px;
-  border-radius: ${theme.spacing(1)};
-  margin: auto;
-  background-color: ${theme.color.white};
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-`
-
-const FormButton = styled.div `
-	padding-bottom: 10px;
-`
 
 const CloseButton = styled.span `
 	font-size: 30px;
@@ -115,12 +90,10 @@ const Container = styled.div `
 	
 `
 
-const PostForm = ({ open, handleClose }) => {
+const PostForm = ({ open, handleClose, addPost }) => {
     const [formType, setFormType] = useState('donate')
 
     const [state, setState] = useState(INITIAL_STATE)
-
-    const { addPost } = useContext(FeedContext)
 
     const handleInputChange = (event) => {
         const { target } = event;
@@ -150,8 +123,8 @@ const PostForm = ({ open, handleClose }) => {
     };
 
     return (
-        <Modal open={open}>
-			<PostContainer>
+      <Modal open={open}>
+			<FormContainer>
 				<FormButton>
 					<CloseButton onClick={() => handleClose()}>&#8592;</CloseButton>
 				</FormButton>
@@ -235,7 +208,7 @@ const PostForm = ({ open, handleClose }) => {
 	          </SubmitButton>
           </Container>
 				</div>
-			</PostContainer>
+			</FormContainer>
 		</Modal>
     )
 }

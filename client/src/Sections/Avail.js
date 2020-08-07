@@ -1,10 +1,14 @@
 import React from 'react'
+import SectionHeader from '../components/home/SectionHeader.js'
 
 const Avail = () => {
 	return (
-		<div>
-			Avail Section
-		</div>
+		<>
+			<SectionHeader title="Avails" />
+			<div>
+				Avail Section
+			</div>
+		</>
 	)
 }
 

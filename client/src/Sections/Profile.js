@@ -1,12 +1,11 @@
 import React,{useState} from 'react'
-import UserProfile from "../components/profile/user/UserProfile";
-import SectionHeader from '../components/home/SectionHeader.js'
 import styled from 'styled-components'
 import theme from '../components/home/theme.js'
 import Avatar from '../components/home/Avatar.js'
 import Jeff from '../assets/Jeff.jpg'
 import Typography from '../components/home/Typography.js'
 import Feed from '../Sections/Feed.js'
+import SectionHeader from '../components/home/SectionHeader.js'
 
 const AboveProfile = styled.div`
 	border-bottom: 1px solid ${theme.color.gainsboro};
@@ -17,13 +16,6 @@ const ProfileHeader = styled.div`
 	display: flex;
 	align-items: center;
 	padding: ${theme.spacing(4)};
-`
-
-const UserInfo = styled.div`
-`
-
-const ProfileInfo = styled.div`
-	
 `
 
 const Element = styled.div`
@@ -63,13 +55,14 @@ const Profile = () => {
 
 	return (
 		<React.Fragment>
+			<SectionHeader title="Profile" />
 			<div>
 				<AboveProfile>
 					<ProfileHeader>
 						<Element right={theme.spacing(3)}>
 							<Avatar src={user.photo} size="150px"/>
 						</Element>
-						<ProfileInfo>
+						<div>
 							<Element bottom={theme.spacing(2)}>
 								<Typography variant="h2" weight={900} color={theme.color.beige}>
 									{user.name.fname + " " + user.name.lname}
@@ -84,7 +77,7 @@ const Profile = () => {
 									| Donations Requested: {user.requests}
 								</Typography>
 							</Info>
-						</ProfileInfo>
+						</div>
 					</ProfileHeader>
 					<Info>
 						<Typography>{user.location}</Typography>

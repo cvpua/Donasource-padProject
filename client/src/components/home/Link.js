@@ -6,7 +6,7 @@ import Typography from './Typography.js'
 
 const StyledLink = styled(RouterLink)`
 	text-decoration: none;
-	color: ${theme.color.persianGreen};
+	color: ${theme.color.dimGray};
 	margin-bottom: 30px;
 	display: flex;
 	align-items: center;
@@ -17,6 +17,7 @@ const StyledIcon = styled.div`
 	justify-content: center;
 	align-items: center;
 	font-size: 20px;
+	color: ${theme.color.persianGreen};
 	@media (min-width: 750px)	{
 		padding-right: 20px;
 	}

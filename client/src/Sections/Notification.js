@@ -1,10 +1,14 @@
 import React from 'react'
+import SectionHeader from '../components/home/SectionHeader.js'
 
 const Notification = () => {
 	return (
-		<div>
-			Notification
-		</div>
+		<>
+			<SectionHeader title="Notification" />
+			<div>
+				Avail Section
+			</div>
+		</>
 	)
 }
 

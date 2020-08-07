@@ -18,6 +18,11 @@ body {
   background-color: #f0efeb;
 }
 
+a {
+  color: inherit;
+  text-decoration: none; /* no underline */
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
