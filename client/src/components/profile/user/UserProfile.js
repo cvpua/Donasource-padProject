@@ -7,7 +7,7 @@ import EditProfile from "./EditProfile";
 const INIT_STATE = {
   id: "sample1",
   username: "user1",
-  passwrod: "password",
+  password: "password",
   photo: null,
   name: {
     fname: "Isko",
