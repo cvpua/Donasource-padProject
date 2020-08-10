@@ -53,13 +53,12 @@ router.get('/api/users/:userId',(req,res) =>{
 // login user
 router.post('/api/login',(req,res) => {
     
-    User.findOne({username : req.body.username})
+    User.findOne({email : req.body.email})
     .exec()
     .then(user => {
         if (!user){
-            // console.log(req.body.username)
             return res.status(401).json({
-                message : "Username/password is invalid"
+                message : "Username/password is does not exist"
             })
         }
         if (user.password === req.body.password){
@@ -75,7 +74,9 @@ router.post('/api/login',(req,res) => {
 
             return res.status(200).json({
                 message : "Logged in",
+                username : user.username,
                 email : user.email,
+                isLoggedIn : true,
                 token : token
                 
             })

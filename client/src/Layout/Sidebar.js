@@ -1,64 +1,44 @@
 import React from 'react'
 import styled from 'styled-components'
-import {Link} from 'react-router-dom'
+import Row from '../components/home/Row.js'
+import theme from '../components/home/theme.js'
+import Link from '../components/home/Link.js'
+import Navigation from '../components/home/Navigation.js'
+import {FaHome,FaBell,FaList,FaUserAlt} from 'react-icons/fa'
 
-const StyledSideBar = styled.div`
-	width: 25%;
-	min-width: 200px;
-	height: 100%;
-	background-color: #FFF;
-	position: fixed;
-`
-
-const StyledContainer = styled.div`
-	height: 500px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: space-between;
-	padding-top: 40px;
-`
-
-const StyledNav = styled.nav`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-around;
-	align-items: center;
-	padding: 0;
-	margin: 0;
-`
-
-const StyledLink = styled(Link)`
-	width: 200px;
-	text-decoration: none;
-	border: 2px solid #02C39A;
-	border-radius: 20px;
-	color: #02C39A;
-	padding: 10px 30px;
-	text-align: center;
-	margin-bottom: 20px;
-`
-
-const StyledLogout = styled(StyledLink)`
-	background-color: #00A896;
-	color: #FFF;
-	border: none;
+const StyledSidebar = styled(Row)`
+	display: none;
+	position: sticky;
+	top: 0; 
+	height: 100vh;
+	border-right: 1px solid ${theme.color.gainsboro};
+	@media (min-width: 600px)	{
+		display: flex;
+		max-width: 300px;
+	}
+	@media (min-width: 900px)	{
+		flex-grow: 0;
+	}
 `
 
 const Sidebar = () => {
-	return (
-		<StyledSideBar>
-			<StyledContainer>
-				<StyledNav>
-					<StyledLink to="/home">Home</StyledLink>
-					<StyledLink to="/profile">Profile</StyledLink>
-					<StyledLink to="/donation">Donation</StyledLink>
-					<StyledLink to="/request">Request</StyledLink>
-					<StyledLink to="/avail">Avail</StyledLink>
-				</StyledNav>
-				<StyledLogout to="/">Logout</StyledLogout>
-			</StyledContainer>
-		</StyledSideBar>
+	return(
+		<StyledSidebar flexGrow={1}>
+			<Navigation>
+				<Link to="/home" text="Home">
+					<FaHome />
+				</Link>
+				<Link to="/notification" text="Notification">
+					<FaBell />
+				</Link>
+				<Link to="/avail" text="Avails">
+					<FaList/>
+				</Link>
+				<Link to="/profile" text="Profile">
+					<FaUserAlt/>
+				</Link>
+			</Navigation>
+		</StyledSidebar>
 	)
 }
 

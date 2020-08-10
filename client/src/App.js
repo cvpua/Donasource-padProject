@@ -1,32 +1,63 @@
-import React,{Component} from 'react';
-import PostButton from './components/post-component/PostButton';
+import React,{useState} from 'react'
 import LoginSignup from "./components/LoginSignup/LoginSignup.js";
-import UserProfile from "./components/profile/user/UserProfile";
 import Layout from './Layout/Layout.js'
-import Main from './Layout/Main.js'
 import './App.css';
+import {Feed,Notification,Avail,Profile,Post} from './Sections'
+import {Switch, Route} from 'react-router-dom'
+import SectionHeader from './components/home/SectionHeader.js'
+import axios from 'axios'
 
-class App extends Component{
-  state = {
-    user: null,
+const App = () => {
+  const [user, setUser] = useState(false)
+  
+  const login = async (user) => {
+    try{
+      const { data } = await axios.post('/api/login',user)
+      setUser(data)
+    }catch(error){
+      alert(error.response.data.message)
+    }
   }
-  login = () => {
-    this.setState ({
-      user: true,
-    })
+
+  const signup = async (user) => {
+    try{
+      const { data } = await axios.post('/api/signup',user)
+      alert(data.message)
+    }catch(error){
+      alert(error.response.data.message)
+    }
   }
-  render(){
-    return(
-      <div className="App">
-        {this.state.user ?
-          <Layout>
-            <Main />
-          </Layout>
-        : <LoginSignup event = {this.login}/>
-        }
-      </div>
-    )
-  }
+
+  return (
+    <div className="App">
+      {user ?
+        <Layout>
+          <Switch>
+            <Route path="/home">
+              <>
+                <SectionHeader title="Home" />
+                <Feed />
+              </>
+            </Route>
+            <Route path="/notification">
+              <Notification />
+            </Route>
+            <Route path="/avail">
+              <Avail />
+            </Route>
+            <Route exact path="/profile">
+              <Profile />
+            </Route>
+const Container = styled.div `
+            <Route path="/profile/post/:id">
+              <Post />
+            </Route>
+          </Switch>
+        </Layout>
+      : <LoginSignup login={login} signup={signup}  />
+      }
+    </div>
+  )
 }
 
-export default App;
+export default App

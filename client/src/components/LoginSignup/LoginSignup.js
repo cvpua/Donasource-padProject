@@ -1,51 +1,38 @@
-import React, { Component } from "react";
+import React,{useState} from "react";
 import  "./LoginSignup.css";
 import Inputlog from "./Inputlog.js";
 import Inputsign from "./Inputsign.js";
 
-class LoginSignup extends Component {
-    state = {
-        login: true,
-        signup: false,
-    }
-    loginToggle = () => {
-        this.setState ({
-            login: true,
-            signup: false,
-        })
-    }
-    signupToggle = () => {
-        this.setState ({
-            login: false,
-            signup: true,
-        })
+const LoginSignup = ({login,signup}) => {
+    const [isLoggingIn, setIsLoggingIn] = useState(true)
+
+    const toggle = () => {
+        setIsLoggingIn(!isLoggingIn)
     }
 
-    render() {
-        return (
-            <div>
-                { this.state.login ? 
-                    <div className="loginSignup">
-                        <div className="logside">
-                            <Inputlog toggle={this.signupToggle} event={this.props.event}/>
-                        </div>
-                        <div className="logsideb">
-                            Welcome Back! Haha Wala pa ako maisip ilagay dito 
-                        </div>
-                    </div> 
-                : 
-                    <div className="loginSignup">
-                        <div className="signside">
-                            <Inputsign toggle={this.loginToggle}/>
-                        </div>
-                        <div className="signsideb">
-                            Join Us! Haha Wala pa ako maisip ilagay dito
-                        </div>
-                    </div> 
-                }   
-            </div>
-        );
-    }
+    return (
+        <div>
+            { isLoggingIn ? 
+                <div className="loginSignup">
+                    <div className="logside">
+                        <Inputlog toggle={toggle} login={login}/>
+                    </div>
+                    <div className="logsideb">
+                        Welcome Back! Haha Wala pa ako maisip ilagay dito 
+                    </div>
+                </div> 
+            : 
+                <div className="loginSignup">
+                    <div className="signside">
+                        <Inputsign toggle={toggle} signup={signup} />
+                    </div>
+                    <div className="signsideb">
+                        Join Us! Haha Wala pa ako maisip ilagay dito
+                    </div>
+                </div> 
+            }   
+        </div>
+    )
 }
 
 export default LoginSignup;

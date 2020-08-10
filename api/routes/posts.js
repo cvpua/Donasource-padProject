@@ -8,6 +8,8 @@ const RequestPost = require('../models/requestPost');
 const User = require('../models/user');
 
 
+// uploading an image is not yet done due to path problems
+
 const storage = multer.diskStorage({
     destination: function(req,file,cb){
         cb(null, './uploads'); //+ '/' + req.body.author + '/' + req.body.title  );
@@ -36,49 +38,48 @@ const upload = multer({
 
 
 
+//get all posts
 router.get('/api/posts',(req,res) => {
-    // RequestPost.find()
-    // .select("title author requestImage")
-    // .exec()
-    // .then((posts) =>{
-    
-    // const response =  
-    // posts.map(post =>{
-    //         return (
-    //             {
-    //                 title : post.title,
-    //                 author : post.author,
-    //                 // images : post.requestImage
-    //             }
-    //         )
-    //     })
-    //     res.status(200).json(response)
-    // })
+
     User.find()
     .select("requestPosts")
-    .then( posts =>{ 
-        const response = posts.map(post => {
-            return (post.requestPosts)
+    .then( Users =>{ 
+        const response = Users.map(user => {
+            
+            if(user.requestPosts.length >= 1){
+               
+                return (user.requestPosts)
+                }
             })
-            res.status(200).json(response)
+
+            
+            let singleResponse = [];    //convert the 2d array into a single array
+            response.forEach( userPosts => {
+                if(userPosts){
+                    singleResponse = singleResponse.concat(userPosts);
+                }
+            })
+            
+            res.status(200).json(singleResponse)
         })
 })
 
 
+//make a post
 router.post('/api/posts',checkAuth,(req,res) => {
 
     upload(req,res,function(err){
         if(err){
-            res.status(415).json("Error");
+            res.status(415).json("Error in uploading images");
         }
         else{
-            
-            console.log("files uploaded");
-            
             const date = new Date();
-            const imageName = req.files.map(file =>{
-                return file.filename;
-            })
+            let imageName = null;
+            if(req.files && req.files.length > 1){
+                     imageName = req.files.map(file =>{
+                        return file.filename;
+                })
+            }
             const post = new RequestPost({
                 _id: new mongoose.Types.ObjectId(),
                 author : req.body.author,
@@ -90,13 +91,7 @@ router.post('/api/posts',checkAuth,(req,res) => {
                 datePosted : Date.now(),
                 requestImage : imageName || ""
             })   
-            // post.save()
-            // .then(result =>{
-            //     res.status(200).json("Product saved")
-            // })
-            // .catch(err => {
-            //     res.status(500).json("Product not saved")
-            // })
+  
 
             User.findOne({email : req.userData.email}).exec()
             .then(user => {
@@ -104,7 +99,7 @@ router.post('/api/posts',checkAuth,(req,res) => {
                 user.requestCount = user.requestCount + 1;
                 user.save()
                 .then(
-                    res.json("Post created!")
+                    res.status(200).json("Post created!")
                 )
                 .catch(err)
             })

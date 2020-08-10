@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 
 
 const UserSignup = require('../models/user');
+const { response } = require('express');
 
 
 
@@ -35,18 +36,20 @@ router.post('/api/signup',(req,res) => {
                 requestCount : 0,
                 requestPosts : []
             })
+          
             newUser.save()
             .then( user => {
                 if (user){
                     res.status(200).json({
                         message : "User created!"
                     })
+                    alert(response.data.message);
                 }
             })
-            .catch(err =>{
+            .catch(error =>{
                 const message = err.keyValue ? "Username is already used" : "Invalid email format"
                     res.status(401).json({
-                        message
+                        error
                     })
             })
         }

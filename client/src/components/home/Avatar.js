@@ -2,15 +2,23 @@ import React from 'react'
 import styled from 'styled-components'
 
 
-const StyledAvatar = styled.img`
-	width: 70px;
-	border-radius: 50%;
+const StyledAvatar = styled.div`
+  min-width: ${props => props.size};
+  min-height: ${props => props.size};
+  border-radius: 50%;
+  background-color: white;
+  background-image: url(${props => props.src});
+  background-size: cover;
+  background-position: top center;
 `
+
+StyledAvatar.defaultProps = {
+	size: "50px",
+}
 
 const Avatar = (props) => {
 	return (
-		<StyledAvatar src={props.src}>
-		</StyledAvatar>
+		<StyledAvatar src={props.src} size={props.size}/>
 	)
 }
 

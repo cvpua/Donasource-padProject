@@ -1,23 +1,23 @@
 import React, { Component } from "react";
 import EditProfile from "./EditProfile";
+import  "./Profile.css"
 
 //TODO: must get from the database
 // FIXME: birthdate of the user?
 const INIT_STATE = {
   id: "sample1",
   username: "user1",
-  passwrod: "password",
   photo: null,
   name: {
-    fname: "Isko",
-    lname: "de la Cruz",
+    fname: "Jeff Emerson",
+    lname: "Lar",
   },
   location: "Los Banos, Laguna",
   email: "idcruz@up.edu.ph",
   contact: "09487621698",
   donations: 56,
   requests: 40,
-  bio: "Iskolar ng Bayan",
+  bio: "Iskolar ng Bayan || YSES || ELBI || tarashot || boss mapagmahalzxczxczxczxcz",
   edit: false,
 }; //must check validity
 
@@ -41,33 +41,45 @@ class UserProfile extends Component {
       contact,
       donations,
       requests,
-      photo,
+      // photo,
       edit,
     } = this.state;
 
     return (
-      <div className="mainProfile">
-        <div className="photoHolder">
-          {/* CONTAINER FOR PICTURE*/}
-          <img src="https://img.icons8.com/dotty/80/000000/name.png" />
-        </div>
-        <div className="displayName">{name.fname + " " + name.lname}</div>
-        <div className="userName">{username}</div>
-        <div className="location">{location}</div>
-        <div className="email">{email}</div>
-        <div className="contact">{contact}</div>
-        <div className="bio">{bio}</div>
-        <div className="credibility">
-          <div className="donations">
-            <div className="given">Donations Given: {donations}</div>
-            <div className="request">Donations Requested: {requests}</div>
+      <div className="profile">
+        <div className="aboveProfile">
+          <div className="headerHolder">
+            <div className="leftHolder">
+              <div className="photoHolder"> 
+                <img className="photo" src="https://cdn57.androidauthority.net/wp-content/uploads/2020/02/eevee-pokemon-go-1200x822.jpg" alt="pic" />  
+              </div>
+            </div>
+            <div className="rightHolder">
+              <div className="names">
+                <div className="displayName">{name.fname + " " + name.lname} </div>
+                <div className="userName">@{username}</div>  
+              </div>
+              <div className="editHolder">
+                <button className="edit" onClick={this.editProfile}>
+                  Edit Profile
+                </button>
+                {edit ? <EditProfile /> : null}
+              </div>
+              <div className="credibility">
+                  <div className="donations"> {donations} <br/> Donations Given </div>
+                  <div className="donationsB"> {requests} <br/> Donations Requested </div>
+              </div>
+            </div>
           </div>
+          <div className="info">
+            <div className="intel">{location}</div>
+            <div className="intel" id="mid">{email}</div>
+            <div className="intel">{contact}</div>
+          </div>
+          <div className="bio">{bio}</div>
         </div>
-        <div className="editHolder">
-          <button className="edit" onClick={this.editProfile}>
-            Edit Profile
-          </button>
-          {edit ? <EditProfile /> : null}
+        <div className="profileContent">
+          {this.props.children}
         </div>
       </div>
     );

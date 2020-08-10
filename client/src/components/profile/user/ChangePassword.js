@@ -8,13 +8,13 @@ class ChangePassword extends Component {
     return (
       <div className="changeHolder">
         <form className="changePassword">
-          <input type="oldPassword" placeholder="Enter old password" />
+          <input className="editProf" type="oldPassword" placeholder="Enter old password" />
           <br />
-          <input type="newPassword" placeholder="Enter new password" />
+          <input className="editProf" type="newPassword" placeholder="Enter new password" />
           <br />
-          <input type="confirmPassword" placeholder="Re-enter new password" />
+          <input className="editProf" type="confirmPassword" placeholder="Re-enter new password" />
           <br />
-          <button type="submit">Confirm</button>
+          <button className="butSub" type="submit">Confirm</button>
         </form>
       </div>
     );
