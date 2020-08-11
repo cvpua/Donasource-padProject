@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require("mongoose");
 const multer = require('multer');
+const fs = require('fs-extra');
+
 const checkAuth = require('../auth/check-auth');
 
 const RequestPost = require('../models/requestPost');
@@ -12,7 +14,7 @@ const User = require('../models/user');
 
 const storage = multer.diskStorage({
     destination: function(req,file,cb){
-        cb(null, './uploads'); //+ '/' + req.body.author + '/' + req.body.title  );
+        cb(null, './uploads'); 
     },
     filename : function(req,file,cb){
         cb(null,new Date().toISOString() + file.originalname);
@@ -52,7 +54,6 @@ router.get('/api/posts',(req,res) => {
                 }
             })
 
-            
             let singleResponse = [];    //convert the 2d array into a single array
             response.forEach( userPosts => {
                 if(userPosts){
@@ -91,26 +92,43 @@ router.post('/api/posts',checkAuth,(req,res) => {
                 datePosted : Date.now(),
                 requestImage : imageName || ""
             })   
-  
+            
 
-            User.findOne({email : req.userData.email}).exec()
-            .then(user => {
-                user.requestPosts.push(post);
-                user.requestCount = user.requestCount + 1;
-                user.save()
-                .then(
-                    res.status(200).json("Post created!")
-                )
-                .catch(err)
-            })
-            .catch( err => {
-                console.log(err)
-                res.status(500).json("Error occured")
+            var dir = 'assets/' + req.body.author + '/requestPosts/' + req.body.title + '/images/';
+
+            fs.move('./uploads',dir,(err)=>{
+                if (err){
+                    console.log(err.response)
+                    res.status(500).json({message: "Error in uploading images"});
+                }else{
+                    User.findOne({email : req.userData.email}).exec()
+                    .then(user => {
+                        user.requestPosts.push(post);
+                        user.requestCount = user.requestCount + 1;
+                        user.save()
+                        .then(
+                            res.status(200).json("Post created!")
+                        )
+                        .catch(err)
+                    })
+                    .catch( err => {
+                        console.log(err)
+                        res.status(500).json("Error occured")
+                    })                   
+                }
+                
             })
            
         }
     });    
     
-}) 
+});
+
+
+
+router.delete('/api/post/:postId',checkAuth,(req,res) => {
+
+    
+});
 
 module.exports = router;
