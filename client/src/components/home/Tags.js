@@ -15,7 +15,7 @@ const Tags = (props) => {
 		<StyledTags>
 			Tags:
 			{props.data.map((tag) =>(
-				<Tag>{tag}</Tag>
+				<Tag key={tag}>{tag}</Tag>
 			))}
 		</StyledTags>
 	)

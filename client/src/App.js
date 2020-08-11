@@ -8,14 +8,14 @@ import SectionHeader from './components/home/SectionHeader.js'
 import axios from 'axios'
 
 const App = () => {
-  const [user, setUser] = useState(false)
+  const [user, setUser] = useState()
   
   const login = async (user) => {
     try{
       const { data } = await axios.post('/api/login',user)
       setUser(data)
     }catch(error){
-      alert(error.response.data.message)
+      alert(error)
     }
   }
 
@@ -24,7 +24,7 @@ const App = () => {
       const { data } = await axios.post('/api/signup',user)
       alert(data.message)
     }catch(error){
-      alert(error.response.data.message)
+      alert(error)
     }
   }
 
@@ -48,7 +48,6 @@ const App = () => {
             <Route exact path="/profile">
               <Profile />
             </Route>
-const Container = styled.div `
             <Route path="/profile/post/:id">
               <Post />
             </Route>
