@@ -6,10 +6,7 @@ const item = new Schema({
     name : {type: String, required : true},
     amount : {type: Number,required : true},
     total : {type: Number, required : true},
-    image : {
-        imageName : {type: String},
-        url : {type: String},
-    }
+    
 })
 
 module.exports = mongoose.model('Item',item);

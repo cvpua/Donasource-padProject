@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const RequestPost = require('./post');
+
 
 
 
@@ -18,7 +18,7 @@ const user = new Schema({
         firstName : {type: String, required : true},
         lastName : {type: String, required : true},
     },
-    photo : String,
+    photo : {type : String, default : null},
     email : {
         type: String, 
         required : true,
@@ -27,7 +27,7 @@ const user = new Schema({
     },
     location : String,
     contactNumber : {type : String, required : true},
-    bio : {type : String, required : true},
+    bio : {type : String, default : null},
     postCount : {type : Number, default : 0},
     donationCount : {type : Number, default : 0},
     requestCount: {type : Number, default : 0},

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Item = require('./item');
+const Image = require('./image');
 
 const post = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
@@ -16,6 +17,7 @@ const post = new Schema({
     datePosted : {type: Date, required : true},
     deadline : {type: Date},
     comments : [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}],
+    photos : [Image.schema]
 })
 
 module.exports = mongoose.model('Post',post);
