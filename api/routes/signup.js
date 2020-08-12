@@ -21,14 +21,18 @@ router.post('/api/signup',(req,res) => {
         }else{
                 const newUser = new UserSignup({
                 _id: new mongoose.Types.ObjectId(),
+                
                 username : req.body.username,
                 password : req.body.password,  //saving of password is stills shit (no encryption)
-                firstName : req.body.firstName,
-                lastName : req.body.lastName,
+                name : {
+                    firstName : req.body.firstName,
+                    lastName : req.body.lastName
+                },
                 email : req.body.email,
+                location : req.body.location,
                 contactNumber : req.body.contactNumber,
-                description : " ",
-                postCount : 0,
+                
+               
             })
           
             newUser.save()
@@ -48,5 +52,11 @@ router.post('/api/signup',(req,res) => {
         }
     })
 }) 
+
+
+router.post('/api/tester',(req,res) => {
+    console.log(req.body)
+    res.json(req.body.arr)
+})
 
 module.exports = router;
