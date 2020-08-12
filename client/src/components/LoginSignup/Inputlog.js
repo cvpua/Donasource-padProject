@@ -12,7 +12,6 @@ const Inputlog = ({login,toggle}) => {
     const handleFormSubmit = (event) => {
         event.preventDefault()
         login(user)
-        console.log(user)
     }
 
     const handleFormChange = (event) => {

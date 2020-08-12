@@ -1,43 +1,35 @@
 .loginSignup {
     height: 100vh;
+	background-color: #00A693;
+}
+
+.containerLogSign {
+    margin: auto;
+    padding-top: 100px;
+    align-items: center;
+    height: 80vh;
+    width: 1200px;
 }
 
 .logside {
-    height: 100%;
-    width: 40%;
     float: left;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #4292db;
+    margin-right: 100px;
 }
 
 .logsideb {
-    height: 100%;
-    width: 60%;
-    float: left;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #4292db;
+    padding-left: 200px;
 }
 
-.signside {
-    height: 100%;
-    width: 60%;
-    float: right;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #4292db;
+
+.donasource {
+    font-size: 36px;
+    margin-bottom: 50px;
 }
 
-.signsideb {
-    height: 100%;
-    width: 40%;
-    float: right;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #4292db;
+.donasourceInfo {
+    font-size: 22px;
+    margin-bottom: 50px;
 }

@@ -14,20 +14,31 @@ const LoginSignup = ({login,signup}) => {
         <div>
             { isLoggingIn ? 
                 <div className="loginSignup">
-                    <div className="logside">
-                        <Inputlog toggle={toggle} login={login}/>
-                    </div>
-                    <div className="logsideb">
-                        Welcome Back! Haha Wala pa ako maisip ilagay dito 
+                    <div className="containerLogSign">
+                        <div className="logside">
+                            <Inputlog toggle={toggle} login={login}/>
+                        </div>
+                        <div className="logsideb">
+                            <div className="donasource">
+                                    Donasource
+                            </div>
+                            <div className="donasourceInfo">
+                                Donasource is a web application that connects people who need help and those people who can help by posting their needs or what they are willing to donate.
+                            </div>
+                        </div>
                     </div>
                 </div> 
             : 
                 <div className="loginSignup">
-                    <div className="signside">
-                        <Inputsign toggle={toggle} signup={signup} />
-                    </div>
-                    <div className="signsideb">
-                        Join Us! Haha Wala pa ako maisip ilagay dito
+                    <div className="containerLogSign">
+                        <div className="logside">
+                            <Inputsign toggle={toggle} signup={signup} />
+                        </div>
+                        <div className="logsideb">
+                            <div className="donasource">
+                                Join Us and be part of a community that helps one another.
+                            </div>
+                        </div>
                     </div>
                 </div> 
             }   

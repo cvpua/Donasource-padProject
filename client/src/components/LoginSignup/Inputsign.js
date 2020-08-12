@@ -18,8 +18,7 @@ const InputSign = ({signup,toggle}) => {
 
     const handleFormSubmit = (event) => {
         event.preventDefault()
-        checkPassword() ? signup(user) : alert("Passwords not the same!")
-        console.log(user)
+        checkPassword() ? signup(user) : alert("Passwords are not the same!")
     }
 
     const handleFormChange = (event) => {
@@ -29,7 +28,6 @@ const InputSign = ({signup,toggle}) => {
             [target.name]: target.value,
         })
         )
-        console.log(user)
     }
 
     return (
