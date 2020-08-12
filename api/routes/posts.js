@@ -6,8 +6,12 @@ const fs = require('fs-extra');
 
 const checkAuth = require('../auth/check-auth');
 
-const RequestPost = require('../models/requestPost');
+const Post = require('../models/post');
 const User = require('../models/user');
+const Image = require('../models/image');
+const { response } = require('express');
+
+
 
 
 // uploading an image is not yet done due to path problems
@@ -17,10 +21,11 @@ const storage = multer.diskStorage({
         cb(null, './uploads'); 
     },
     filename : function(req,file,cb){
-        cb(null,new Date().toISOString() + file.originalname);
+        cb(null, new Date().toISOString() + file.originalname);
     }
 });
 
+// File type checker
 const fileFilter = (req,file,cb) => {
     if(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg'){
         cb(null,true);
@@ -36,7 +41,7 @@ const upload = multer({
     },
     fileFilter
 
-}).array('requestImage',2);
+}).array('photos',3);
 
 
 
@@ -44,13 +49,13 @@ const upload = multer({
 router.get('/api/posts',(req,res) => {
 
     User.find()
-    .select("requestPosts")
+    .select("posts")
     .then( Users =>{ 
         const response = Users.map(user => {
             
-            if(user.requestPosts.length >= 1){
+            if(user.posts.length >= 1){
                
-                return (user.requestPosts)
+                return (user.posts)
                 }
             })
 
@@ -66,22 +71,47 @@ router.get('/api/posts',(req,res) => {
 })
 
 
+//tester route
+
+
+
 //make a post
 router.post('/api/posts',checkAuth,(req,res) => {
 
+    fs.ensureDirSync('./uploads');
+
     upload(req,res,function(err){
         if(err){
-            res.status(415).json("Error in uploading images");
+            
+            res.status(415).json({
+                message:"Error in uploading images in the uploads folder",
+                response: err
+            });
         }
         else{
-            const date = new Date();
-            let imageName = null;
+
+            let title = req.body.title.replace(/\s/g, '');
+
+            const dir = 'assets/' + req.body.author + '/posts/' + title + '_' + Date.now() + '/images/';
+
+            let imageArray = null;
             if(req.files && req.files.length > 1){
-                     imageName = req.files.map(file =>{
-                        return file.filename;
+                
+                     imageArray = req.files.map(file =>{
+                       
+                         image = new Image({
+                            _id: new mongoose.Types.ObjectId(),
+                            image: {
+                                imageName : file.filename, 
+                                url: 'http://localhost:5000/'+dir+file.filename 
+                        }});
+                        return(image)
                 })
+                
             }
-            const post = new RequestPost({
+            
+           
+            const post = new Post({
                 _id: new mongoose.Types.ObjectId(),
                 author : req.body.author,
                 title : req.body.title,
@@ -90,42 +120,80 @@ router.post('/api/posts',checkAuth,(req,res) => {
                 location : req.body.location,
                 tags : req.body.tags,
                 datePosted : Date.now(),
-                requestImage : imageName || ""
+                photos : imageArray
             })   
             
 
-            var dir = 'assets/' + req.body.author + '/requestPosts/' + req.body.title + '/images/';
+            
 
-            fs.move('./uploads',dir,(err)=>{
-                if (err){
-                    console.log(err.response)
-                    res.status(500).json({message: "Error in uploading images"});
+            fs.move('./uploads',dir,(error)=>{
+               
+                if (error){
+            
+                    res.status(500).json({
+                        message: "Error in moving images to the assets folder",
+                        error
+                        
+                });
                 }else{
                     User.findOne({email : req.userData.email}).exec()
                     .then(user => {
-                        user.requestPosts.push(post);
-                        user.requestCount = user.requestCount + 1;
+                        user.posts.push(post);
+                        user.postCount = user.postCount + 1;
                         user.save()
                         .then(
-                            res.status(200).json("Post created!")
+                            post.save()
+                            .then(
+                                res.status(200).json({
+                                    message:"Post created!",
+                                    post
+                                })
+                            )
+                            .catch(err => {
+                                console.log(err)
+                                res.json(err)
+                            })
                         )
-                        .catch(err)
+                        .catch(err => {
+                            console.log(err)
+                            res.json(err)
+                        })
                     })
                     .catch( err => {
+                        
                         console.log(err)
                         res.status(500).json("Error occured")
                     })                   
                 }
                 
             })
-           
         }
     });    
     
 });
 
+// get a post
+router.get('/api/posts/:postId',(req,res) => {
+
+    User.findOne({username : req.body.username})
+    .exec()
+    .then (user =>{
+        if(user.postCount > 0){
+            user.posts.map(post => {
+                if(post._id == req.params.postId){
+                    res.status(200).json(post);
+                }                  
+            })
+        }
+    })
+    .catch(err =>{
+        res.status(500).json(err)
+    })
+})
 
 
+
+// delete a user
 router.delete('/api/post/:postId',checkAuth,(req,res) => {
 
     

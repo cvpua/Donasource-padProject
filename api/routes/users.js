@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
-const multer = require('multer');
-const upload = multer({dest : 'uploads/'});
+
+// const multer = require('multer');
+// const upload = multer({dest : 'uploads/'});
 
 
 
@@ -13,7 +14,7 @@ const User = require('../models/user');
 // get all user
 router.get('/api/users',(req,res) => {
     User.find()
-    .select("firstName lastName email")
+    .populate()
     .exec()
     .then((users) =>{
     
@@ -23,7 +24,9 @@ router.get('/api/users',(req,res) => {
                 {
                     userId: user._id,
                     email : user.email,
+                    username : user.username,
                     name : user.firstName + " " + user.lastName,
+                    posts : user.posts
                 }
             )
         })
@@ -38,7 +41,6 @@ router.get('/api/users/:userId',(req,res) =>{
     .exec()
     .then( user => {
         if (!user){
-            // console.log(req.body.username)
             return res.status(401).json({
                 message : "Username/password does not exist"
             })
@@ -47,6 +49,12 @@ router.get('/api/users/:userId',(req,res) =>{
                 user
             })
         }
+    })
+    .catch(error => {
+        res.status(400).json({
+            message : "User not found",
+            error : error.response
+        })
     })
 })
 
@@ -58,14 +66,15 @@ router.post('/api/login',(req,res) => {
     .then(user => {
         if (!user){
             return res.status(401).json({
-                message : "Username/password is does not exist"
+                message : "Email/password is does not exist"
             })
         }
         if (user.password === req.body.password){
             const token = 
             jwt.sign({
                 email : user.email,
-                userId : user._id 
+                userId : user._id, 
+                
             },
             process.env.JWT_KEY,
             {
@@ -77,12 +86,13 @@ router.post('/api/login',(req,res) => {
                 username : user.username,
                 email : user.email,
                 isLoggedIn : true,
+                
                 token : token
                 
             })
         }else{
             return res.status(401).json({
-                message : "Username/password does not exist"
+                message : "Email/password does not exist"
             })
         }
     })
@@ -92,23 +102,5 @@ router.post('/api/login',(req,res) => {
     })
 })
 
-
-router.post('/api/users',(req,res) => {
-   
-    const user = new UserProfile({
-        _id: new mongoose.Types.ObjectId(),
-        username : req.body.username,
-        password : req.body.password,
-        firstName : req.body.firstName,
-        lastName : req.body.lastName,
-        email : req.body.email,
-        contactNumber : req.body.contactNumber,
-        description : req.body.description,
-        requestCount : req.body.requestCount,
-        requestPosts : [...req.body.requestPosts]
-    })
-    res.json(user.requestPosts[0])
-
-}) 
 
 module.exports = router;

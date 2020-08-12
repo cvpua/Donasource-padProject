@@ -9,11 +9,6 @@ const { response } = require('express');
 
 
 
-
-router.get('/api/signup',(req,res) => {
-    res.send("Hello")
-})
-
 router.post('/api/signup',(req,res) => {
    
     UserSignup.find({email : req.body.email})
@@ -33,8 +28,7 @@ router.post('/api/signup',(req,res) => {
                 email : req.body.email,
                 contactNumber : req.body.contactNumber,
                 description : " ",
-                requestCount : 0,
-                requestPosts : []
+                postCount : 0,
             })
           
             newUser.save()
@@ -43,11 +37,10 @@ router.post('/api/signup',(req,res) => {
                     res.status(200).json({
                         message : "User created!"
                     })
-                    alert(response.data.message);
                 }
             })
             .catch(error =>{
-                const message = err.keyValue ? "Username is already used" : "Invalid email format"
+                const message = error.keyValue ? "Username is already used" : "Invalid email format"
                     res.status(401).json({
                         error
                     })

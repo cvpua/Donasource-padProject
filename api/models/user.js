@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const RequestPost = require('./requestPost');
+const RequestPost = require('./post');
 
 
 mongoose.set('useCreateIndex', true);
@@ -24,8 +24,8 @@ const user = new Schema({
     password : {type : String, required : true},
     contactNumber : {type : String, required : true},
     description : {type : String, required : true},
-    requestCount : {type : Number, default : 0},
-    requestPosts : [RequestPost.schema]
+    postCount : {type : Number, default : 0},
+    posts : [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}]
 })
 
 module.exports = mongoose.model('User',user);
