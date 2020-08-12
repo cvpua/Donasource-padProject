@@ -8,7 +8,7 @@ const checkAuth = require('../auth/check-auth');
 
 const Post = require('../models/post');
 const User = require('../models/user');
-const Image = require('../models/image');
+const Item = require('../models/item');
 const { response } = require('express');
 
 
@@ -99,8 +99,11 @@ router.post('/api/posts',checkAuth,(req,res) => {
                 
                      imageArray = req.files.map(file =>{
                        
-                         image = new Image({
+                         image = new Item({
                             _id: new mongoose.Types.ObjectId(),
+                            name: req.body.name,
+                            amount: req.body.amount,
+                            total: req.body.total,
                             image: {
                                 imageName : file.filename, 
                                 url: 'http://localhost:5000/'+dir+file.filename 

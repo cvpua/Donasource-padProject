@@ -9,7 +9,7 @@ const comment = new Schema({
         avatar : {type: String, required : true},
     },
     content : {type : String, required : true},
-     
+    postId :  {type : String, required : true}
 })
 
 
