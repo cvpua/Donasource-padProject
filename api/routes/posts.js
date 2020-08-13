@@ -10,6 +10,7 @@ const Post = require('../models/post');
 const User = require('../models/user');
 const Item = require('../models/item');
 const Image = require('../models/image');
+const Comment = require('../models/comment');
 const { response } = require('express');
 
 
@@ -49,28 +50,9 @@ const upload = multer({
 //get all posts
 router.get('/api/posts',(req,res) => {
 
-    // User.find()
-    // .select("posts")
-    // .then( Users =>{ 
-    //     const response = Users.map(user => {
-            
-    //         if(user.posts.length >= 1){
-               
-    //             return (user.posts)
-    //             }
-    //         })
-
-    //         let singleResponse = [];    //convert the 2d array into a single array
-    //         response.forEach( userPosts => {
-    //             if(userPosts){
-    //                 singleResponse = singleResponse.concat(userPosts);
-    //             }
-    //         })
-            
-    //         res.status(200).json(singleResponse)
-    //     })
 
     Post.find()
+    .populate("likers", "username")
     .exec()
     .then(Posts => {
         const response = Posts.map(post => {
@@ -87,31 +69,15 @@ router.get('/api/posts',(req,res) => {
 // get a post
 router.get('/api/posts/:postId',(req,res) => {
 
-    // User.findOne({username : req.body.username})
-    // .exec()
-    // .then (user =>{
-    //     if(user.postCount > 0){
-    //         user.posts.map(post => {
-    //             if(post._id == req.params.postId){
-    //                 res.status(200).json(post);
-    //             }                  
-    //         })
-    //     }
-    // })
-    // .catch(err =>{
-    //     res.status(500).json(err)
-    // })
     Post.findOne({_id : req.params.postId})
     .exec()
     .then(post=>{
         res.status(200).json(post)
     })
     .catch(err => {
-        res.status(400).json({Message : "Post not found",err})
+        res.status(400).json({message : "Post not found",err})
     })
 })
-
-
 
 
 //make a post
@@ -257,8 +223,77 @@ router.post('/api/posts',checkAuth,(req,res) => {
     
 });
 
+//make a comment
+router.patch('/api/posts/:postId/comments',(req,res) => {
+    
+    Post.findOne({_id : req.params.postId})
+    .exec()
+    .then(
+        post => {
+            const comment = new Comment({
+                _id: new mongoose.Types.ObjectId(),
+                user: {
+                    name : req.body.username,
+                    avatar : req.body.avatar,
+                },
+                content : req.body.content,
+                postId : post._id
+            })
+            let comments = post.comments;
+            comments.push(comment)
+            post.comments = comments;
+            post.save()
+            .then( response => {
+                res.status(200).json({message : "Comment created!", post})
+            })
+            .catch(err =>{
+                res.status(500).json({message : "Comment not created",err})
+            })
+    })
+    .catch(err => {
+        res.status(400).json({message : "Post not found!",err})
+    })
 
+    
+});
 
+//like a post
+router.patch('/api/posts/:postId/likes',(req,res) => {
+    
+    Post.findOne({_id : req.params.postId})
+    .exec()
+    .then(
+         post => {
+            let likes = post.likes;
+            likes = likes + 1;
+            post.likes = likes;
+            post.likers.push(req.body._id);
+            post.save()
+            .then( response => {
+                User.findOne({_id:req.body._id})
+                .exec()
+                .then(
+                    user => {
+                         user.likedPosts.push(post);
+                         user.likedPostsCount = user.likedPostsCount + 1;
+                         user.save()
+                         .then (response => {
+                            res.status(200).json({message : "Post liked!", post})
+                         })     
+                    }
+                )
+                .catch(err => res.json({message:"Error in identifying user",err}))
+                
+            })
+            .catch(err =>{
+                res.status(500).json({message : "Post not liked!",err})
+            })
+    })
+    .catch(err => {
+        res.status(400).json({message : "Post not found!",err})
+    })
+
+});
 
 
 

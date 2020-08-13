@@ -14,7 +14,6 @@ const User = require('../models/user');
 // get all user
 router.get('/api/users',(req,res) => {
     User.find()
-    .populate()
     .exec()
     .then((users) =>{
     
@@ -25,7 +24,7 @@ router.get('/api/users',(req,res) => {
                     userId: user._id,
                     email : user.email,
                     username : user.username,
-                    name : user.firstName + " " + user.lastName,
+                    name : user.name.firstName + " " + user.name.lastName,
                     posts : user.posts
                 }
             )
@@ -102,5 +101,18 @@ router.post('/api/login',(req,res) => {
     })
 })
 
+// get all post liked by a user
+router.get('/api/users/:userId/likedPosts',(req,res) => {
+
+    User.findOne({_id : req.params.userId})
+    .populate("likedPosts")
+    .exec()
+    .then(user => {
+        res.status(200).json(user.likedPosts)
+    })
+    .catch(err => {
+        res.status(400).json({message: "User not found",err})
+    })
+})
 
 module.exports = router;
