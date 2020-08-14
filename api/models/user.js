@@ -15,6 +15,7 @@ const user = new Schema({
     },
     password : {type : String, required : true},
     name : {
+        type: {type: String},
         firstName : {type: String, required : true},
         lastName : {type: String, required : true},
     },
@@ -37,3 +38,4 @@ const user = new Schema({
 })
 
 module.exports = mongoose.model('User',user);
+
