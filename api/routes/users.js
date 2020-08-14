@@ -96,7 +96,7 @@ router.post('/api/login',(req,res) => {
         }
     })
     .catch(err =>{
-        console.log(err);
+       
         res.status(500).json({error : err})
     })
 })
@@ -108,11 +108,13 @@ router.get('/api/users/:userId/likedPosts',(req,res) => {
     .populate("likedPosts")
     .exec()
     .then(user => {
+       
         res.status(200).json(user.likedPosts)
     })
     .catch(err => {
         res.status(400).json({message: "User not found",err})
     })
+    
 })
 
 module.exports = router;

@@ -260,38 +260,74 @@ router.patch('/api/posts/:postId/comments',(req,res) => {
 //like a post
 router.patch('/api/posts/:postId/likes',(req,res) => {
     
-    Post.findOne({_id : req.params.postId})
-    .exec()
-    .then(
-         post => {
-            let likes = post.likes;
-            likes = likes + 1;
-            post.likes = likes;
-            post.likers.push(req.body._id);
-            post.save()
-            .then( response => {
-                User.findOne({_id:req.body._id})
+    
+    User.findOne({_id : req.body.userId})
+    .exec(function(err,foundUser){
+        if(!err && foundUser){
+            const alreadyLiked = foundUser.likedPosts.includes(req.params.postId);
+            if(alreadyLiked){
+                Post.findOne({_id : req.params.postId})
                 .exec()
                 .then(
-                    user => {
-                         user.likedPosts.push(post);
-                         user.likedPostsCount = user.likedPostsCount + 1;
-                         user.save()
-                         .then (response => {
-                            res.status(200).json({message : "Post liked!", post})
-                         })     
-                    }
-                )
-                .catch(err => res.json({message:"Error in identifying user",err}))
-                
-            })
-            .catch(err =>{
-                res.status(500).json({message : "Post not liked!",err})
-            })
+                     post => {
+                        let likes = post.likes;
+                        likes = likes - 1;
+                        post.likes = likes;
+                        post.likers = post.likers.filter(userId => String(userId) !== req.body.userId)
+                        post.save()
+                        .then( response => {
+                            foundUser.likedPosts = foundUser.likedPosts.filter(postId => String(postId) !== req.params.postId)
+                            foundUser.likedPostsCount = foundUser.likedPostsCount - 1;
+                            foundUser.save()
+                                .then (response => {
+                                     res.status(200).json({message : "Post unliked!", post})
+                                })     
+                            
+                        })
+                        .catch(err =>{
+                            res.status(500).json({message : "Post not unliked!",err})
+                        })
+                    })
+                    .catch(err => {
+                        res.status(400).json({message : "Post not found!",err})
+                    })    
+            }else{
+                Post.findOne({_id : req.params.postId})
+                .exec()
+                .then(
+                     post => {
+                        let likes = post.likes;
+                        likes = likes + 1;
+                        post.likes = likes;
+                        post.likers.push(req.body.userId);
+                        post.save()
+                        .then( response => {
+                            foundUser.likedPosts.push(post);
+                            foundUser.likedPostsCount = foundUser.likedPostsCount + 1;
+                            foundUser.save()
+                                .then (response => {
+                                     res.status(200).json({message : "Post liked!", post})
+                                })     
+                            
+                        })
+                        .catch(err =>{
+                            res.status(500).json({message : "Post not liked!",err})
+                        })
+                    })
+                    .catch(err => {
+                        res.status(400).json({message : "Post not found!",err})
+                    })
+            }
+
+            
+        }else{
+            res.status(500).json({message : "User not found", err})
+        }
     })
-    .catch(err => {
-        res.status(400).json({message : "Post not found!",err})
-    })
+    
+    
+
+    
 
 });
 
