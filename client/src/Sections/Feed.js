@@ -1,4 +1,4 @@
-import React,{ useState,useEffect } from 'react'
+import React,{ useState,useEffect,useContext } from 'react'
 import {Link} from 'react-router-dom'
 import CardPost from '../components/home/CardPost.js';
 import styled from 'styled-components'
@@ -6,29 +6,35 @@ import Fab from '../components/home/Fab.js'
 import PostForm from '../components/home/form/PostForm.js'
 import MarcoPic from '../assets/dp.jpg'
 import axios from 'axios'
+import UserContext from '../App.js'
 
-const POST = 
-  {
-  	id: 1,
-    avatar: MarcoPic,
-    title: "I need alcohol pls guys",
-    author: "Marco Mirandilla",
-    type: "request",
-    status: "fulfilled",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur auctor orci neque, vitae condimentum felis tincidunt non. Nulla commodo urna ac neque bibendum, sed convallis odio faucibus. Mauris accumsan ornare augue, ut porttitor lacus condimentum ut. Vestibulum consequat enim sit amet leo faucibus iaculis. Nam vehicula rutrum dui nec euismod. Curabitur eu interdum justo. Praesent malesuada, elit eu eleifend maximus, lorem purus molestie magna, sed blandit quam justo sed odio. Nulla varius finibus posuere. Vestibulum a turpis sed sem varius cursus sed vitae justo. Ut euismod erat neque.",
-    items: [{
-      name: "Alcohol",
-      amount: 2,
-      total: 4
-    },],
-    tags: ['Educational','Food'],
-  }
+const POST = {
+	id: 1,
+  avatar: MarcoPic,
+  title: "I need alcohol pls guys",
+  author: "Marco Mirandilla",
+  type: "request",
+  status: "fulfilled",
+  description: 
+  items: [{
+    name: "Alcohol",
+    amount: 2,
+    total: 4
+    description: ,
+    image: ,
+  },],
+  tags: ['Educational','Food'],
+  datePosted: ,
+  deadline: ,
+  location: ,
+}
 
 const StyledFeed = styled.div`
 	padding: 10px;
 `
 
 const Feed = () => {
+
 	const [posts, setPosts] = useState([])
 	
 	// this state changes when the user clicked the fab and the close button on the Post Form
@@ -36,15 +42,10 @@ const Feed = () => {
 	const [loading, setLoading] = useState(true)
 
 	const addPost = (data) => {
-		const newPost = {
-		  ...data,
-		  avatar: MarcoPic,
-		  author: "Marco Mirandilla"
-		}
 		setPosts(prevState => (
 		  [
 		    ...prevState,
-		    newPost,
+		    data,
 		  ]
 		))
 	}

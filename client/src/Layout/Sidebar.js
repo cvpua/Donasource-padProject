@@ -25,7 +25,7 @@ const Sidebar = () => {
 	return(
 		<StyledSidebar flexGrow={1}>
 			<Navigation>
-				<Link to="/home" text="Home">
+				<Link to=flex"/home" text="Home">
 					<FaHome />
 				</Link>
 				<Link to="/notification" text="Notification">
