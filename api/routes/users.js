@@ -57,49 +57,7 @@ router.get('/api/users/:userId',(req,res) =>{
     })
 })
 
-// login user
-router.post('/api/login',(req,res) => {
-    
-    User.findOne({email : req.body.email})
-    .exec()
-    .then(user => {
-        if (!user){
-            return res.status(401).json({
-                message : "Email/password is does not exist"
-            })
-        }
-        if (user.password === req.body.password){
-            const token = 
-            jwt.sign({
-                email : user.email,
-                userId : user._id, 
-                
-            },
-            process.env.JWT_KEY,
-            {
-                expiresIn : "1h"
-            })
 
-            return res.status(200).json({
-                message : "Logged in",
-                username : user.username,
-                email : user.email,
-                isLoggedIn : true,
-                
-                token : token
-                
-            })
-        }else{
-            return res.status(401).json({
-                message : "Email/password does not exist"
-            })
-        }
-    })
-    .catch(err =>{
-       
-        res.status(500).json({error : err})
-    })
-})
 
 // get all post liked by a user
 router.get('/api/users/:userId/likedPosts',(req,res) => {
