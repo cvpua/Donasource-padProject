@@ -6,7 +6,7 @@ const comment = new Schema({
     
     user : {
         type : {type : String},
-        name : {type: String, required : true},
+        username : {type: String, required : true},
         avatar : {type: String, required : true},
     },
     content : {type : String, required : true},
