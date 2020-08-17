@@ -10,11 +10,22 @@ const User = require('../models/user');
 const { response } = require('express');
 
 
-
+// signup
+// req attributes:
+// username 
+// password   
+// firstName 
+// lastName 
+// email
+// location
+// contactNumber
 router.post('/api/signup', Auth.signup) 
 
 
 // login user
+// req attributes:
+// email
+// password
 router.post('/api/login', Auth.login)
 
 module.exports = router;

@@ -90,13 +90,27 @@ exports.makePost = (req,res) => {
             const dir = 'assets/' + req.body.author + '/posts/' + title + '_' + Date.now() + '/images/';
 
             let imageArray = null;
+
+            let items = null;
+
+            // please comment out this part if nag-error sa paggawa ng post
+            items = req.body.items.map(item => {
+
+                const newItem = new Item({
+                    name : item.name,
+                    amount : item.amount,
+                    total : item.total
+                });
+                return newItem;
+            });
+            // _____________________________
+
             if(req.files && req.files.length > 1){
                 
                      imageArray = req.files.map(file =>{
                        
                          image = new Image({
                             _id: new mongoose.Types.ObjectId(),
-                            total: req.body.total,
                             image: {
                                 imageName : file.filename, 
                                 url: 'http://localhost:5000/'+dir+file.filename 
@@ -105,8 +119,7 @@ exports.makePost = (req,res) => {
                         return(image)
                 })
                 
-            }
-            
+            }     
            
             const post = new Post({
                 _id: new mongoose.Types.ObjectId(),
@@ -116,7 +129,7 @@ exports.makePost = (req,res) => {
                 type : req.body.type,
                 status : req.body.status,
                 description : req.body.description,
-                items : [],
+                items : items,
                 location : req.body.location,
                 tags : req.body.tags,
                 datePosted : Date.now(),
@@ -125,7 +138,7 @@ exports.makePost = (req,res) => {
                 comments : []
             })   
             
-            // There is images and needs to create folders and move images
+            // There are images therefore it needs to create folders and move images
             if(req.files.length > 0){ 
               
                 fs.move('./uploads',dir,(error)=>{

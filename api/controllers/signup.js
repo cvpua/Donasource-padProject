@@ -92,6 +92,7 @@ exports.login = (req,res) => {
             })
                 return res.status(200).json({
                     message : "Logged in",
+                    userId : user._id,
                     username : user.username,
                     email : user.email,
                     isLoggedIn : true,
