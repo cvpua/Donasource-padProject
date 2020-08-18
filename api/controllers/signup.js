@@ -67,7 +67,7 @@ exports.login = (req,res) => {
     User.findOne({email : req.body.email})
     .exec()
     .then(user => {
-        if (!user || err){
+        if (!user ){
             
             return res.status(401).json({
                 message : "Email/password is does not exist"
@@ -76,7 +76,7 @@ exports.login = (req,res) => {
         
         brcypt.compare(req.body.password,user.password, (err,result) => {
             
-            if (!result){   
+            if (!result || err){   
                 
                 return res.status(401).json({
                     message: "Email/password is does not exist",err
