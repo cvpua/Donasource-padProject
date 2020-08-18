@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 
 const INITIAL_STATE = {
-    search: ''
+    search: '',
+    category: '',
 };
 
 const sample = [
@@ -15,13 +16,13 @@ const sample = [
         id: 2,
         title: "Penge barya kyah",
         author: "Jep Lar",
-        tags: ['Educational', 'Food'],
+        tags: ['Drinks', 'Food'],
     },
     {
         id: 3,
         title: "For online classes",
         author: "CV Pua",
-        tags: ['Food'],
+        tags: ['Food','Shelter'],
     },
 ]
 
@@ -32,21 +33,50 @@ class Search extends Component {
         const { target } = event;
         this.setState({ search: target.value });
     }
-
+    
     handleFormSubmit = (event) => { 
+        const { category } = this.state;
         event.preventDefault();
+        
         this.setState(INITIAL_STATE);
-    }
-    render() {
         let filteredPost = sample.filter(
-                (title) => {
-                return title.title.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
+            (post) => {
+                console.log(category)
+                if (category === "title") {
+                    return post.title.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
+                } else if (category === "author") {
+                    return post.author.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
+                } else if (category === "tags"){
+                    post.tags.filter((item) => {
+                        if (item.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1) {
+                            console.log(post)
+                        }
+                    })
+                }
             }
-        );
-        const { search } = this.state;
+            );
+            filteredPost.map((post) => {
+                console.log(post)
+            })
+        }
+        
+    changeCategory = (event) => {
+        const { target } = event;
+        this.setState({
+            category: target.value
+        });
+    }
+
+    handleFormReset = () => {
+        this.setState(() => this.initialState)
+    }
+
+    render() {
+        const { search, category } = this.state;
+                
         return (
             <div>
-                <form onSubmit ={this.handleFormSubmit}>
+                <form onSubmit ={this.handleFormSubmit} onReset = {this.handleFormReset}>
                     <input
                         onChange={this.updateSearch}
                         name="search"
@@ -54,13 +84,21 @@ class Search extends Component {
                         type="text"
                         placeholder="Search Bar"
                         />
+                    <br />
+                    <div onChange={this.changeCategory}>
+                        <input type="radio" id="title" name="categories" value="title" checked={this.state.category === 'title'} />
+                        <label for="title" />Title <br />
+                        <input type="radio" id="author" name="categories" value="author" checked={this.state.category === 'author'}/>
+                        <label for="author" />Author<br />
+                        <input type="radio" id="tags" name="categories" value="tags" checked={this.state.category === 'tags'}/>
+                        <label for="tags" />Tags <br />
+                    </div>
+                    <button style={{ backgroundColor: "lightblue" }}> Search </button>
                 </form>
-                {filteredPost.map((title)=> {
-                    console.log(title)
-                })}
             </div>
         )
     }
 }
 
 export default Search
+

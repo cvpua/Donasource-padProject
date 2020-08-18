@@ -67,16 +67,19 @@ exports.login = (req,res) => {
     User.findOne({email : req.body.email})
     .exec()
     .then(user => {
-        if (!user){
+        if (!user || err){
+            
             return res.status(401).json({
                 message : "Email/password is does not exist"
             })
         }
-
+        
         brcypt.compare(req.body.password,user.password, (err,result) => {
-            if (err){   
+            
+            if (!result){   
+                
                 return res.status(401).json({
-                    message: "Email/password is does not exist"
+                    message: "Email/password is does not exist",err
                   });
             }
             if (result){
@@ -102,9 +105,8 @@ exports.login = (req,res) => {
             }
         });
     })
-    .catch(err =>{
-       
-        res.status(500).json({error : err})
+    .catch(err => {
+        res.status(500).json({error : err});
     })
 }
 
