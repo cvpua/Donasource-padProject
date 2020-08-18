@@ -1,6 +1,6 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import customTheme from './styles/theme'
-import { ThemeProvider,CSSReset,Flex } from '@chakra-ui/core'
+import { ThemeProvider,CSSReset,Flex, useToast } from '@chakra-ui/core'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Header, Left, Nav, Logout, Middle, Home, Right } from './components'
 import PostSection from './components/PostSection.js'
@@ -8,6 +8,7 @@ import Profile from './components/Profile.js'
 import Search from './components/Search.js'
 import LoginSignup from './components/LoginSignup/LoginSignup.js'
 import axios from 'axios'
+import Toast from './components/Toast.js'
 
 // To do: 
 // (done) Add Profile Component
@@ -26,26 +27,51 @@ const App = () => {
   // #DevOnly - custom theme
   console.log(customTheme)
 
-  const [user, setUser] = useState( )
+  const [user, setUser] = useState()
+  const [message, setMessage] = useState(undefined)
+  const toast = useToast()
  
   // Doesn't return any date when when email and password are wrong
   const login = async (user) => {
     try{
       const { data } = await axios.post('/api/login',user)
-      console.log('Data Returned: ', data)
       setUser(data)
-      alert(data.message)
+      setMessage({
+        title: "Success",
+        description: data.message,
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      })
     }catch(error){
-      alert(error)
+      setMessage({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      })
     }
   }
 
   const signup = async (user) => {
     try{
       const { data } = await axios.post('/api/signup',user)
-      alert(data.message)
+      setMessage({
+        title: "Success",
+        description: data.message,
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      })
     }catch(error){
-      alert(error)
+      setMessage({
+        title: "Success",
+        description: error.message,
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      })
     }
   }
 
@@ -53,6 +79,7 @@ const App = () => {
     <Router>
       <ThemeProvider theme={customTheme}>
         <CSSReset/>
+          <Toast message={message} />
           {
             !user ? <LoginSignup login={login} signup={signup} />
             : <div>
@@ -80,7 +107,6 @@ const App = () => {
                       <Route exact path="/profile" component={Profile} />
                       {/*<Route path="/notification" component={Notification} />
                       <Route path="/avail" component={Avails} />
-                      
                       */}
                       <Route path="/profile/post/:id" component={PostSection} />
                     </Switch>

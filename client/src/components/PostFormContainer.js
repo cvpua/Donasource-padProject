@@ -39,16 +39,18 @@ const PostFormContainer = (props) => {
 				Yup.string().required('Required')
 			).required('Required')
 	})
+	
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
-		// Must return an id and dateCreated
-		// const { data } = await axios.post('/api/post', values)
-		setTimeout(() => {
-			console.log('Values: ', values)
+		try {
+			const { data } = await axios.post('/api/post', values)
+			alert(data.message)
 			createPost(values)
 			handleIsSubmitting(false)
 			onClose()
-		}, 3000)
+		}catch(error){
+			alert(error.message)
+		}
 	}
 
 	return (

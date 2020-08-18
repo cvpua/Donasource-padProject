@@ -40,59 +40,36 @@ const INIT_STATE = [{
 		images: null,
 	}]
 
-const Feed = () => {
-	const [posts, setPosts] = useState(INIT_STATE)
-	// For better user experience; will set to false once the data fetching is done
-	const [isLoading, setIsLoading] = useState(false)
+const Feed = (props) => {
+	const { posts, createPost, isLoading } = props
 	// Form modal will close if the form is successfully submitted
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	//	A custom hook to help handle common open, close, or toggle scenarios. 
 	// See this docs for more information: https://chakra-ui.com/usedisclosure
 	const { isOpen, onOpen, onClose } = useDisclosure()
 
-	const createPost = (newPost) => {
-		setPosts((prevState) => ([
-			...prevState,
-			newPost,
-		]))
-		console.log('Posts: ', posts)
-	}
-
-	// For fetching the list of posts
-	// This will trigger the effect every time Home is rendered
-	// Effect: fetching the posts and saving it to the posts state
-	// useEffect(() => {
-	//   const fetchData = async () => {
-	//     try{
-	//       const { data } = await axios.get('/api/posts')
-	//       setPosts(data)
-	// 			setIsLoading(!isLoading)
-	//     }catch(error){
-	//       alert(error)
-	//     }
-	//   }
-	//   fetchData()
- //  }, [])
+	
 	
 	return (
 		<>
-	      {
-	      	isLoading 
-	      	? <Spinner 
-	      			thickness="4px"
-	      			speed="0.65s" 
-	      			emptyColor="gray.200" 
-	      			color="blue.500" 
-	      			size="xl" 
-	      		/>
-	      	: <Stack px="5" >
-	      			{
-		      			posts.map((post,i) => (
-		      				<Post key={i} data={post} id={i} isLinked={true} />
-		      			))
-	      			}
-	      		</Stack>
-	      }
+			{
+				isLoading 
+      	? <Spinner 
+      			thickness="4px"
+      			speed="0.65s" 
+      			emptyColor="gray.200" 
+      			color="blue.500" 
+      			size="xl" 
+      		/>
+      	: <Stack px="5" >
+		  			{
+		    			posts.map((post,i) => (
+		    				<Post key={i} data={post} id={i} isLinked={true} />
+		    			))
+		  			}
+		  		</Stack>
+			}
+	    
 	    {/* Post Form Modal */}
 	    <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
