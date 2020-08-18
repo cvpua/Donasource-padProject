@@ -21,7 +21,7 @@ app.use(express.urlencoded({extended:false}))
 app.use('/', postsApi);
 app.use('/',usersApi);
 app.use('/',signupApi);
-app.use('/uploads',express.static('uploads'))
+app.use('/assets',express.static('assets'))
 
 
 const port = process.env.PORT || 5000;

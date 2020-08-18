@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const RequestPost = require('./requestPost');
+
+
 
 
 mongoose.set('useCreateIndex', true);
@@ -13,19 +14,28 @@ const user = new Schema({
         unique : true
     },
     password : {type : String, required : true},
-    firstName : {type : String, required : true},
-    lastName : {type : String, required : true},
+    name : {
+        type: {type: String},
+        firstName : {type: String, required : true},
+        lastName : {type: String, required : true},
+    },
+    photo : {type : String, default : null},
     email : {
         type: String, 
         required : true,
         unique : true, 
         match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
     },
-    password : {type : String, required : true},
+    location : String,
     contactNumber : {type : String, required : true},
-    description : {type : String, required : true},
-    requestCount : {type : Number, default : 0},
-    requestPosts : [RequestPost.schema]
+    bio : {type : String, default : null},
+    postCount : {type : Number, default : 0},
+    donationCount : {type : Number, default : 0},
+    requestCount: {type : Number, default : 0},
+    posts : [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
+    likedPostsCount : {type : Number, default : 0},
+    likedPosts : [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}]
 })
 
 module.exports = mongoose.model('User',user);
+
