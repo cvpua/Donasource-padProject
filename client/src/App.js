@@ -31,13 +31,15 @@ const App = () => {
   // Doesn't return any date when when email and password are wrong
   const login = async (user) => {
     try{
-      const { data } = await axios.post('/api/login',user)
+      const  {data}  = await axios.post('/api/login',user)
       console.log('Data Returned: ', data)
       setUser(data)
       alert(data.message)
     }catch(error){
       alert(error)
+      console.log('Data returned:',error.response)
     }
+    
   }
 
   const signup = async (user) => {
