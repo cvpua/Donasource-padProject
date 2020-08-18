@@ -1,13 +1,16 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
 import axios from 'axios'
 import MarcoPic from '../assets/dp.jpg'
+import {UserContext} from '../App.js'
 
 const PostFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, createPost } = props
 
+	const user = useContext(UserContext)
+	console.log('User: ', user)
 	const initialValues = {
 		avatar: MarcoPic,
 		author: 'Marco Mirandilla',
@@ -39,17 +42,26 @@ const PostFormContainer = (props) => {
 				Yup.string().required('Required')
 			).required('Required')
 	})
-	
+
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
 		try {
-			const { data } = await axios.post('/api/post', values)
+			const { data } = await axios.post(
+				'/api/posts', 
+				values,
+				{
+					headers: {
+						Authorization: 'Bearer ' + user.token
+					}
+				}
+			)
 			alert(data.message)
 			createPost(values)
-			handleIsSubmitting(false)
-			onClose()
+			
 		}catch(error){
 			alert(error.message)
+			handleIsSubmitting(false)
+			onClose()
 		}
 	}
 

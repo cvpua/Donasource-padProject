@@ -23,6 +23,8 @@ import Toast from './components/Toast.js'
 // CSSReset - removes browser default styles
 //          - recommended to ensure all components work correctly.
 
+export const UserContext = React.createContext()
+
 const App = () => {
   // #DevOnly - custom theme
   console.log(customTheme)
@@ -36,6 +38,7 @@ const App = () => {
     try{
       const { data } = await axios.post('/api/login',user)
       setUser(data)
+      console.log('User: ', data)
       setMessage({
         title: "Success",
         description: data.message,
@@ -48,7 +51,7 @@ const App = () => {
         title: "Error",
         description: error.message,
         status: "error",
-        duration: 5000,
+        duration: 6000,
         isClosable: true,
       })
     }
@@ -79,6 +82,7 @@ const App = () => {
     <Router>
       <ThemeProvider theme={customTheme}>
         <CSSReset/>
+        <UserContext.Provider value={user}>
           <Toast message={message} />
           {
             !user ? <LoginSignup login={login} signup={signup} />
@@ -122,6 +126,7 @@ const App = () => {
                 {/* End of Main */}
               </div>
           }
+        </UserContext.Provider>
       </ThemeProvider>
     </Router>
   )

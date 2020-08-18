@@ -25,7 +25,6 @@ const Home = () => {
 	  const fetchData = async () => {
 	    try{
 	      const { data } = await axios.get('/api/posts')
-	      console.log('Data: ', data)
 	      setPosts(data.response)
 				setIsLoading(!isLoading)
 	    }catch(error){
