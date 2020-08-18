@@ -12,13 +12,12 @@ const MyNumeric = (props) => {
 					<FormControl isInvalid={form.errors[name] && form.touched[name]} mb="4">
 						<FormLabel htmlFor={name}>{label}</FormLabel>
 						<NumberInput 
-							id={name} {...rest} {...field}
+							id={name}
+							onChange={val=>form.setFieldValue(name, val)} 
+							min={0}
+							{...rest} {...field}
 						>
 							<NumberInputField />
-						  <NumberInputStepper>
-						    <NumberIncrementStepper />
-						    <NumberDecrementStepper />
-						  </NumberInputStepper>
 						</NumberInput>
 						<FormErrorMessage>{form.errors[name]}</FormErrorMessage>
 					</FormControl>

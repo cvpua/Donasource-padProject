@@ -64,12 +64,3 @@ const LoginSignup = ({login,signup}) => {
 }
 
 export default LoginSignup;
-
-const items = [
-    {
-        name: 'watermelon',
-        amount: 0,
-        total: 10,
-        donors: [],
-    }
-]

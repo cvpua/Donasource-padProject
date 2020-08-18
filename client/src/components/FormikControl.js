@@ -22,7 +22,7 @@ const FormikControl = (props) => {
 		case 'tags' : return <MyTags {...rest} />
 		case 'images': return <MyImages {...rest} />
 		case 'password': return <MyPassword {...rest} />
-		case 'number': return <MyNumeric {...rest} />
+		case 'numeric': return <MyNumeric {...rest} />
 		default: return null
 	}
 }
