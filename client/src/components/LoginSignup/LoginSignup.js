@@ -46,7 +46,7 @@ const LoginSignup = ({login,signup}) => {
                         {/* Signup Form Container */}
                         <Box bg="white" shadow="md" rounded="lg" py="12" px="10" maxh="100vh" >
                             <Text fontSize="3xl" fontWeight="bold" mb="4">Sign up</Text>
-                            <SignupFormContainer handleIsSubmitting={handleIsSubmitting} />
+                            <SignupFormContainer handleIsSubmitting={handleIsSubmitting} signup={signup} />
                             <Flex justify="flex-end" mt="8">
                                 <Button mr="2" onClick={toggle} >Log in</Button>    
                                 <Button type="submit" variantColor="cyan" form="signupform" isLoading={isSubmitting} >Sign up</Button>

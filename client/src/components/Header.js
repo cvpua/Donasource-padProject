@@ -7,7 +7,7 @@ const Header = (props) => {
 	return (
 		<Flex 
       h="16" 
-      bg="cyan.500" 
+      bg="primary.600" 
       zIndex="banner" 
       justify="center" 
       align="center"

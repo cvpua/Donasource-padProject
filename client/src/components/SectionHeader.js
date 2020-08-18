@@ -17,8 +17,8 @@ const SectionHeader = (props) => {
       <Box as={props.icon} size="6" color="cyan.700" mr="2"></Box>
       <Text 
       	fontFamily="heading" 
-      	fontWeight="extrabold" 
-      	fontSize="3xl" 
+      	fontWeight="semibold" 
+      	fontSize="2xl" 
       	color="primary"
       >
       	{ title }

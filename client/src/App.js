@@ -25,32 +25,35 @@ const App = () => {
   // #DevOnly - custom theme
   console.log(customTheme)
 
-  const [user, setUser] = useState()
+  const [user, setUser] = useState( )
  
+  // Doesn't return any date when when email and password are wrong
   const login = async (user) => {
     try{
       const { data } = await axios.post('/api/login',user)
+      console.log('Data Returned: ', data)
       setUser(data)
+      alert(data.message)
     }catch(error){
       alert(error)
     }
   }
 
-//   const signup = async (user) => {
-//     try{
-//       const { data } = await axios.post('/api/signup',user)
-//       alert(data.message)
-//     }catch(error){
-//       alert(error)
-//     }
-//   }
+  const signup = async (user) => {
+    try{
+      const { data } = await axios.post('/api/signup',user)
+      alert(data.message)
+    }catch(error){
+      alert(error)
+    }
+  }
 
   return (
     <Router>
       <ThemeProvider theme={customTheme}>
         <CSSReset/>
           {
-            !user ? <LoginSignup login={login} />
+            !user ? <LoginSignup login={login} signup={signup} />
             : <div>
                 {/* Header */}
                 <Header title="Donasource" />

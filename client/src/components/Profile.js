@@ -9,11 +9,11 @@ const Profile = () => {
 		<div>
 			<SectionHeader title="Profile" icon={FaUserAlt} />
 			<Box mx="4" shadow="md" bg="gray.50" rounded="lg">
-			<Flex py="10" pb="4" flexDirection="column" justify="center" align="center">
+			<Flex py="10" pb="4" borderBottom="4px" borderColor="gray.200" mb="4" flexDirection="column" justify="center" align="center">
 				{/* Avatar */}
-				<Avatar size="lg" name="Marco Mirandilla" mb="2"/>
+				<Avatar size="2xl" name="Marco Mirandilla" mb="2"/>
 				{/* Name */}
-				<Text fontSize="lg" fontWeight="semibold">Marco Mirandilla</Text>
+				<Text fontSize="2xl" fontWeight="semibold">Marco Mirandilla</Text>
 				{/* Username */}
 				<Text fontWeight="light">@rcmirandilla</Text>
 
@@ -24,30 +24,30 @@ const Profile = () => {
 				<Flex flexDirection="column" mt="2">
 					{/* Location */}
 					<Flex align="center" justify="center">
-					<FaLocationArrow />
+					<Box as={FaLocationArrow} color="primary.600" />
 					<Text ml="2">Los Banos, Laguna</Text>
 					</Flex>
 					{/* Email */}
 					<Flex align="center" justify="center">
-					<FaAt />
+					<Box as={FaAt} color="primary.600" />
 					<Text ml="2">rcmirandilla@up.edu.ph</Text>
 					</Flex>
 					{/* Contact */}
 					<Flex align="center" justify="center">
-					<FaSms />
+					<Box as={FaSms} color="primary.600" />
 					<Text ml="2">09286019739</Text> 
 					</Flex>
 				</Flex>
-				<StatGroup>
+				<StatGroup >
 					{/* Donations */}
 				  <Stat d="flex" p="4" flexDirection="column" justifyContent="center" alignItems="center">
 				    <StatNumber>345,670</StatNumber>
-				    <StatLabel>Donations</StatLabel>
+				    <StatLabel color="primary.600">Donations</StatLabel>
 				  </Stat>
 				  {/* Requests */}
 				  <Stat d="flex" p="4" flexDirection="column" justifyContent="center" alignItems="center">
 				    <StatNumber>345,670</StatNumber>
-				    <StatLabel>Requests</StatLabel>
+				    <StatLabel color="primary.600" >Requests</StatLabel>
 				  </Stat>
 				</StatGroup>
 			</Flex>

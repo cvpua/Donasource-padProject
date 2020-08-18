@@ -2,6 +2,7 @@ import React from 'react'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
+import axios from 'axios'
 
 const LoginFormContainer = (props) => {
 	const { handleIsSubmitting, login } = props
@@ -16,9 +17,9 @@ const LoginFormContainer = (props) => {
 		password: Yup.string().required('Required')
 	})
 
-	const onSubmit = (values) => {
+	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
-		login()
+		login(values)
 		console.log('Values: ', values)
 		handleIsSubmitting(false)
 	}
