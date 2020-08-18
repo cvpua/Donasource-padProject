@@ -5,7 +5,8 @@ import MyRadio from './MyRadio.js'
 import MyItems from './MyItems.js'
 import MyTags from './MyTags.js'
 import MyImages from './MyImages.js'
-
+import MyPassword from './MyPassword.js'
+import MyNumeric from './MyNumeric.js'
 
 const FormikControl = (props) => {
 	const { control, ...rest } = props
@@ -20,6 +21,8 @@ const FormikControl = (props) => {
 		case 'items': return <MyItems {...rest} />
 		case 'tags' : return <MyTags {...rest} />
 		case 'images': return <MyImages {...rest} />
+		case 'password': return <MyPassword {...rest} />
+		case 'number': return <MyNumeric {...rest} />
 		default: return null
 	}
 }

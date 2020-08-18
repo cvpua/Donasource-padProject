@@ -8,7 +8,7 @@ const MyInput = (props) => {
 		<Field name={name}>
 			{
 				({field, form}) => {
-					return <FormControl isInvalid={form.errors[name] && form.touched[name]} >
+					return <FormControl isInvalid={form.errors[name] && form.touched[name]} mb="2">
 						<FormLabel htmlFor={name}>{label}</FormLabel>
 						<Input id={name} {...rest} {...field} />
 						<FormErrorMessage>{form.errors[name]}</FormErrorMessage>

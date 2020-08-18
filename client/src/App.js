@@ -1,13 +1,14 @@
-import React from 'react'
+import React,{useState} from 'react'
 import customTheme from './styles/theme'
 import { ThemeProvider,CSSReset,Flex } from '@chakra-ui/core'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Header, Left, Nav, Logout, Middle, Home, Right } from './components'
 import PostSection from './components/PostSection.js'
 import Profile from './components/Profile.js'
+import LoginSignup from './components/LoginSignup/LoginSignup.js'
 
 // To do: 
-// Add Profile Component
+// (done) Add Profile Component
 // Add Avails Component
 // Add Notification Component
 // Login
@@ -23,6 +24,8 @@ const App = () => {
   // #DevOnly - custom theme
   console.log(customTheme)
 
+  const [user, setUser] = useState()
+ 
 //   const login = async (user) => {
 //     try{
 //       const { data } = await axios.post('/api/login',user)
@@ -45,44 +48,49 @@ const App = () => {
     <Router>
       <ThemeProvider theme={customTheme}>
         <CSSReset/>
-        {/* Header */}
-        <Header title="Donasource" />
-        {/* Main */}
-        <Flex 
-          justify={{base: "center", xl: "space-evenly"}}  
-          bg="gray.100"
-        >
-          {/* Left/Sidebar */}
-          <Left>
-            {/* Navigation */}
-            <Nav />
-            {/* Logout */}
-            <Logout />
-          </Left>
-          {/* End of Left/Sidebar */}
+          {
+            !user ? <LoginSignup />
+            : <div>
+                {/* Header */}
+                <Header title="Donasource" />
+                {/* Main */}
+                <Flex 
+                  justify={{base: "center", xl: "space-evenly"}}  
+                  bg="gray.100"
+                >
+                  {/* Left/Sidebar */}
+                  <Left>
+                    {/* Navigation */}
+                    <Nav />
+                    {/* Logout */}
+                    <Logout />
+                  </Left>
+                  {/* End of Left/Sidebar */}
 
-          {/* Middle */}
-          <Middle>
-            {/* Section */}
-            <Switch>
-              <Route path="/home" component={Home} />
-              <Route exact path="/profile" component={Profile} />
-              {/*<Route path="/notification" component={Notification} />
-              <Route path="/avail" component={Avails} />
-              
-              */}
-              <Route path="/profile/post/:id" component={PostSection} />
-            </Switch>
-          </Middle>
-          {/* End of Middle */}
+                  {/* Middle */}
+                  <Middle>
+                    {/* Section */}
+                    <Switch>
+                      <Route path="/home" component={Home} />
+                      <Route exact path="/profile" component={Profile} />
+                      {/*<Route path="/notification" component={Notification} />
+                      <Route path="/avail" component={Avails} />
+                      
+                      */}
+                      <Route path="/profile/post/:id" component={PostSection} />
+                    </Switch>
+                  </Middle>
+                  {/* End of Middle */}
 
-          {/* Right/Ads */}
-          <Right>
-            
-          </Right>
-          {/* End of Right/Ads */}
-        </Flex>
-        {/* End of Main */}
+                  {/* Right/Ads */}
+                  <Right>
+                    
+                  </Right>
+                  {/* End of Right/Ads */}
+                </Flex>
+                {/* End of Main */}
+              </div>
+          }
       </ThemeProvider>
     </Router>
   )

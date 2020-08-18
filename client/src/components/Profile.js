@@ -8,7 +8,7 @@ const Profile = () => {
 	return (
 		<div>
 			<SectionHeader title="Profile" icon={FaUserAlt} />
-			<Box mx="4" border="4px" borderColor="cyan.400" rounded="lg">
+			<Box mx="4" shadow="md" bg="gray.50" rounded="lg">
 			<Flex py="10" pb="4" flexDirection="column" justify="center" align="center">
 				{/* Avatar */}
 				<Avatar size="lg" name="Marco Mirandilla" mb="2"/>
