@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Header, Left, Nav, Logout, Middle, Home, Right } from './components'
 import PostSection from './components/PostSection.js'
 import Profile from './components/Profile.js'
+import Search from './components/Search.js'
 import LoginSignup from './components/LoginSignup/LoginSignup.js'
 import axios from 'axios'
 
@@ -88,7 +89,7 @@ const App = () => {
 
                   {/* Right/Ads */}
                   <Right>
-                    
+                      <Search />
                   </Right>
                   {/* End of Right/Ads */}
                 </Flex>
