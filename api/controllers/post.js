@@ -94,15 +94,17 @@ exports.makePost = (req,res) => {
             let items = null;
 
             // please comment out this part if nag-error sa paggawa ng post
-            items = req.body.items.map(item => {
-
-                const newItem = new Item({
-                    name : item.name,
-                    amount : item.amount,
-                    total : item.total
+            if(req.body.items && req.body.items.length > 0){
+                items = req.body.items.map(item => {
+                    console.log(item);
+                    const newItem = new Item({
+                        name : item.name,
+                        amount : item.amount,
+                        total : item.total
+                    });
+                    return newItem;
                 });
-                return newItem;
-            });
+            }
             // _____________________________
 
             if(req.files && req.files.length > 1){
@@ -336,6 +338,7 @@ exports.deletePost = (req,res) => {
         .exec()
         .then(user =>{
             user.posts = user.posts.filter(post => String(post._id) !== req.params.postId)
+            post.type === "request" ? user.requestCount = user.requestCount - 1 : user.donationCount = user.donationCount - 1
             user.save()
             .then(response => {
                 res.status(200).json({message : "Post deleted!",post})
