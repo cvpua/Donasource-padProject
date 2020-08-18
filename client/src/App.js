@@ -6,6 +6,7 @@ import { Header, Left, Nav, Logout, Middle, Home, Right } from './components'
 import PostSection from './components/PostSection.js'
 import Profile from './components/Profile.js'
 import LoginSignup from './components/LoginSignup/LoginSignup.js'
+import axios from 'axios'
 
 // To do: 
 // (done) Add Profile Component
@@ -26,14 +27,14 @@ const App = () => {
 
   const [user, setUser] = useState()
  
-//   const login = async (user) => {
-//     try{
-//       const { data } = await axios.post('/api/login',user)
-//       setUser(data)
-//     }catch(error){
-//       alert(error)
-//     }
-//   }
+  const login = async (user) => {
+    try{
+      const { data } = await axios.post('/api/login',user)
+      setUser(data)
+    }catch(error){
+      alert(error)
+    }
+  }
 
 //   const signup = async (user) => {
 //     try{
@@ -49,7 +50,7 @@ const App = () => {
       <ThemeProvider theme={customTheme}>
         <CSSReset/>
           {
-            !user ? <LoginSignup />
+            !user ? <LoginSignup login={login} />
             : <div>
                 {/* Header */}
                 <Header title="Donasource" />

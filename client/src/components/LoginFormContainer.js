@@ -4,7 +4,7 @@ import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
 
 const LoginFormContainer = (props) => {
-	const { handleIsSubmitting } = props
+	const { handleIsSubmitting, login } = props
 
 	const initialValues = {
 		email: '',
@@ -16,12 +16,11 @@ const LoginFormContainer = (props) => {
 		password: Yup.string().required('Required')
 	})
 
-	const onSubmit = async (values) => {
+	const onSubmit = (values) => {
 		handleIsSubmitting(true)
-		setTimeout(() => {
-			console.log('Values: ', values)
-			handleIsSubmitting(false)
-		}, 3000)
+		login()
+		console.log('Values: ', values)
+		handleIsSubmitting(false)
 	}
 
 	return (
