@@ -30,15 +30,15 @@ const App = () => {
   console.log(customTheme)
 
   const [user, setUser] = useState()
-  const [message, setMessage] = useState(undefined)
-  const toast = useToast()
+  const [message, setMessage] = useState()
  
-  // Doesn't return any date when when email and password are wrong
   const login = async (user) => {
     try{
       const { data } = await axios.post('/api/login',user)
-      setUser(data)
-      console.log('User: ', data)
+      setUser({
+        user: data.user,
+        token: data.token,
+      })
       setMessage({
         title: "Success",
         description: data.message,

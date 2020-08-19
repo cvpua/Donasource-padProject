@@ -26,20 +26,6 @@ import MarcoPic from '../assets/dp.jpg'
 //  []
 // Add Skeleton for better user experience
 
-// temporary initial state
-const INIT_STATE = [{
-		avatar: MarcoPic,
-		author: 'Marco Mirandilla',
-		title: 'Penge Ayuda',
-		description: 'Wala lang',
-		type: 'donation',
-		location: 'Gumaca',
-		deadline: new Date(),
-		items: [{name: 'Watermelon', quantity: 10, amount: 0}],
-		tags: ['Food'],
-		images: null,
-	}]
-
 const Feed = (props) => {
 	const { posts, createPost, isLoading } = props
 	// Form modal will close if the form is successfully submitted
@@ -49,7 +35,7 @@ const Feed = (props) => {
 	const { isOpen, onOpen, onClose } = useDisclosure()
 
 	
-	
+	console.log('Posts: ', posts)
 	return (
 		<>
 			{
@@ -63,8 +49,8 @@ const Feed = (props) => {
       		/>
       	: <Stack px="5" >
 		  			{
-		    			posts.map((post,i) => (
-		    				<Post key={i} data={post} id={i} isLinked={true} />
+		    			posts.map((post) => (
+		    				<Post key={post._id} data={post} isLinked={true} />
 		    			))
 		  			}
 		  		</Stack>

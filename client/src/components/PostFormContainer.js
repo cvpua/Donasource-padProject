@@ -4,23 +4,24 @@ import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
 import axios from 'axios'
 import MarcoPic from '../assets/dp.jpg'
-import {UserContext} from '../App.js'
+import { UserContext } from '../App.js'
 import { Types } from 'mongoose'
 
 const PostFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, createPost } = props
 
-	const user = useContext(UserContext)
+	const USER = useContext(UserContext)
+	const { user, token } = USER
 
 	const initialValues = {
-		avatar: MarcoPic,
-		author: 'Marco Mirandilla',
-		title: 'Penge Ayuda',
-		description: 'Wala lang',
+		avatar: user.photo,
+		author: user.name.firstName + " " + user.name.lastName,
+		title: '',
+		description: '',
 		type: 'donation',
-		location: 'Gumaca',
+		location: '',
 		deadline: new Date(),
-		items: [{name: '', total: '', amount: 0}],
+		items: [{name: '', total: 1, amount: 0}],
 		tags: ['Food'],
 		images: [],
 		comments: [],
@@ -35,7 +36,7 @@ const PostFormContainer = (props) => {
 			.of(
 				Yup.object().shape({
 					name: Yup.string().required('Required'),
-					total: Yup.number().required('Required')
+					total: Yup.number().min(1, 'Minimum of one item').required('Required')
 				})
 			).required('Required'),
 		tags: Yup.array()
@@ -70,7 +71,7 @@ const PostFormContainer = (props) => {
 				formData, //pinaltan ko ung pinapasa
 				{
 					headers: {
-						'Authorization': 'Bearer ' + user.token,
+						'Authorization': 'Bearer ' + token,
 						'Content-Type' : "multipart/form-data; boundary=<calculated when request is sent>"
 					}
 				}

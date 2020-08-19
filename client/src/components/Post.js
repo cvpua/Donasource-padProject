@@ -28,8 +28,9 @@ import CommentFormContainer from './CommentFormContainer.js'
 // For now, let this be a request type post
 
 const Post = (props) => {
-	const { data, addComment,id, isLinked } = props
+	const { data, addComment, isLinked } = props
 	const {
+    _id,
 		avatar,
 		title,
 		author,
@@ -37,6 +38,7 @@ const Post = (props) => {
 		description,
 		items,
 		tags,
+    likers,
 	} = data
 
   //  A custom hook to help handle common open, close, or toggle scenarios. 
@@ -50,7 +52,7 @@ const Post = (props) => {
   		<PseudoBox p="5" mb="4" shadow="sm" bg="white" rounded="lg" pos="relative" _hover={{ borderColor: "gray.200", bg: "gray.50" }}>
         {
           isLinked 
-          ? <Box as={Link} to={`/profile/post/${id}`} w="full" h="full" pos="absolute" top="0" left="0" bottom="0" right="0"></Box>
+          ? <Box as={Link} to={`/profile/post/${_id}`} w="full" h="full" pos="absolute" top="0" left="0" bottom="0" right="0"></Box>
           : "" 
         }
         {/* Post Header */}
@@ -75,7 +77,7 @@ const Post = (props) => {
           {/* Comment Button */}
           <IconButton variant="ghost" isRound icon={FaCommentDots} onClick={onOpen} />
           {/* Like Button  */}
-          <LikeButton />
+          <LikeButton id={_id} likers={likers} />
         </Flex>
         {props.children}
       </PseudoBox>
@@ -89,7 +91,7 @@ const Post = (props) => {
           <ModalCloseButton />
           <ModalBody>
             {/* Comment Form */}
-            <CommentFormContainer onClose={onClose} handleIsSubmitting={setIsSubmitting} addComment={addComment}/>
+            <CommentFormContainer onClose={onClose} handleIsSubmitting={setIsSubmitting} addComment={addComment} postId={_id} />
           </ModalBody>
 
           <ModalFooter>

@@ -244,7 +244,7 @@ exports.makeComment = (req,res) => {
             const comment = new Comment({
                 _id: new mongoose.Types.ObjectId(),
                 user: {
-                    username : req.body.username,
+                    username : req.body.author,
                     avatar : req.body.avatar,
                 },
                 content : req.body.content,

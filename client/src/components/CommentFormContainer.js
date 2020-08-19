@@ -1,16 +1,20 @@
-import React from 'react'
+import React,{ useContext } from 'react'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
 import axios from 'axios'
 import JeffPic from '../assets/Jeff.jpg'
+import { UserContext } from '../App.js'
 
 const CommentFormContainer = (props) => {
-	const { onClose, handleIsSubmitting, addComment } = props
+	const { onClose, handleIsSubmitting, addComment, postId } = props
+
+	const USER = useContext(UserContext)
+	const { user, token } = USER
 
 	const initialValues = {
-		avatar: JeffPic,
-		author: 'Jeff Lar',
+		avatar: user.photo,
+		author: user.name.firstName + " " + user.name.lastName,
 		content: '',
 	}
 
@@ -20,16 +24,17 @@ const CommentFormContainer = (props) => {
 
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
-		// backend addCommmentToPost(postId, comment)
-
-		setTimeout(() => {
-			console.log('Values: ', values)
+		try {
+			const { data } = await axios.patch(`/api/posts/${postId}/comments`, values)
+			alert(data.message)
 			if (addComment) {
 				addComment(values)
 			}
 			handleIsSubmitting(false)
 			onClose()
-		}, 3000)
+		}catch (error){
+			alert(error.message)
+		}
 	}
 
 	return (

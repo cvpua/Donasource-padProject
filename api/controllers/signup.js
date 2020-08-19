@@ -95,10 +95,8 @@ exports.login = (req,res) => {
             })
                 return res.status(200).json({
                     message : "Logged in",
-                    username : user.username,
-                    email : user.email,
+                    user : user,
                     isLoggedIn : true,
-                    
                     token : token
                     
                 });

@@ -15,7 +15,6 @@ const Home = () => {
 			...prevState,
 			newPost,
 		]))
-		console.log('Posts: ', posts)
 	}
 
 	// For fetching the list of posts

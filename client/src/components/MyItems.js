@@ -70,7 +70,6 @@ const MyItems = (props) => {
 														id={`${name}.${index}.total`} 
 														type="number" {...rest} 
 														onChange={val=>form.setFieldValue(`${name}.${index}.total`, val)} 
-														min={1}
 													>
 														<NumberInputField />
 													  <NumberInputStepper>
