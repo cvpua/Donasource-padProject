@@ -43,8 +43,16 @@ const PostFormContainer = (props) => {
 			).required('Required')
 	})
 
-	const onSubmit = async (values) => {
+	const onSubmit = async (formValues) => {
 		handleIsSubmitting(true)
+		const values = {
+			...formValues,
+			items: {
+				...formValues.items,
+				amount: 0,
+			}
+		}
+
 		try {
 			const { data } = await axios.post(
 				'/api/posts', 
@@ -57,7 +65,6 @@ const PostFormContainer = (props) => {
 			)
 			alert(data.message)
 			createPost(values)
-			
 		}catch(error){
 			alert(error.message)
 			handleIsSubmitting(false)
