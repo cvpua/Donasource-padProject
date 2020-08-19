@@ -20,7 +20,7 @@ const post = new Schema({
     likes : {type: Number, default : 0},
     likers : [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     comments : [Comment.schema],
-    photos : [Image.schema]
+    images : [Image.schema]
 })
 
 module.exports = mongoose.model('Post',post);

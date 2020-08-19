@@ -37,7 +37,7 @@ const upload = multer({
     },
     fileFilter
 
-}).array('photos',3);
+}).array('images',3);
 
 
 exports.getAllPosts = (req,res) => {
@@ -73,24 +73,46 @@ exports.getPost = (req,res) => {
 
 exports.makePost = (req,res) => {
 
+    
+
+    
     fs.ensureDirSync('./uploads');
 
     upload(req,res,function(err){
         if(err){
-            
+            console.log(err)
             res.status(415).json({
                 message:"Error in uploading images in the uploads folder (only 3 images are allowed per post)",
                 response: err
             });
         }
         else{
-
+            console.log(req.body);
+            console.log(req.files);
+            req.body.items = JSON.parse(req.body.items)
+            
             let title = req.body.title.replace(/\s/g, ''); //remove spaces on strings
 
             const dir = 'assets/' + req.body.author + '/posts/' + title + '_' + Date.now() + '/images/';
 
             let imageArray = null;
-            if(req.files && req.files.length > 1){
+            
+            let items = null;    
+            
+            if(req.body.items && req.body.items.length > 0){
+                items = req.body.items.map(item =>{
+                    console.log(item)
+                    const newItem = new Item({
+                        name : item.name,
+                        amount : item.amount,
+                        total : item.quantity
+                    });
+                    return newItem;
+                });
+            }
+            
+            
+            if(req.files && req.files.length >= 1){
                 
                      imageArray = req.files.map(file =>{
                        
@@ -116,18 +138,18 @@ exports.makePost = (req,res) => {
                 type : req.body.type,
                 status : req.body.status,
                 description : req.body.description,
-                items : [],
+                items : items,
                 location : req.body.location,
                 tags : req.body.tags,
                 datePosted : Date.now(),
                 deadline: Date.now(),
-                photos : imageArray,
+                images : imageArray,
                 comments : []
             })   
             
             // There is images and needs to create folders and move images
             if(req.files.length > 0){ 
-              
+
                 fs.move('./uploads',dir,(error)=>{
                 
                     if (error){

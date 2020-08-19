@@ -5,12 +5,13 @@ import FormikControl from './FormikControl.js'
 import axios from 'axios'
 import MarcoPic from '../assets/dp.jpg'
 import {UserContext} from '../App.js'
+import { Types } from 'mongoose'
 
 const PostFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, createPost } = props
 
 	const user = useContext(UserContext)
-	console.log('User: ', user)
+
 	const initialValues = {
 		avatar: MarcoPic,
 		author: 'Marco Mirandilla',
@@ -45,6 +46,7 @@ const PostFormContainer = (props) => {
 
 	const onSubmit = async (formValues) => {
 		handleIsSubmitting(true)
+
 		const values = {
 			...formValues,
 			items: {
@@ -52,14 +54,35 @@ const PostFormContainer = (props) => {
 				amount: 0,
 			}
 		}
+		
+		// Eto nadagdag
+		let formData = new FormData();
+		for(var key in values){
+			if(key === "items"){
+				formData.append(key,JSON.stringify(values[key]));
+			}else if(key === "images"){
+				const imageLength = values[key].length;
+				for(let i = 0; i < imageLength ; i++){
+					formData.append(key,values[key][i]);
+				}
+			}else{
+				formData.append(key,values[key]);
+			}
+			
+			
+		}
+		formData.append('status','not fulfilled');
+		// --------------------------------
 
 		try {
+			console.log(values);
 			const { data } = await axios.post(
 				'/api/posts', 
-				values,
+				formData, //pinaltan ko ung pinapasa
 				{
 					headers: {
-						Authorization: 'Bearer ' + user.token
+						'Authorization': 'Bearer ' + user.token,
+						'Content-Type' : "multipart/form-data; boundary=<calculated when request is sent>"
 					}
 				}
 			)
@@ -81,7 +104,7 @@ const PostFormContainer = (props) => {
 			{
 				(formikProps) => {
 					return (<div>
-							<Form id="postform">
+							<Form id="postform" >
 								<FormikControl control="radio" label="Type" name="type" />
 								<FormikControl control="input" type="text" label="Title" name="title" />
 								<FormikControl control="textarea" label="Description" name="description" />
