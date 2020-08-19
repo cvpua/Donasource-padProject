@@ -7,7 +7,7 @@ const comment = new Schema({
     user : {
         type : {type : String},
         username : {type: String, required : true},
-        avatar : {type: String, required : true},
+        avatar : {type: String,  default: null},
     },
     content : {type : String, required : true},
     postId :  {type : String, required : true}
