@@ -3,7 +3,7 @@ import { ListItem, ListIcon, Badge } from '@chakra-ui/core'
 
 const Item = (props) => {
 	const { item } = props
-	const { name, amount, quantity: total } = item
+	const { name, amount, total } = item
 	const remaining = total - amount
 	const isCompleted = remaining === 0 ? true : false
 

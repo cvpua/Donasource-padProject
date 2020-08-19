@@ -105,7 +105,7 @@ exports.makePost = (req,res) => {
                     const newItem = new Item({
                         name : item.name,
                         amount : item.amount,
-                        total : item.quantity
+                        total : item.total
                     });
                     return newItem;
                 });

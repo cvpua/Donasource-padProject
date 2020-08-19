@@ -20,9 +20,9 @@ const PostFormContainer = (props) => {
 		type: 'donation',
 		location: 'Gumaca',
 		deadline: new Date(),
-		items: [{name: 'Watermelon', quantity: 10, amount: 0}],
+		items: [{name: '', total: '', amount: 0}],
 		tags: ['Food'],
-		images: null,
+		images: [],
 		comments: [],
 	}
 	const validationSchema = Yup.object().shape({
@@ -35,7 +35,7 @@ const PostFormContainer = (props) => {
 			.of(
 				Yup.object().shape({
 					name: Yup.string().required('Required'),
-					quantity: Yup.number().required('Required')
+					total: Yup.number().required('Required')
 				})
 			).required('Required'),
 		tags: Yup.array()
@@ -44,16 +44,8 @@ const PostFormContainer = (props) => {
 			).required('Required')
 	})
 
-	const onSubmit = async (formValues) => {
+	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
-
-		const values = {
-			...formValues,
-			items: {
-				...formValues.items,
-				amount: 0,
-			}
-		}
 		
 		// Eto nadagdag
 		let formData = new FormData();
@@ -68,14 +60,11 @@ const PostFormContainer = (props) => {
 			}else{
 				formData.append(key,values[key]);
 			}
-			
-			
 		}
 		formData.append('status','not fulfilled');
 		// --------------------------------
 
 		try {
-			console.log(values);
 			const { data } = await axios.post(
 				'/api/posts', 
 				formData, //pinaltan ko ung pinapasa
@@ -88,6 +77,8 @@ const PostFormContainer = (props) => {
 			)
 			alert(data.message)
 			createPost(values)
+			handleIsSubmitting(false)
+			onClose()
 		}catch(error){
 			alert(error.message)
 			handleIsSubmitting(false)

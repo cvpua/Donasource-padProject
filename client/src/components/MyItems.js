@@ -54,7 +54,7 @@ const MyItems = (props) => {
 										}
 									</Field>
 									{/* Item Quantity Field */}
-									<Field name={`${name}[${index}].quantity`}>
+									<Field name={`${name}[${index}].total`}>
 										{
 											({field,form}) => (
 												<FormControl ml="2" isInvalid={
@@ -65,12 +65,12 @@ const MyItems = (props) => {
 														form.errors[name][index].quantity && 
 														form.touched[name][index].quantity
 													} >
-													<FormLabel htmlFor={`${name}.${index}.quantity`}>Quantity</FormLabel>
+													<FormLabel htmlFor={`${name}.${index}.total`}>Quantity</FormLabel>
 													<NumberInput 
-														id={`${name}.${index}.quantity`} 
+														id={`${name}.${index}.total`} 
 														type="number" {...rest} 
-														onChange={val=>form.setFieldValue(`${name}.${index}.quantity`, val)} 
-														min={0}
+														onChange={val=>form.setFieldValue(`${name}.${index}.total`, val)} 
+														min={1}
 													>
 														<NumberInputField />
 													  <NumberInputStepper>
@@ -90,7 +90,7 @@ const MyItems = (props) => {
 									</div>
 								))
 							}
-							<button type='button' onClick={() => push({name: '', quantity: ''})} >+</button>
+							<button type='button' onClick={() => push({name: '', total: '', amount: 0})} >+</button>
 						</div>
 					)
 				}
