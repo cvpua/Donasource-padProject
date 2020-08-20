@@ -1,11 +1,9 @@
 import React from 'react'
-import { Field } from 'formik'
-import { Input, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/core'
-import Thumb from './Thumb.js'
+import { FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/core'
 
 const MyImages = (props) => {
 	const { label, name, form, ...rest } = props
-	const { values, setFieldValue } = form
+	const { setFieldValue } = form
 
 	return (
  					<FormControl isInvalid={form.errors[name] && form.touched[name]} >

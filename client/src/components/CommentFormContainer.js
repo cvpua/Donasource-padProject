@@ -3,18 +3,17 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
 import axios from 'axios'
-import JeffPic from '../assets/Jeff.jpg'
 import { UserContext } from '../App.js'
 
 const CommentFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, addComment, postId } = props
 
 	const USER = useContext(UserContext)
-	const { user, token } = USER
+	const { user } = USER
 
 	const initialValues = {
 		avatar: user.photo,
-		author: user.name.firstName + " " + user.name.lastName,
+		author: user.username,
 		content: '',
 	}
 

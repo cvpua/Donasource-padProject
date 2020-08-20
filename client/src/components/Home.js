@@ -1,5 +1,5 @@
 import React,{ useState, useEffect } from 'react'
-import { Box, Spinner } from '@chakra-ui/core'
+import { Box } from '@chakra-ui/core'
 import SectionHeader from './SectionHeader.js'
 import Feed from './Feed.js'
 import {FaHome} from 'react-icons/fa'
@@ -10,7 +10,12 @@ const Home = () => {
 	// For better user experience; will set to false once the data fetching is done
 	const [isLoading, setIsLoading] = useState(true)
 
-	const createPost = (newPost) => {
+	const createPost = (post) => {
+		const newPost = {
+			...post,
+			likers: [],
+			comments: []
+		}
 		setPosts((prevState) => ([
 			...prevState,
 			newPost,
@@ -25,7 +30,7 @@ const Home = () => {
 	    try{
 	      const { data } = await axios.get('/api/posts')
 	      setPosts(data.response)
-				setIsLoading(!isLoading)
+				setIsLoading(false)
 	    }catch(error){
 	      alert(error)
 	    }

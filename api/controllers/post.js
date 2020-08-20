@@ -44,7 +44,7 @@ exports.getAllPosts = (req,res) => {
 
 
     Post.find()
-    .populate("likers", "username")
+    .populate("username")
     .exec()
     .then(Posts => {
         const response = Posts.map(post => {

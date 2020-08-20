@@ -13,7 +13,7 @@ const LikeButton = (props) => {
 	const { user } = USER
 	const { _id: userId } = user
 
-	const state = likers.find((liker) => (liker._id === userId ? true : false))
+	const state = likers.find((liker) => (liker === userId ? true : false))
 
 	const [isLiked, setIsLiked] = useState(state)
 

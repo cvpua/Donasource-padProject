@@ -1,5 +1,5 @@
 import React from 'react'
-import { Field, ErrorMessage, FieldArray } from 'formik'
+import { Field, FieldArray } from 'formik'
 import { Input, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/core'
 
 const MyTags = (props) => {

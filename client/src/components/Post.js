@@ -9,8 +9,6 @@ import {
   Text, 
   PseudoBox, 
   useDisclosure, 
-  Stack, 
-  Avatar, 
   Modal, 
   ModalHeader, 
   ModalBody, 
@@ -20,7 +18,7 @@ import {
   ModalCloseButton, 
   Button
 } from '@chakra-ui/core'
-import { FaDonate, FaCommentDots, FaHeart } from 'react-icons/fa'
+import { FaDonate, FaCommentDots} from 'react-icons/fa'
 import LikeButton from './LikeButton.js'
 import { Link } from 'react-router-dom'
 import CommentFormContainer from './CommentFormContainer.js'

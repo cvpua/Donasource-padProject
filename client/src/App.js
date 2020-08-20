@@ -1,6 +1,6 @@
-import React,{useState, useEffect} from 'react'
+import React,{useState} from 'react'
 import customTheme from './styles/theme'
-import { ThemeProvider,CSSReset,Flex, useToast } from '@chakra-ui/core'
+import { ThemeProvider,CSSReset,Flex } from '@chakra-ui/core'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Header, Left, Nav, Logout, Middle, Home, Right } from './components'
 import PostSection from './components/PostSection.js'

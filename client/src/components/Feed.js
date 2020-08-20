@@ -1,5 +1,4 @@
-import React,{ useState, useEffect } from 'react'
-import axios from 'axios'
+import React,{ useState } from 'react'
 import { 
 	Stack, 
 	Spinner, 
@@ -16,8 +15,6 @@ import {
 } from '@chakra-ui/core'
 import Post from './Post.js'
 import PostFormContainer from './PostFormContainer.js'
-import MarcoPic from '../assets/dp.jpg'
-
 // To do:
 // Add Post Feature
 //  [+] - Post Button
@@ -34,8 +31,6 @@ const Feed = (props) => {
 	// See this docs for more information: https://chakra-ui.com/usedisclosure
 	const { isOpen, onOpen, onClose } = useDisclosure()
 
-	
-	console.log('Posts: ', posts)
 	return (
 		<>
 			{

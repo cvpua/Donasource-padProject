@@ -1,7 +1,4 @@
 import React,{useState} from "react";
-import  "./LoginSignup.css";
-import Inputlog from "./Inputlog.js";
-import Inputsign from "./Inputsign.js";
 import { Box, Flex, Text, Button} from '@chakra-ui/core'
 import LoginFormContainer from '../LoginFormContainer.js'
 import SignupFormContainer from '../SignupFormContainer.js'

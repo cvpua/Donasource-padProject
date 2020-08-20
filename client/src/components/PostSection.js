@@ -3,49 +3,58 @@ import {useParams} from 'react-router-dom'
 import axios from 'axios'
 import { Stack, Box, Flex, Avatar, Text } from '@chakra-ui/core'
 import Post from './Post.js'
-import MarcoPic from '../assets/dp.jpg'
 import SectionHeader from './SectionHeader.js'
 
-const initialValues = {
-		avatar: MarcoPic,
-		author: 'Marco Mirandilla',
-		title: 'Penge Ayuda',
-		description: 'Wala lang',
+const INIT_POST = {
+		avatar: null,
+		author: '',
+		title: '',
+		description: '',
 		type: 'donation',
-		location: 'Gumaca',
-		deadline: new Date(),
-		items: [{name: 'Watermelon', quantity: 10, amount: 0}],
-		tags: ['Food'],
-		images: null,
+		location: '',
+		deadline: '',
+		items: [{name: '', total: 0, amount: 0}],
+		tags: [],
+		images: [],
 		comments: [],
-	}
+		likers: [],
+}
 
 const PostSection = ({match}) => {
 	// to get the parameter in the link
-	const { id } = useParams()
+	const { id: postId } = useParams()
 
-	const [post, setPost] = useState(initialValues)
+	const [post, setPost] = useState(INIT_POST)
 	const [comments, setComments] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
 
 	const addComment = (comment) => {
+		const newComment = {
+			content: comment.content,
+			user: {
+				avatar: comment.avatar,
+				username: comment.author,
+			}
+		}
     setComments((prevState) => ([
       ...prevState,
-      comment,
+      newComment,
     ]))
   }
 
-  // useEffect(() => {
-  // 	const fetchData = async () => {
-  // 		try{
-	 //      const { data } = await axios.get('/api/post/:id', id)
-  // 			setPost(data)
-		// 		setIsLoading(!isLoading)
-	 //    }catch(error){
-	 //      alert(error)
-	 //    }
-  // 	}
-  // }, [])
+  useEffect(() => {
+  	const fetchData = async () => {
+  		try{
+	      const { data } = await axios.get(`/api/posts/${postId}`)
+  			setPost(data)
+  			setComments(data.comments)
+				setIsLoading(false)
+	    }catch(error){
+	      alert(error)
+	    }
+  	}
+  	fetchData()
+  }, [postId])
 
 	return (
 		<div>
@@ -58,13 +67,13 @@ const PostSection = ({match}) => {
 	        {
 	          comments.map((comment) => {
 	            return (
-	              <Box borderTop="1px" borderColor="gray.200" mb="4" pt="4">
+	              <Box key={comment._id} borderTop="1px" borderColor="gray.200" mb="4" pt="4">
 	                <Flex mb="2">
 	                  {/* Avatar */}
-	                  <Avatar size="md" name={comment.author} src={comment.avatar} mr="4"/>
+	                  <Avatar size="md" name={comment.user.username} src={comment.user.avatar} mr="4"/>
 	                  {/* Author */}
 	                  <Box>
-		                  <Text fontWeight="medium" >{comment.author}</Text>
+		                  <Text fontWeight="bold" >{comment.user.username}</Text>
 		                  <Text fontFamily="body">{comment.content}</Text>
 	                  </Box>
 	                </Flex>

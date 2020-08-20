@@ -26,6 +26,7 @@ exports.getAllUsers = (req,res) => {
 
 exports.getUser = (req,res) =>{
     User.findOne({_id : req.params.userId})
+    .populate('posts')
     .exec()
     .then( user => {
         if (!user){

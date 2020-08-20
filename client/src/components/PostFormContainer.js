@@ -3,9 +3,7 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
 import axios from 'axios'
-import MarcoPic from '../assets/dp.jpg'
 import { UserContext } from '../App.js'
-import { Types } from 'mongoose'
 
 const PostFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, createPost } = props
@@ -24,7 +22,6 @@ const PostFormContainer = (props) => {
 		items: [{name: '', total: 1, amount: 0}],
 		tags: ['Food'],
 		images: [],
-		comments: [],
 	}
 	const validationSchema = Yup.object().shape({
 		title: Yup.string().required('Required'),
