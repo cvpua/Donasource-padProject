@@ -105,7 +105,9 @@ exports.makePost = (req,res) => {
                     const newItem = new Item({
                         name : item.name,
                         amount : item.amount,
-                        total : item.total
+                        total : item.total,
+                        donor : [],
+                        donee : []
                     });
                     return newItem;
                 });
@@ -334,6 +336,39 @@ exports.likePost = (req,res) => {
         }
     })
     
+}
+
+
+
+exports.donate = (req,res) => {
+   
+    Post.findById(req.params.postId)
+    .exec()
+    .then(post => {
+        let items = null;
+        if(req.body.items && req.body.items.length > 0){
+            items = req.body.items.map(item =>{
+                const newItem = new Item({
+                    name : item.name,
+                    amount : item.amount,
+                    total : item.total,
+                    donor : item.donor
+                });
+                return newItem;
+            });
+        }
+        post.items = items;
+        post.save()
+        .then( response => {
+            res.status(200).json({message : "Item/s donated. Thank you!"})
+        })
+        .catch( err => {
+            res.status(500).json({message : "Item/s not donated", err})
+        })
+    })
+    .catch( err => {
+        res.status(500).json({message : "Post not found", err})
+    })
 }
 
 

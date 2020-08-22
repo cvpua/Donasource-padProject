@@ -21,6 +21,10 @@ router.patch('/api/posts/:postId/comments',PostController.makeComment);
 //like/unlike a post
 router.patch('/api/posts/:postId/likes',PostController.likePost);
 
+//donate 
+router.put('/api/posts/:postId/donate',PostController.donate);
+
+// delete a post
 router.delete('/api/posts/:postId',PostController.deletePost);
 
 
