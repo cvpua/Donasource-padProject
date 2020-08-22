@@ -167,9 +167,9 @@ exports.makePost = (req,res) => {
                             user.posts.push(post);
 
                             if(post.type === "request"){
-                                user.requestCount = user.requestCount + 1 
+                                user.requestPostCount = user.requestPostCount + 1;
                             }else{
-                                user.donationCount = user.donationCount + 1;
+                                user.donationPostCount = user.donationPostCount + 1;
                             }
                             user.postCount = user.postCount + 1;
                             user.save()
@@ -205,7 +205,7 @@ exports.makePost = (req,res) => {
                 User.findOne({email : req.userData.email}).exec()
                         .then(user => {
                             user.posts.push(post);
-                            post.type === "request" ? user.requestCount = user.requestCount + 1 : user.donationCount = user.donationCount + 1
+                            post.type === "request" ? user.requestPostCount = user.requestPostCount + 1 : user.donationPostCount = user.donationPostCount + 1
                             user.postCount = user.postCount + 1;
                             user.save()
                             .then(
@@ -360,7 +360,21 @@ exports.donate = (req,res) => {
         post.items = items;
         post.save()
         .then( response => {
-            res.status(200).json({message : "Item/s donated. Thank you!"})
+
+            User.findById(req.body.userId)
+            .exec()
+            .then(user => {
+                user.donationGiven = user.donationGiven + 1;
+                console.log(user.donationGiven)
+                user.save()
+                .then(response => {
+                    res.status(200).json({message : "Item/s donated. Thank you!"})
+                })
+            })
+            .catch(err =>{
+                res.json({message: "User not found"})
+            })
+            
         })
         .catch( err => {
             res.status(500).json({message : "Item/s not donated", err})
