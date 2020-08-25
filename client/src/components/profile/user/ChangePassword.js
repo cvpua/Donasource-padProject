@@ -3,7 +3,7 @@ import e from "express";
 
 class ChangePassword extends Component {
   //FIXME: using the email props for verification purposes
-  render() {
+  
     state = {
       isValidUser: false,
       isMatching: false,
@@ -55,7 +55,7 @@ class ChangePassword extends Component {
 
     //TODO: updating database for new password
     //FIXME: accessing the objectId of the user / query via other means
-
+render() {
     return (
       <div className="changeHolder">
         <form className="changePassword" onSubmit={this.matchPassword}>
