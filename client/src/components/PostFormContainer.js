@@ -60,6 +60,7 @@ const PostFormContainer = (props) => {
 				formData.append(key,values[key]);
 			}
 		}
+
 		// --------------------------------
 
 		try {

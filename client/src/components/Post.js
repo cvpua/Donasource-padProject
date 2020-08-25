@@ -64,9 +64,6 @@ const Post = (props) => {
     setItems(mainItems)
   }, [mainItems])
 
-  console.log('Post Data: ', data)
-  console.log('Items Data: ', items)
-
 	return (
     <div>
   		<PseudoBox p="5" mb="4" shadow="sm" bg="white" rounded="lg" pos="relative" _hover={{ borderColor: "gray.200", bg: "gray.50" }}>
