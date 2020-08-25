@@ -48,8 +48,14 @@ exports.getAllPosts = (req,res) => {
     .exec()
     .then(Posts => {
         const response = Posts.map(post => {
+           
             return post
         })
+       response.sort((a,b) => {
+            let dateA = new Date(a.datePosted);
+            let dateB = new Date(b.datePosted);
+            return dateB - dateA;
+        });
         res.status(200).json({
             postCount: response.length,
             response})
@@ -74,8 +80,6 @@ exports.getPost = (req,res) => {
 exports.makePost = (req,res) => {
 
     
-
-    
     fs.ensureDirSync('./uploads');
 
     upload(req,res,function(err){
@@ -87,8 +91,7 @@ exports.makePost = (req,res) => {
             });
         }
         else{
-            console.log(req.body);
-            console.log(req.files);
+          
             req.body.items = JSON.parse(req.body.items)
             
             let title = req.body.title.replace(/\s/g, ''); //remove spaces on strings
@@ -101,7 +104,7 @@ exports.makePost = (req,res) => {
             
             if(req.body.items && req.body.items.length > 0){
                 items = req.body.items.map(item =>{
-                    console.log(item)
+                    
                     const newItem = new Item({
                         name : item.name,
                         amount : item.amount,
@@ -342,6 +345,7 @@ exports.likePost = (req,res) => {
 
 exports.donate = (req,res) => {
    
+    
     Post.findById(req.params.postId)
     .exec()
     .then(post => {
@@ -358,6 +362,17 @@ exports.donate = (req,res) => {
             });
         }
         post.items = items;
+        
+        let isFulfilled = true;
+
+        post.items.forEach(item => {
+            if(item.amount !== item.total){
+                isFulfilled = false;
+            }
+        });
+
+        if (isFulfilled) post.status = "FULFILLED"
+        
         post.save()
         .then( response => {
 
@@ -365,7 +380,6 @@ exports.donate = (req,res) => {
             .exec()
             .then(user => {
                 user.donationGiven = user.donationGiven + 1;
-                console.log(user.donationGiven)
                 user.save()
                 .then(response => {
                     res.status(200).json({message : "Item/s donated. Thank you!"})
@@ -381,6 +395,7 @@ exports.donate = (req,res) => {
         })
     })
     .catch( err => {
+      
         res.status(500).json({message : "Post not found", err})
     })
 }
@@ -394,6 +409,10 @@ exports.deletePost = (req,res) => {
         .exec()
         .then(user =>{
             user.posts = user.posts.filter(post => String(post._id) !== req.params.postId)
+            user.postCount = user.postCount - 1;
+
+            post.type === "request" ? post.requestPostCount = post.requestPostCount - 1 : post.donationPostCount = post.donationPostCount - 1;
+
             user.save()
             .then(response => {
                 res.status(200).json({message : "Post deleted!",post})
@@ -405,8 +424,6 @@ exports.deletePost = (req,res) => {
         .catch( err =>
             console.log(err)
         )
-
-
         
     })
     .catch(err => {

@@ -60,7 +60,7 @@ const PostFormContainer = (props) => {
 				formData.append(key,values[key]);
 			}
 		}
-		formData.append('status','not fulfilled');
+		
 		// --------------------------------
 
 		try {

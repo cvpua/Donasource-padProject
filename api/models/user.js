@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-
+const Image = require('./image');
 
 
 mongoose.set('useCreateIndex', true);
@@ -19,7 +19,7 @@ const user = new Schema({
         firstName : {type: String, required : true},
         lastName : {type: String, required : true},
     },
-    photo : {type : String, default : null},
+    photo : {type : Image.schema, default : null},
     email : {
         type: String, 
         required : true,
@@ -29,6 +29,10 @@ const user = new Schema({
     location : String,
     contactNumber : {type : String, required : true},
     bio : {type : String, default : null},
+    avails : [{
+        post :{type: mongoose.Schema.Types.ObjectId, ref: 'Post'},
+        status : { type : String , default : "Pending"}
+    }],
     donationGiven : {type : Number,default : 0},
     donationRequested : {type : Number,default : 0},
     postCount : {type : Number, default : 0},
