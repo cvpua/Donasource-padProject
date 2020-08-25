@@ -3,6 +3,7 @@ import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
 import { UserContext } from '../App.js'
+import axios from 'axios'
 
 // To do: 
 // Add the data of the donor
@@ -10,7 +11,7 @@ import { UserContext } from '../App.js'
 // Change the setFieldValue on MyNumeric. The value that should be setted is the combination of current amount and the previous amount
 
 const DonateFormContainer = (props) => {
-	const { onClose, handleIsSubmitting, items } = props
+	const { onClose, handleIsSubmitting, items, donate, postId } = props
 
 	const USER = useContext(UserContext)
 	const { user } = USER
@@ -32,7 +33,8 @@ const DonateFormContainer = (props) => {
 						}
 					]
 				}
-			))
+			)),
+		userId: userId,
 	}
 
 	const validationSchema = (values) => Yup.object().shape({
@@ -54,7 +56,19 @@ const DonateFormContainer = (props) => {
 	})
 
 	const onSubmit = async (values) => {
-		// Remove the remaining attribute
+		handleIsSubmitting(true)
+
+		try {
+			const { data } = await axios.put(`/api/posts/${postId}/donate`, values)
+			alert(data.message)
+			donate(values.items)
+			handleIsSubmitting(false)
+			onClose()
+		}catch(error){
+			alert(error.message)
+			handleIsSubmitting(false)
+			onClose()
+		}
 	}
 
 	return (
@@ -66,7 +80,7 @@ const DonateFormContainer = (props) => {
 			{
 				(formikProps) => {
 					return (<div>
-							<Form id="donateForm">
+							<Form id="donateform">
 								{
 									items.map((item,index) => (
 										<FormikControl 

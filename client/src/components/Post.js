@@ -35,7 +35,7 @@ const Post = (props) => {
 		author,
 		deadline,
 		description,
-		items,
+		items: mainItems,
 		tags,
     likers,
 	} = data
@@ -47,6 +47,12 @@ const Post = (props) => {
 
   // Form modal will close if the form is successfully submitted
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const [items, setItems] = useState(mainItems)
+
+  const donate = (items) => {
+    setItems(items)
+  }
 
 	return (
     <div>
@@ -91,14 +97,14 @@ const Post = (props) => {
           <ModalCloseButton />
           <ModalBody>
             {/* Comment Form */}
-            <DonateFormContainer onClose={onCloseDonate} handleIsSubmitting={setIsSubmitting} items={items} />
+            <DonateFormContainer onClose={onCloseDonate} handleIsSubmitting={setIsSubmitting} items={items} donate={donate} postId={_id} />
           </ModalBody>
 
           <ModalFooter>
             <Button variant="ghost" mr={3} onClick={onCloseDonate}>
               Cancel
             </Button>
-            <Button variantColor="primary" type="submit" isLoading={isSubmitting} form="donateform">Donate</Button>
+            <Button variantColor="cyan" type="submit" isLoading={isSubmitting} form="donateform">Donate</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -119,7 +125,7 @@ const Post = (props) => {
             <Button variant="ghost" mr={3} onClick={onCloseComment}>
               Cancel
             </Button>
-            <Button variantColor="primary" type="submit" isLoading={isSubmitting} form="commentform">Comment</Button>
+            <Button variantColor="cyan" type="submit" isLoading={isSubmitting} form="commentform">Comment</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
