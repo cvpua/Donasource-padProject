@@ -1,4 +1,4 @@
-import React,{ useState } from 'react'
+import React,{ useState, useEffect } from 'react'
 import PostHeader from './PostHeader.js'
 import ItemList from './ItemList.js'
 import Tags from './Tags.js'
@@ -52,13 +52,20 @@ const Post = (props) => {
   const [items, setItems] = useState(mainItems)
   const [status, setStatus] = useState(mainStatus)
 
-  const donate = (items) => {
-    setItems(items)
+  const donate = (newItems) => {
+    setItems(newItems)
     const isFulfilled = items.every((item) => ((item.total - item.amount) === 0 ? true : false))
     if (isFulfilled){
       setStatus("FULFILLED")
     }
   }
+
+  useEffect(() => {
+    setItems(mainItems)
+  }, [mainItems])
+
+  console.log('Post Data: ', data)
+  console.log('Items Data: ', items)
 
 	return (
     <div>

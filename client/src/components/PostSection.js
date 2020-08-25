@@ -13,7 +13,7 @@ const INIT_POST = {
 		type: 'donation',
 		location: '',
 		deadline: '',
-		items: [{name: '', total: 0, amount: 0}],
+		items: [],
 		tags: [],
 		images: [],
 		comments: [],

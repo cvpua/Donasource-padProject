@@ -11,12 +11,8 @@ import axios from 'axios'
 import Toast from './components/Toast.js'
 
 // To do: 
-// (done) Add Profile Component
 // Add Avails Component
 // Add Notification Component
-// Login
-// Logout
-// Signup
 
 
 // ThemeProvider - provides 'customTheme' to every component using context api
@@ -24,15 +20,20 @@ import Toast from './components/Toast.js'
 //          - recommended to ensure all components work correctly.
 
 export const UserContext = React.createContext()
+export const PostContext = React.createContext()
 
 const App = () => {
-  // #DevOnly - custom theme
-  console.log(customTheme)
 
   const [user, setUser] = useState()
   // Toast Message
   const [message, setMessage] = useState()
  
+  const [posts, setPosts] = useState([])
+
+  const store = {
+    posts: [posts, setPosts],
+  }
+
   const login = async (user) => {
     try{
       const { data } = await axios.post('/api/login',user)
@@ -79,6 +80,7 @@ const App = () => {
     }
   }
 
+
   return (
     <Router>
       <ThemeProvider theme={customTheme}>
@@ -104,6 +106,7 @@ const App = () => {
                   </Left>
                   {/* End of Left/Sidebar */}
 
+                  <PostContext.Provider value={store} >
                   {/* Middle */}
                   <Middle>
                     {/* Section */}
@@ -117,10 +120,11 @@ const App = () => {
                     </Switch>
                   </Middle>
                   {/* End of Middle */}
+                  </PostContext.Provider>
 
                   {/* Right/Ads */}
                   <Right>
-                      <Search />
+                      <Search posts={posts} setFilteredPosts={setPosts}/>
                   </Right>
                   {/* End of Right/Ads */}
                 </Flex>
