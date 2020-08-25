@@ -38,6 +38,7 @@ const Post = (props) => {
 		items: mainItems,
 		tags,
     likers,
+    status: mainStatus,
 	} = data
 
   //  A custom hook to help handle common open, close, or toggle scenarios. 
@@ -49,9 +50,14 @@ const Post = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [items, setItems] = useState(mainItems)
+  const [status, setStatus] = useState(mainStatus)
 
   const donate = (items) => {
     setItems(items)
+    const isFulfilled = items.every((item) => ((item.total - item.amount) === 0 ? true : false))
+    if (isFulfilled){
+      setStatus("FULFILLED")
+    }
   }
 
 	return (
@@ -80,7 +86,7 @@ const Post = (props) => {
         {/* Post Actions */}
         <Flex justify="space-around" borderTop="1px" borderColor="gray.200" py="2">
           {/* Donate Button */}
-          <IconButton variant="ghost" isRound icon={FaDonate} onClick={onOpenDonate} />
+          <IconButton isDisabled={status === "PENDING" ? false : true} variant="ghost" isRound icon={FaDonate} onClick={onOpenDonate} />
           {/* Comment Button */}
           <IconButton variant="ghost" isRound icon={FaCommentDots} onClick={onOpenComment} />
           {/* Like Button  */}

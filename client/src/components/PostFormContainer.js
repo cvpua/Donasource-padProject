@@ -22,6 +22,7 @@ const PostFormContainer = (props) => {
 		items: [{name: '', total: 1, amount: 0, donor:[]}],
 		tags: ['Food'],
 		images: [],
+		status: "PENDING",
 	}
 	const validationSchema = Yup.object().shape({
 		title: Yup.string().required('Required'),
