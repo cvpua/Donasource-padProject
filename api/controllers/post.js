@@ -105,7 +105,9 @@ exports.makePost = (req,res) => {
                     const newItem = new Item({
                         name : item.name,
                         amount : item.amount,
-                        total : item.total
+                        total : item.total,
+                        donor : [],
+                        donee : []
                     });
                     return newItem;
                 });
@@ -165,9 +167,9 @@ exports.makePost = (req,res) => {
                             user.posts.push(post);
 
                             if(post.type === "request"){
-                                user.requestCount = user.requestCount + 1 
+                                user.requestPostCount = user.requestPostCount + 1;
                             }else{
-                                user.donationCount = user.donationCount + 1;
+                                user.donationPostCount = user.donationPostCount + 1;
                             }
                             user.postCount = user.postCount + 1;
                             user.save()
@@ -203,7 +205,7 @@ exports.makePost = (req,res) => {
                 User.findOne({email : req.userData.email}).exec()
                         .then(user => {
                             user.posts.push(post);
-                            post.type === "request" ? user.requestCount = user.requestCount + 1 : user.donationCount = user.donationCount + 1
+                            post.type === "request" ? user.requestPostCount = user.requestPostCount + 1 : user.donationPostCount = user.donationPostCount + 1
                             user.postCount = user.postCount + 1;
                             user.save()
                             .then(
@@ -334,6 +336,53 @@ exports.likePost = (req,res) => {
         }
     })
     
+}
+
+
+
+exports.donate = (req,res) => {
+   
+    Post.findById(req.params.postId)
+    .exec()
+    .then(post => {
+        let items = null;
+        if(req.body.items && req.body.items.length > 0){
+            items = req.body.items.map(item =>{
+                const newItem = new Item({
+                    name : item.name,
+                    amount : item.amount,
+                    total : item.total,
+                    donor : item.donor
+                });
+                return newItem;
+            });
+        }
+        post.items = items;
+        post.save()
+        .then( response => {
+
+            User.findById(req.body.userId)
+            .exec()
+            .then(user => {
+                user.donationGiven = user.donationGiven + 1;
+                console.log(user.donationGiven)
+                user.save()
+                .then(response => {
+                    res.status(200).json({message : "Item/s donated. Thank you!"})
+                })
+            })
+            .catch(err =>{
+                res.json({message: "User not found"})
+            })
+            
+        })
+        .catch( err => {
+            res.status(500).json({message : "Item/s not donated", err})
+        })
+    })
+    .catch( err => {
+        res.status(500).json({message : "Post not found", err})
+    })
 }
 
 

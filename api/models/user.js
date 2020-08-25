@@ -29,9 +29,11 @@ const user = new Schema({
     location : String,
     contactNumber : {type : String, required : true},
     bio : {type : String, default : null},
+    donationGiven : {type : Number,default : 0},
+    donationRequested : {type : Number,default : 0},
     postCount : {type : Number, default : 0},
-    donationCount : {type : Number, default : 0},
-    requestCount: {type : Number, default : 0},
+    donationPostCount : {type : Number, default : 0},
+    requestPostCount: {type : Number, default : 0},
     posts : [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
     likedPostsCount : {type : Number, default : 0},
     likedPosts : [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}]
