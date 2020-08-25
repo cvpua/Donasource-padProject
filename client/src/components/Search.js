@@ -54,11 +54,8 @@ class Search extends Component {
                     })
                 }
             }
-            );
-            filteredPost.map((post) => {
-                console.log(post)
-            })
-        }
+        );
+    }
         
     changeCategory = (event) => {
         const { target } = event;
