@@ -1,10 +1,12 @@
 import React from 'react'
 import { Field, FieldArray } from 'formik'
-import {  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,Input, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/core'
+import {  
+	NumberInput,
+	Input, 
+	FormControl, 
+	FormLabel, 
+	FormErrorMessage 
+} from '@chakra-ui/core'
 
 const MyItems = (props) => {
 	const { label, name, ...rest } =props
@@ -71,14 +73,9 @@ const MyItems = (props) => {
 														type="number" 
 														{...rest}
 														{...field} 
-														onChange={val=>form.setFieldValue(`${name}.${index}.total`, val)} 
-													>
-														<NumberInputField />
-													  <NumberInputStepper>
-													    <NumberIncrementStepper />
-													    <NumberDecrementStepper />
-													  </NumberInputStepper>
-													</NumberInput>
+														onChange={val=>form.setFieldValue(`${name}.${index}.total`, val)}
+														onBlur={(e) => {form.setFieldTouched(`${name}.${index}.total`,true)}}  
+													/>
 													<FormErrorMessage>{
 														form.errors[name] && 
 														form.errors[name][index] &&

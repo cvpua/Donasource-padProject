@@ -5,11 +5,6 @@ import FormikControl from './FormikControl.js'
 import { UserContext } from '../App.js'
 import axios from 'axios'
 
-// To do: 
-// Add the data of the donor
-// Alter the values/data to be submitted in the onSubmit so that the remaining attribute is not inlcuded 
-// Change the setFieldValue on MyNumeric. The value that should be setted is the combination of current amount and the previous amount
-
 const DonateFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, items, donate, postId } = props
 

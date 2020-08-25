@@ -15,13 +15,7 @@ import {
 } from '@chakra-ui/core'
 import Post from './Post.js'
 import PostFormContainer from './PostFormContainer.js'
-// To do:
-// Add Post Feature
-//  [+] - Post Button
-//  [+] - Post Form
-//  [+] - addPost(post) (sa backend na lang)
-//  []
-// Add Skeleton for better user experience
+
 
 const Feed = (props) => {
 	const { posts, createPost, isLoading } = props

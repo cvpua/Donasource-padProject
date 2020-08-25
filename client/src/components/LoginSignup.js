@@ -16,7 +16,7 @@ const LoginSignup = ({login,signup}) => {
     }
 
     return (
-        <Flex bg="primary.600" h={isLoggingIn ? "100vh" : "full"} flexDirection={{base: "column-reverse", lg: "row"}}  justify={{base: 'center', lg: 'space-evenly'}} align={{base: 'center', lg: 'center'}} p="2">
+        <Flex bg="primary.600" h={isLoggingIn ? "100vh" : "full"} minH="100vh" flexDirection={{base: "column-reverse", lg: "row"}}  justify={{base: 'center', lg: 'space-evenly'}} align={{base: 'center', lg: 'center'}} p="2">
             {
                 isLoggingIn 
                 ?
