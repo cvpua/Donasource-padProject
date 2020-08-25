@@ -6,7 +6,7 @@ import { Header, Left, Nav, Logout, Middle, Home, Right } from './components'
 import PostSection from './components/PostSection.js'
 import Profile from './components/Profile.js'
 import Search from './components/Search.js'
-import LoginSignup from './components/LoginSignup/LoginSignup.js'
+import LoginSignup from './components/LoginSignup.js'
 import axios from 'axios'
 import Toast from './components/Toast.js'
 
@@ -30,6 +30,7 @@ const App = () => {
   console.log(customTheme)
 
   const [user, setUser] = useState()
+  // Toast Message
   const [message, setMessage] = useState()
  
   const login = async (user) => {

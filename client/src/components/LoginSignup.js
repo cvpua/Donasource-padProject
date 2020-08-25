@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import { Box, Flex, Text, Button} from '@chakra-ui/core'
-import LoginFormContainer from '../LoginFormContainer.js'
-import SignupFormContainer from '../SignupFormContainer.js'
+import LoginFormContainer from './LoginFormContainer.js'
+import SignupFormContainer from './SignupFormContainer.js'
 
 const LoginSignup = ({login,signup}) => {
     const [isLoggingIn, setIsLoggingIn] = useState(true)

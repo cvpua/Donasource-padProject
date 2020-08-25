@@ -68,7 +68,9 @@ const MyItems = (props) => {
 													<FormLabel htmlFor={`${name}.${index}.total`}>Quantity</FormLabel>
 													<NumberInput 
 														id={`${name}.${index}.total`} 
-														type="number" {...rest} 
+														type="number" 
+														{...rest}
+														{...field} 
 														onChange={val=>form.setFieldValue(`${name}.${index}.total`, val)} 
 													>
 														<NumberInputField />

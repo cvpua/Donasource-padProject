@@ -22,6 +22,7 @@ import { FaDonate, FaCommentDots} from 'react-icons/fa'
 import LikeButton from './LikeButton.js'
 import { Link } from 'react-router-dom'
 import CommentFormContainer from './CommentFormContainer.js'
+import DonateFormContainer from './DonateFormContainer.js'
 
 // For now, let this be a request type post
 
@@ -41,7 +42,9 @@ const Post = (props) => {
 
   //  A custom hook to help handle common open, close, or toggle scenarios. 
   // See this docs for more information: https://chakra-ui.com/usedisclosure
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isOpenComment, onOpen: onOpenComment, onClose: onCloseComment } = useDisclosure()
+  const { isOpen: isOpenDonate, onOpen: onOpenDonate, onClose: onCloseDonate } = useDisclosure()
+
   // Form modal will close if the form is successfully submitted
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -71,29 +74,49 @@ const Post = (props) => {
         {/* Post Actions */}
         <Flex justify="space-around" borderTop="1px" borderColor="gray.200" py="2">
           {/* Donate Button */}
-          <IconButton variant="ghost" isRound icon={FaDonate} />
+          <IconButton variant="ghost" isRound icon={FaDonate} onClick={onOpenDonate} />
           {/* Comment Button */}
-          <IconButton variant="ghost" isRound icon={FaCommentDots} onClick={onOpen} />
+          <IconButton variant="ghost" isRound icon={FaCommentDots} onClick={onOpenComment} />
           {/* Like Button  */}
           <LikeButton id={_id} likers={likers} />
         </Flex>
         {props.children}
       </PseudoBox>
       
+      {/* Donate Form Modal */}
+      <Modal isOpen={isOpenDonate} onClose={onCloseDonate}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Donate</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {/* Comment Form */}
+            <DonateFormContainer onClose={onCloseDonate} handleIsSubmitting={setIsSubmitting} items={items} />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button variant="ghost" mr={3} onClick={onCloseDonate}>
+              Cancel
+            </Button>
+            <Button variantColor="primary" type="submit" isLoading={isSubmitting} form="donateform">Donate</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
 
       {/* Comment Form Modal */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpenComment} onClose={onCloseComment}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader></ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {/* Comment Form */}
-            <CommentFormContainer onClose={onClose} handleIsSubmitting={setIsSubmitting} addComment={addComment} postId={_id} />
+            <CommentFormContainer onClose={onCloseComment} handleIsSubmitting={setIsSubmitting} addComment={addComment} postId={_id} />
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onClose}>
+            <Button variant="ghost" mr={3} onClick={onCloseComment}>
               Cancel
             </Button>
             <Button variantColor="primary" type="submit" isLoading={isSubmitting} form="commentform">Comment</Button>

@@ -19,7 +19,7 @@ const PostFormContainer = (props) => {
 		type: 'donation',
 		location: '',
 		deadline: new Date(),
-		items: [{name: '', total: 1, amount: 0}],
+		items: [{name: '', total: 1, amount: 0, donor:[]}],
 		tags: ['Food'],
 		images: [],
 	}
