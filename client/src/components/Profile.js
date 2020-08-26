@@ -101,12 +101,12 @@ const Profile = () => {
 					<StatGroup >
 						{/* Donations */}
 					  <Stat d="flex" p="4" flexDirection="column" justifyContent="center" alignItems="center">
-					    <StatNumber>{profile.donationCount}</StatNumber>
+					    <StatNumber>{profile.donationGiven}</StatNumber>
 					    <StatLabel color="primary.600">Donations</StatLabel>
 					  </Stat>
 					  {/* Requests */}
 					  <Stat d="flex" p="4" flexDirection="column" justifyContent="center" alignItems="center">
-					    <StatNumber>{profile.requestCount}</StatNumber>
+					    <StatNumber>{profile.donationRequested}</StatNumber>
 					    <StatLabel color="primary.600" >Requests</StatLabel>
 					  </Stat>
 					</StatGroup>

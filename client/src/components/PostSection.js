@@ -46,7 +46,10 @@ const PostSection = ({match}) => {
   	const fetchData = async () => {
   		try{
 	      const { data } = await axios.get(`/api/posts/${postId}`)
-  			setPost(data)
+  			setPost(prevState => ({
+  				...prevState,
+  				...data,
+  			}))
   			setComments(data.comments)
 				setIsLoading(false)
 	    }catch(error){

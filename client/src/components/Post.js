@@ -49,12 +49,13 @@ const Post = (props) => {
   // Form modal will close if the form is successfully submitted
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const [items, setItems] = useState(mainItems)
-  const [status, setStatus] = useState(mainStatus)
+  const [items, setItems] = useState([])
+  const [status, setStatus] = useState('')
 
   const donate = (newItems) => {
     setItems(newItems)
-    const isFulfilled = items.every((item) => ((item.total - item.amount) === 0 ? true : false))
+    console.log('New Items: ', items)
+    const isFulfilled = newItems.every((item) => ((item.total - item.amount) === 0 ? true : false))
     if (isFulfilled){
       setStatus("FULFILLED")
     }
@@ -62,6 +63,7 @@ const Post = (props) => {
 
   useEffect(() => {
     setItems(mainItems)
+    setStatus(mainStatus)
   }, [mainItems])
 
 	return (

@@ -9,7 +9,7 @@ const MyNumeric = (props) => {
 		<Field name={`${name}[${index}].donor[${donorLength - 1}].amountDonated`}>
 			{
 				({field,form}) => {
-					console.log('Form: ', form)
+					console.log('Form Values: ', form.values)
 					return(
 					<FormControl
 						isInvalid={
