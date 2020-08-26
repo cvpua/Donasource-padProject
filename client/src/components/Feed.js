@@ -4,6 +4,7 @@ import {
 	Spinner, 
 	IconButton,
 	Button, 
+  Flex,
 	useDisclosure, 
 	Modal,
   ModalOverlay,
@@ -27,23 +28,26 @@ const Feed = (props) => {
 
 	return (
 		<>
-			{
-				isLoading 
-      	? <Spinner 
-      			thickness="4px"
-      			speed="0.65s" 
-      			emptyColor="gray.200" 
-      			color="blue.500" 
-      			size="xl" 
-      		/>
-      	: <Stack px="5" >
-		  			{
-		    			posts.map((post) => (
-		    				<Post key={post._id} data={post} isLinked={true} />
-		    			))
-		  			}
-		  		</Stack>
-			}
+  			{
+  				isLoading 
+        	? <Flex justify="center">
+            <Spinner 
+        			thickness="4px"
+        			speed="0.65s" 
+        			emptyColor="gray.200" 
+        			color="blue.500" 
+        			size="xl"
+              mt="8"
+        		/>
+            </Flex>
+        	: <Stack px="5" >
+  		  			{
+  		    			posts.map((post) => (
+  		    				<Post key={post._id} data={post} isLinked={true} />
+  		    			))
+  		  			}
+  		  		</Stack>
+  			}
 	    
 	    {/* Post Form Modal */}
 	    <Modal isOpen={isOpen} onClose={onClose}>

@@ -8,7 +8,7 @@ import axios from 'axios'
 const DonateFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, items, donate, postId } = props
 
-	const USER = useContext(UserContext)
+	const [USER] = useContext(UserContext)
 	const { user } = USER
 
 	const { _id: userId } = user

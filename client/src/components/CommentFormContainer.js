@@ -8,7 +8,7 @@ import { UserContext } from '../App.js'
 const CommentFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, addComment, postId } = props
 
-	const USER = useContext(UserContext)
+	const [USER] = useContext(UserContext)
 	const { user } = USER
 
 	const initialValues = {

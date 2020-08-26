@@ -8,7 +8,7 @@ import { UserContext } from '../App.js'
 const PostFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, createPost } = props
 
-	const USER = useContext(UserContext)
+	const [ USER ] = useContext(UserContext)
 	const { user, token } = USER
 
 	const initialValues = {

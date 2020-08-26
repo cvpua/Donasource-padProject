@@ -27,7 +27,7 @@ const INIT_PROFILE = {
 
 
 const Profile = () => {
-	const USER = useContext(UserContext)
+	const [USER] = useContext(UserContext)
 	const { user } = USER
 	const { _id: userId } = user
 

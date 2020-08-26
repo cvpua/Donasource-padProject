@@ -1,12 +1,13 @@
-import React,{ useState, useEffect } from 'react'
+import React,{ useState, useEffect, useContext } from 'react'
 import { Box } from '@chakra-ui/core'
 import SectionHeader from './SectionHeader.js'
 import Feed from './Feed.js'
 import {FaHome} from 'react-icons/fa'
 import axios from 'axios'
+import { PostContext } from './PostProvider.js'
 
 const Home = () => {
-	const [posts, setPosts] = useState([])
+	const [posts, setPosts] = useContext(PostContext)
 	// For better user experience; will set to false once the data fetching is done
 	const [isLoading, setIsLoading] = useState(true)
 

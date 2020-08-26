@@ -1,35 +1,24 @@
-import React, { Component } from 'react'
+import React,{ useContext, useState } from 'react'
+import { PostContext } from './PostProvider.js'
 
-const INITIAL_STATE = {
-    search: '',
-    category: '',
-};
+const Search = () => {
+    const [posts, setPosts] = useContext(PostContext)
 
+    const [search, setSearch] = useState('')
+    const [category, setCategory] = useState('title')
 
-class Search extends Component {
-    state = INITIAL_STATE;
-
-    
-    updateSearch = (event) => {
-        const { target } = event;
-        this.setState({ search: target.value });
-    }
-    
-    handleFormSubmit = (event) => { 
-        const { category } = this.state;
-        const { setFilteredPost, posts } = this.props;
+    const handleFormSubmit = (event) => {
         event.preventDefault();
-        
-        this.setState(INITIAL_STATE);
+
         let filteredPost = posts.filter(
             (post) => {
                 if (category === "title") {
-                    return post.title.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
+                    return post.title.toLowerCase().indexOf(search.toLowerCase()) !== -1;
                 } else if (category === "author") {
-                    return post.author.toLowerCase().indexOf(this.state.search.toLowerCase()) !== -1;
+                    return post.author.toLowerCase().indexOf(search.toLowerCase()) !== -1;
                 } else if (category === "tags"){
                     let indicator = post.tags.map((item) => {
-                        if (item.toLowerCase() === this.state.search.toLowerCase()){
+                        if (item.toLowerCase() === search.toLowerCase()){
                             return true;
                         }
                     })
@@ -40,52 +29,38 @@ class Search extends Component {
                     }
                 }
             }
-            );
-            setFilteredPost(filteredPost)
-            // filteredPost.map((post) => {
-            //     console.log(post)
-            //    
-            // })
-        }
-        
-    changeCategory = (event) => {
-        const { target } = event;
-        this.setState({
-            category: target.value
-        });
+        );
+        setPosts(filteredPost)
     }
 
-    handleFormReset = () => {
-        this.setState(() => this.initialState)
+    const handleFormReset = () => {
+        setSearch('')
+        setCategory('')
     }
 
-    render() {
-        const { search, category } = this.state;
-                
-        return (
-            <div>
-                <form onSubmit ={this.handleFormSubmit} onReset = {this.handleFormReset}>
-                    <input
-                        onChange={this.updateSearch}
-                        name="search"
-                        value={search}
-                        type="text"
-                        placeholder="Search Bar"
-                        />
-                    <br />
-                    <div onChange={this.changeCategory}>
-                        <input type="radio" id="title" name="categories" value="title" checked={category === 'title'} />
-                        <label for="title" />Title <br />
-                        <input type="radio" id="author" name="categories" value="author" checked={category === 'author'}/>
-                        <label for="author" />Author<br />
-                        <input type="radio" id="tags" name="categories" value="tags" checked={category === 'tags'}/>
-                        <label for="tags" />Tags <br />
-                    </div>
-                    <button style={{ backgroundColor: "lightblue" }}> Search </button>
-                </form>
-            </div>
-        )
-    }
+    return (
+         <div>
+            <form onSubmit ={handleFormSubmit} onReset = {handleFormReset}>
+                <input
+                    onChange={e => setSearch(e.target.value)}
+                    name="search"
+                    value={search}
+                    type="text"
+                    placeholder="Search Bar"
+                    />
+                <br />
+                <div onChange={e => setCategory(e.target.value)} >
+                    <input type="radio" id="title" name="categories" value="title" checked={category === 'title'} />
+                    <label for="title" />Title <br />
+                    <input type="radio" id="author" name="categories" value="author" checked={category === 'author'}/>
+                    <label for="author" />Author<br />
+                    <input type="radio" id="tags" name="categories" value="tags" checked={category === 'tags'}/>
+                    <label for="tags" />Tags <br />
+                </div>
+                <button style={{ backgroundColor: "lightblue" }}> Search </button>
+            </form>
+        </div>
+    )
 }
 
 export default Search

@@ -9,7 +9,7 @@ const LikeButton = (props) => {
 	const { id: postId, likers } = props
 
 	// User Id
-	const USER = useContext(UserContext)
+	const [USER] = useContext(UserContext)
 	const { user } = USER
 	const { _id: userId } = user
 
