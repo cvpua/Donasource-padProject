@@ -7,12 +7,21 @@ const { response } = require('express');
 
 // req.body === properties to be updated : initial value
 
-router.get('/api/update/userSchema', (req,res)=> {
+router.patch('/api/update/userSchema', (req,res)=> {
    
     const toUpdate = {}
-    for(const property of req.body){
-        toUpdate[property.propName] = ops.value;
+    
+    
+    if(req.body && req.body.length >= 1){
+        for(const property of req.body){
+            toUpdate[property.propName] = ops.value;
+        }
+    }else{
+        let  keys = Object.keys(req.body);
+        toUpdate[keys] = req.body.keys;
     }
+
+
     User.updateMany({}, {$set : toUpdate})
     .exec()
     .then(response => {

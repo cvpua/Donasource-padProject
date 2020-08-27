@@ -18,4 +18,8 @@ router.get('/api/users/:userId',UserController.getUser)
 router.get('/api/users/:userId/likedPosts',UserController.getLikedPosts)
 
 
+router.get('/api/users/:userId/notifications',UserController.getAllNotifications)
+
+router.get('/api/users/:userId/notifications/:notifId',UserController.getNotification)
+
 module.exports = router;
