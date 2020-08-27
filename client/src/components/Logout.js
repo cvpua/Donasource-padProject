@@ -1,7 +1,7 @@
 import React, {useContext} from 'react'
-import { Flex, Button } from '@chakra-ui/core'
+import { Flex, Button, Box, Text } from '@chakra-ui/core'
 import { Link } from 'react-router-dom'
-import { RiLogoutBoxLine } from 'react-icons/ri'
+import { BiLogOut } from 'react-icons/bi'
 import { UserContext } from '../App.js'
 
 const Logout = () => {
@@ -13,11 +13,16 @@ const Logout = () => {
 	}
 
 	return (
-		<Flex flexDirection="column">
-      <Button as={Link} to="/" onClick={logout} variantColor="cyan" variant="solid" size="lg" leftIcon={RiLogoutBoxLine}>
-         Logout
-      </Button>
-    </Flex>
+			<Flex 
+        as={Link} 
+        to="/" 
+        p="2" 
+        rounded="full"
+        onClick={logout}
+      >
+        <Box ml="4" as={BiLogOut} size="8" color="primary.600" />
+        <Text color="primary.600" fontWeight="bold" fontFamily="Ubuntu" fontSize="xl" lineHeight="tall" ml="1">Logout</Text>
+      </Flex>
 	)
 }
 

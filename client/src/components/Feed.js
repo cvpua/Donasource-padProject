@@ -71,11 +71,11 @@ const Feed = (props) => {
 
 	    {/* Floating Action Button / Post Button */}
     	<IconButton 
-    		icon="add" 
     		pos="fixed" 
-    		bottom="8" 
-    		right="8" 
-    		isRound
+    		bottom={{base: "4.5rem", md: "8"}}
+        icon="add" 
+    		right={{base: "6", md: "8"}} 
+        isRound
     		variant="solid"
     		variantColor="cyan"
     		aria-label="Post"

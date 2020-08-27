@@ -2,7 +2,7 @@ import React,{ useState, useEffect, useContext } from 'react'
 import { Box } from '@chakra-ui/core'
 import SectionHeader from './SectionHeader.js'
 import Feed from './Feed.js'
-import {FaHome} from 'react-icons/fa'
+import {BiHomeSmile} from 'react-icons/bi'
 import axios from 'axios'
 import { PostContext } from './PostProvider.js'
 
@@ -42,7 +42,7 @@ const Home = () => {
 	return (
 		<Box>
 			{/* Section Header */}
-      <SectionHeader title="Home" icon={FaHome}/>
+      <SectionHeader title="Home" icon={BiHomeSmile}/>
     	<Feed 
       	posts={posts}
       	createPost={createPost}

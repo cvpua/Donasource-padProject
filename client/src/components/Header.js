@@ -13,10 +13,10 @@ const Header = (props) => {
       align="center"
     >
       <Text 
-        fontFamily="heading" 
+        fontFamily="Ubuntu" 
         fontSize={["2xl","4xl"]} 
         fontWeight="bold" 
-        color="white"
+        color="cyan.50"
       >
         { title }
       </Text>
