@@ -6,9 +6,11 @@ const Comment = require('./comment');
 
 const post = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
+    userId : {type: String, required : true},
     avatar : {type: String, required : true},
     title : {type : String, required : true},
     author : {type: String, required : true},
+    username : {type: String, required : true},
     type : {type : String, required : true},
     status : {type : String, required : true},
     description : {type : String, required : true},

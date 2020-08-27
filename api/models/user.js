@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Image = require('./image');
+const Notification = require('./notification');
 
 
 mongoose.set('useCreateIndex', true);
@@ -29,6 +30,7 @@ const user = new Schema({
     location : String,
     contactNumber : {type : String, required : true},
     bio : {type : String, default : null},
+    notifications : [Notification.schema],
     avails : [{
         post :{type: mongoose.Schema.Types.ObjectId, ref: 'Post'},
         status : { type : String , default : "Pending"}

@@ -36,7 +36,7 @@ exports.signup = (req,res) => {
                             },
                             email : req.body.email,
                             location : req.body.location,
-                            contactNumber : req.body.contactNumber,
+                            contactNumber : req.body.contactNumber
                         })
 
                         newUser.save()

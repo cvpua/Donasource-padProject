@@ -6,6 +6,7 @@ const checkAuth = require('../auth/check-auth');
 
 const Post = require('../models/post');
 const User = require('../models/user');
+const Notification = require('../models/notification');
 const Item = require('../models/item');
 const Image = require('../models/image');
 const Comment = require('../models/comment');
@@ -137,9 +138,11 @@ exports.makePost = (req,res) => {
            
             const post = new Post({
                 _id: new mongoose.Types.ObjectId(),
+                userId: req.body.userId,
                 avatar : req.body.avatar,
                 title : req.body.title,
                 author : req.body.author,
+                username : req.body.username,
                 type : req.body.type,
                 status : req.body.status,
                 description : req.body.description,
@@ -147,7 +150,7 @@ exports.makePost = (req,res) => {
                 location : req.body.location,
                 tags : req.body.tags,
                 datePosted : Date.now(),
-                deadline: Date.now(),
+                deadline: req.body.deadline,
                 images : imageArray,
                 comments : []
             })   
@@ -240,30 +243,61 @@ exports.makePost = (req,res) => {
     
 }
 
+
+
+
+
 exports.makeComment = (req,res) => {
     
     Post.findOne({_id : req.params.postId})
     .exec()
     .then(
         post => {
+            
             const comment = new Comment({
                 _id: new mongoose.Types.ObjectId(),
                 user: {
-                    username : req.body.author,
+                    username : req.body.username,
+                    author : req.body.author,
                     avatar : req.body.avatar,
                 },
                 content : req.body.content,
                 postId : post._id
             })
+            
             let comments = post.comments;
             comments.push(comment)
             post.comments = comments;
+            
             post.save()
-            .then( response => {
-                res.status(200).json({message : "Comment created!", post})
+            .then( response => {    
+                  
+                User.findById(post.userId)
+                .exec()
+                .then(user =>{
+                    
+                    const notification = new Notification({
+                        postId : post._id,
+                        userId : req.body.userId,
+                        username : req.body.username,
+                        name : req.body.name,
+                        response : req.body.name + " commented on your post"
+                    })
+                    user.notifications.push(notification)
+                    user.save()
+                    .then(response =>{
+                        res.status(200).json({message : "Comment created!", post})
+                    })
+                })
+                .catch(err =>{
+                    console.log(err)
+                })
+
+
+                
             })
             .catch(err =>{
-                res.status(500).json({message : "Comment not created",err})
+                res.status(500).json({message : "Comment not created",err:err.response})
             })
     })
     .catch(err => {
@@ -320,7 +354,30 @@ exports.likePost = (req,res) => {
                             foundUser.likedPostsCount = foundUser.likedPostsCount + 1;
                             foundUser.save()
                                 .then (response => {
-                                     res.status(200).json({message : "Post liked!", post})
+                                    User.findById(post.userId)
+                                    .exec()
+                                    .then(targetUser => {
+                                        const notification = new Notification({
+                                            postId : post._id,
+                                            userId : req.body.userId,
+                                            username : req.body.username,
+                                            name : req.body.name,
+                                            response : req.body.author + " liked your post",
+                                            date : Date.now()
+                                        })
+                                        targetUser.notifications.push(notification)
+                                        targetUser.save()
+                                        .then(response => {
+                                            res.status(200).json({message : "Post liked!", post})
+                                        })
+                                        .catch(err =>{
+                                            console.log(err)
+                                        })
+                                    })
+                                    .catch(err =>{
+                                        console.log(err)
+                                    })
+                                     
                                 })     
                             
                         })
@@ -332,14 +389,13 @@ exports.likePost = (req,res) => {
                         res.status(400).json({message : "Post not found!",err})
                     })
             }
-
-            
         }else{
             res.status(500).json({message : "User not found", err})
         }
     })
     
 }
+
 
 
 
@@ -356,15 +412,14 @@ exports.donate = (req,res) => {
                     name : item.name,
                     amount : item.amount,
                     total : item.total,
-                    donor : item.donor
+                    donor : item.donor,
+                    date : Date.now()
                 });
                 return newItem;
             });
         }
-        post.items = items;
-        
+        post.items = items; 
         let isFulfilled = true;
-
         post.items.forEach(item => {
             if(item.amount !== item.total){
                 isFulfilled = false;
@@ -382,7 +437,30 @@ exports.donate = (req,res) => {
                 user.donationGiven = user.donationGiven + 1;
                 user.save()
                 .then(response => {
-                    res.status(200).json({message : "Item/s donated. Thank you!"})
+
+                    User.findById(post.userId)
+                    .exec()
+                    .then(targetUser => {
+                        const notification = new Notification({
+                            postId : post._id,
+                            userId : req.body.userId,
+                            username : req.body.username,
+                            name : req.body.name,
+                            response : req.body.author + " donated on your post",
+                            date : Date.now()
+                        })
+                        targetUser.notifications.push(notification)
+                        targetUser.save()
+                        .then(response => {
+                            res.status(200).json({message : "Item/s donated. Thank you!"})
+                        })
+                        .catch(err =>{
+                            console.log(err)
+                        })
+                    })
+                    .catch(err =>{
+                        console.log(err)
+                    })
                 })
             })
             .catch(err =>{
