@@ -45,7 +45,6 @@ exports.getAllPosts = (req,res) => {
 
 
     Post.find()
-    .populate("username")
     .exec()
     .then(Posts => {
         const response = Posts.map(post => {
@@ -480,33 +479,56 @@ exports.donate = (req,res) => {
 
 
 exports.deletePost = (req,res) => {
-    Post.deleteOne({_id : req.params.postId})
+    
+    Post.findById(req.params.postId)
     .exec()
     .then(post => {
-        User.findOne({username : req.body.username})
+        
+        if(post.images){
+            post.images.map(image => {
+                
+                let imageDir = image.image.url.replace("http://localhost:5000/","");
+                fs.unlink(imageDir,(err => {
+                    if(err) throw err;
+                    
+                }))
+            })
+            console.log("Folder/s deleted");
+        }
+        Post.deleteOne({_id : req.params.postId})
         .exec()
-        .then(user =>{
-            user.posts = user.posts.filter(post => String(post._id) !== req.params.postId)
-            user.postCount = user.postCount - 1;
+        .then(post => {
+        
+            User.findOne({username : req.body.username})
+            .exec()
+            .then(user =>{
+                user.posts = user.posts.filter(post => String(post._id) !== req.params.postId)
+                user.postCount = user.postCount - 1;
 
-            post.type === "request" ? post.requestPostCount = post.requestPostCount - 1 : post.donationPostCount = post.donationPostCount - 1;
+                post.type === "request" ? post.requestPostCount = post.requestPostCount - 1 : post.donationPostCount = post.donationPostCount - 1;
 
-            user.save()
-            .then(response => {
-                res.status(200).json({message : "Post deleted!",post})
+                user.save()
+                .then(response => {
+                    res.status(200).json({message : "Post deleted!",post})
+                })
+                .catch( err =>
+                    console.log(err)
+                )
             })
             .catch( err =>
                 console.log(err)
             )
         })
-        .catch( err =>
-            console.log(err)
-        )
+        .catch(err => {
+            res.status(500).json({message: "Unable to delete post",
+            err})
         
     })
-    .catch(err => {
-        res.status(500).json({message: "Unable to delete post",
-        err})
-        
     })
+    .catch(err =>{
+        console.log(err)
+    })
+    
+    
+    
 }
