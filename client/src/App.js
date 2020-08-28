@@ -17,11 +17,14 @@ import { BiHomeSmile, BiBell, BiFace, BiBox, BiPlus } from 'react-icons/bi'
 
 /*
   
-  Buttom Navigation for mobile
-  Spinner for Profile Section
+  (Done) Buttom Navigation for mobile
+  (Done) Spinner for Profile Section
   Toast Message for every alert
   Edit Profile Form
   Add Image Feature
+  Add Empty Messages
+  Add Error Toast Messages
+
 */
 
 // ThemeProvider - provides 'customTheme' to every component using context api

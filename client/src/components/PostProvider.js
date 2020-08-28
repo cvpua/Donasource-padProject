@@ -2,8 +2,56 @@ import React,{ useState } from 'react'
 
 export const PostContext = React.createContext(null)
 
+const INIT_POSTS = [
+	{
+		_id: '1',
+		avatar: null,
+		title: '',
+		name: {
+			firstName: '',
+			lastName: '',
+		},
+		deadline: null,
+		description: '',
+		items: [],
+		tags: [],
+	  likers: [],
+	  status: '',
+	},
+	{
+		_id: '2',
+		avatar: null,
+		title: '',
+		name: {
+			firstName: '',
+			lastName: '',
+		},
+		deadline: null,
+		description: '',
+		items: [],
+		tags: [],
+	  likers: [],
+	  status: '',
+	},
+	{
+		_id: '3',
+		avatar: null,
+		title: '',
+		name: {
+			firstName: '',
+			lastName: '',
+		},
+		deadline: null,
+		description: '',
+		items: [],
+		tags: [],
+	  likers: [],
+	  status: '',
+	},
+]
+
 const PostProvider = ({children}) => {
-	const [posts, setPosts] = useState([])
+	const [posts, setPosts] = useState(INIT_POSTS)
 
 	return (
 		<PostContext.Provider value={[posts, setPosts]} >
