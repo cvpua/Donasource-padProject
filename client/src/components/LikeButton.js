@@ -1,6 +1,6 @@
-import React,{ useState, useContext } from 'react'
+import React,{ useState, useContext, useEffect } from 'react'
 import { IconButton } from '@chakra-ui/core'
-import {FaHeart} from 'react-icons/fa'
+import {AiOutlineHeart,AiFillHeart} from 'react-icons/ai'
 import { UserContext } from '../App.js'
 import axios from 'axios'
 
@@ -13,22 +13,36 @@ const LikeButton = (props) => {
 	const { user } = USER
 	const { _id: userId, name, username } = user
 
-	const state = likers.find((liker) => (liker === userId ? true : false))
-
-	const [isLiked, setIsLiked] = useState(state)
+	const [isLiked, setIsLiked] = useState(false)
+	const [isLoading, setIsLoading] = useState(false)
 
 	const toggle = async () => {
+		setIsLoading(true)
 		try{
 			const { data } = await axios.patch(`/api/posts/${postId}/likes`, {userId, name, username})
-			alert(data.message)
+			setIsLoading(false)
 			setIsLiked(!isLiked)
+			
 		}catch(error){
 			alert(error.message)
 		}
 	}
 
+	useEffect(() => {
+		const state = likers.find((liker) => (liker === userId ? true : false))
+		setIsLiked(state)
+	}, [likers, userId])
+
 	return (
-		<IconButton variant="ghost" isRound onClick={toggle} color={isLiked ? "red.800" : ""} icon={FaHeart} />
+		<IconButton 
+			variant="ghost"
+			icon={isLiked ? AiFillHeart : AiOutlineHeart} 
+			isRound 
+			size="lg"
+			onClick={toggle} 
+			color={isLiked ? "red.800" : ""} 
+			isLoading={isLoading}			
+		/>
 	)
 }
 

@@ -1,5 +1,6 @@
 import React,{ useState } from 'react'
 import { 
+  Box,
 	Stack, 
 	Spinner, 
 	IconButton,
@@ -14,7 +15,9 @@ import {
   ModalBody,
   ModalCloseButton, 
   Skeleton,
+  Text,
 } from '@chakra-ui/core'
+import { BiMeh } from 'react-icons/bi'
 import Post from './Post.js'
 import PostFormContainer from './PostFormContainer.js'
 
@@ -29,13 +32,23 @@ const Feed = (props) => {
 
 	return (
 		<>
-	    <Stack px="5" >
-        {
-          posts.map((post) => (
-            <Post key={post._id} data={post} isLinked={true} isLoading={isLoading} />
-          ))
-        }
-      </Stack>
+      {
+        posts.length === 0 ? 
+          <Flex align="center" py="4" flexDirection="column">
+            <Box as={BiMeh} size="32" />
+            <Text>Oooops! Your feed is empty. Make a post now!</Text>
+          </Flex>
+        : 
+          <Stack px="5" >
+            {
+              posts.map((post) => (
+                <Post key={post._id} data={post} isLinked={true} isLoading={isLoading} />
+              ))
+            }
+          </Stack>
+      }
+      
+	    
 	    {/* Post Form Modal */}
 	    <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

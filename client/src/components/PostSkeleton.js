@@ -3,7 +3,7 @@ import { Skeleton, Box, Flex } from '@chakra-ui/core'
 
 const PostSkeleton = () => {
 	return (
-		<Box p="5" mb="4" shadow="sm" bg="white" rounded="lg" pos="relative" _hover={{ borderColor: "gray.200", bg: "gray.50" }}>
+		<Box p="5" mb="4" shadow="sm" bg="white" rounded="lg" pos="relative" >
 			{/* Post Header */}
 			<Flex align="center" mb="2">
 	    	{/* Avatar */}

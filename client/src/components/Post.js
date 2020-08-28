@@ -18,7 +18,7 @@ import {
   ModalCloseButton, 
   Button
 } from '@chakra-ui/core'
-import { FaDonate, FaCommentDots} from 'react-icons/fa'
+import { BiDonateHeart, BiCommentDots} from 'react-icons/bi'
 import LikeButton from './LikeButton.js'
 import { Link } from 'react-router-dom'
 import CommentFormContainer from './CommentFormContainer.js'
@@ -74,7 +74,7 @@ const Post = (props) => {
       {
         isLoading ? <PostSkeleton />
         :
-      		<PseudoBox p="5" mb="4" shadow="sm" bg="white" rounded="lg" pos="relative" _hover={{ borderColor: "gray.200", bg: "gray.50" }}>
+      		<PseudoBox p="5" pb="2" mb="4" bg="white" shadow="sm" rounded="lg" pos="relative" _hover={{ borderColor: "gray.200", bg: "gray.50" }}>
             {
               isLinked
               ? <Box as={Link} to={`/profile/post/${_id}`} w="full" h="full" pos="absolute" top="0" left="0" bottom="0" right="0"></Box>
@@ -96,11 +96,11 @@ const Post = (props) => {
           	{/* Tags */}
             <Tags tags={tags} />
             {/* Post Actions */}
-            <Flex justify="space-around" borderTop="1px" borderColor="gray.200" py="2">
+            <Flex justify="space-around" borderTop="2px" borderColor="gray.300" pt="2">
               {/* Donate Button */}
-              <IconButton isDisabled={status === "PENDING" ? false : true} variant="ghost" isRound icon={FaDonate} onClick={onOpenDonate} />
+              <IconButton isDisabled={status === "PENDING" ? false : true} size="lg" variant="ghost" isRound icon={BiDonateHeart} onClick={onOpenDonate} />
               {/* Comment Button */}
-              <IconButton variant="ghost" isRound icon={FaCommentDots} onClick={onOpenComment} />
+              <IconButton variant="ghost" size="lg" isRound icon={BiCommentDots} onClick={onOpenComment} />
               {/* Like Button  */}
               <LikeButton id={_id} likers={likers} />
             </Flex>
