@@ -11,7 +11,7 @@ const DonateFormContainer = (props) => {
 	const [USER] = useContext(UserContext)
 	const { user } = USER
 
-	const { _id: userId } = user
+	const { _id: userId, username, name } = user
 
 	const initialValues = {
 		items: 
@@ -30,6 +30,8 @@ const DonateFormContainer = (props) => {
 				}
 			)),
 		userId: userId,
+		username: username,
+		name: name,
 	}
 
 	const validationSchema = (values) => Yup.object().shape({

@@ -32,7 +32,7 @@ const Post = (props) => {
     _id,
 		avatar,
 		title,
-		author,
+		name,
 		deadline,
 		description,
 		items: mainItems,
@@ -40,6 +40,8 @@ const Post = (props) => {
     likers,
     status: mainStatus,
 	} = data
+
+  const author = name.firstName + " " + name.lastName
 
   //  A custom hook to help handle common open, close, or toggle scenarios. 
   // See this docs for more information: https://chakra-ui.com/usedisclosure
@@ -64,7 +66,7 @@ const Post = (props) => {
   useEffect(() => {
     setItems(mainItems)
     setStatus(mainStatus)
-  }, [mainItems])
+  }, [mainItems, mainStatus])
 
 	return (
     <div>

@@ -226,10 +226,4 @@ export default {
 			900: "#004a1c",
 		},
 	},
-	fonts: {
-		...theme.fonts,	
-		body: "Lato, sans-serif",
-		heading: "Lato, sans-serif",
-	}
-
 }

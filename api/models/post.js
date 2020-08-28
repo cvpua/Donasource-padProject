@@ -9,7 +9,11 @@ const post = new Schema({
     userId : {type: String, required : true},
     avatar : {type: String, required : true},
     title : {type : String, required : true},
-    author : {type: String, required : true},
+    name : {
+            type: {type: String},
+            firstName : {type: String, required : true},
+            lastName : {type: String, required : true},
+        },
     username : {type: String, required : true},
     type : {type : String, required : true},
     status : {type : String, required : true},

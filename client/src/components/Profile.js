@@ -2,6 +2,7 @@ import React,{ useContext, useState, useEffect } from 'react'
 import {	Avatar, Text, Box, Flex, Stat, StatGroup, StatLabel, StatNumber, Menu, MenuItem, MenuButton, MenuList, IconButton } from '@chakra-ui/core'
 import SectionHeader from './SectionHeader.js'
 import { FaUserAlt, FaLocationArrow, FaSms, FaAt } from 'react-icons/fa'
+import {BiFace} from 'react-icons/bi'
 import Feed from './Feed.js'
 import { UserContext } from '../App.js'
 import axios from 'axios'
@@ -36,6 +37,7 @@ const Profile = () => {
 	const [feed, setFeed] = useState(profile.posts)
 
 	const fullName = profile.name.firstName + " " + profile.name.lastName
+	
 	const createPost = (post) => {
 		const newPost = {
 			...post,
@@ -64,8 +66,8 @@ const Profile = () => {
 
 	return (
 		<div>
-			<SectionHeader title="Profile" icon={FaUserAlt} />
-			<Box mx="4" shadow="md" bg="gray.50" rounded="lg">
+			<SectionHeader title="Profile" icon={BiFace} />
+			<Box mx="4" my="2" shadow="sm" bg="white" rounded="lg">
 				<Flex justify="flex-end">
 					<IconButton variant="ghost" icon={FiEdit} size="lg" m="2"/>
 				</Flex>

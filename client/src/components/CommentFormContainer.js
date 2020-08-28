@@ -12,8 +12,10 @@ const CommentFormContainer = (props) => {
 	const { user } = USER
 
 	const initialValues = {
+		userId: user._id,
 		avatar: user.photo,
-		author: user.username,
+		name: user.name,
+		username: user.username,
 		content: '',
 	}
 

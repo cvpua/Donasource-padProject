@@ -1,7 +1,7 @@
 import React,{useState, useLayoutEffect} from 'react'
 import customTheme from './styles/theme'
-import { ThemeProvider,CSSReset,Flex } from '@chakra-ui/core'
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import { ThemeProvider,CSSReset,Flex, IconButton, Box } from '@chakra-ui/core'
+import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom'
 import { Header, Left, Nav, Logout, Middle, Home, Right } from './components'
 import PostSection from './components/PostSection.js'
 import Profile from './components/Profile.js'
@@ -10,7 +10,7 @@ import LoginSignup from './components/LoginSignup.js'
 import axios from 'axios'
 import Toast from './components/Toast.js'
 import PostProvider from './components/PostProvider.js'
-
+import { BiHomeSmile, BiBell, BiFace, BiBox, BiPlus } from 'react-icons/bi'
 // To do: 
 // Add Avails Component
 // Add Notification Component
@@ -21,7 +21,6 @@ import PostProvider from './components/PostProvider.js'
   Spinner for Profile Section
   Toast Message for every alert
   Edit Profile Form
-  Sessions
   Add Image Feature
 */
 
@@ -33,6 +32,9 @@ export const UserContext = React.createContext(null)
 
 
 const App = () => {
+  console.log('Theme: ', customTheme)
+
+  const history = useHistory()
 
   const [user, setUser] = useState()
   // Toast Message
@@ -47,6 +49,7 @@ const App = () => {
       }
       setUser(info)
       localStorage.setItem("user", JSON.stringify(info))
+      history.push("/home")
       setMessage({
         title: "Success",
         description: data.message,
@@ -98,19 +101,16 @@ const App = () => {
         {
           !user ? <LoginSignup login={login} signup={signup} />
           : <div>
-              <Redirect to="/home" />
-              
               {/* Header */}
               <Header title="Donasource" />
               {/* Main */}
               <Flex 
                 justify={{base: "center", xl: "space-evenly"}}  
-                bg="gray.100"
               >
                 {/* Left/Sidebar */}
                 <Left>
                   {/* Navigation */}
-                  <Nav />
+                  <Nav variant="side" />
                   {/* Logout */}
                   <Logout />
                 </Left>
@@ -131,6 +131,8 @@ const App = () => {
                   </Middle>
                   {/* End of Middle */}
                   
+                  {/* Bottom Navigation */}
+                  <Nav variant="bottom" d={{base: "flex", md: "none"}} />
 
                   {/* Right/Ads */}
                   <Right>
@@ -140,6 +142,7 @@ const App = () => {
                 </PostProvider>
               </Flex>
               {/* End of Main */}
+
             </div>
         }
       </UserContext.Provider>
