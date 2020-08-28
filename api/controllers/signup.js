@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 
 
 const User = require('../models/user');
+const Blacklist = require('../models/blacklist');
+const { reset } = require("nodemon");
 
 
 exports.signup = (req,res) => {
@@ -65,6 +67,7 @@ exports.signup = (req,res) => {
 exports.login = (req,res) => {
     
     User.findOne({email : req.body.email})
+    .select("_id name username photo email password")
     .exec()
     .then(user => {
         if (!user ){
@@ -95,7 +98,11 @@ exports.login = (req,res) => {
             })
                 return res.status(200).json({
                     message : "Logged in",
-                    user : user,
+                    // userId : user._id,
+                    // username: user.username,                    
+                    // email : user.email,
+                    // name : user.name.firstName + " " + user.name.lastName,
+                    user:user,
                     isLoggedIn : true,
                     token : token
                     
@@ -105,6 +112,24 @@ exports.login = (req,res) => {
     })
     .catch(err => {
         res.status(500).json({error : err});
+    })
+}
+
+
+exports.logout = (req,res) => {
+    
+    const token = req.headers.authorization.split(" ")[1]
+    const blacklist = new Blacklist({
+        _id: new mongoose.Types.ObjectId(),
+        token : token,
+        createdAt : Date.now()
+    })
+    blacklist.save()
+    .then(response => {
+        res.json({message:"logged out!"})
+    })
+    .catch(err => {
+        console.log(err)
     })
 }
 
