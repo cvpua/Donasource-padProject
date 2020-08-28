@@ -9,6 +9,10 @@ const INIT_POST = {
 		avatar: null,
 		author: '',
 		title: '',
+		name: {
+			firstName: '',
+			lastName: '',
+		},
 		description: '',
 		type: 'donation',
 		location: '',
@@ -70,15 +74,16 @@ const PostSection = ({match}) => {
 	      <Stack>
 	        {
 	          comments.map((comment) => {
+	          	const author = comment.user.name.firstName + " " + comment.user.name.lastName
 	            return (
 	              <Box key={comment._id} borderTop="1px" borderColor="gray.200" mb="4" pt="4">
 	                <Flex mb="2">
 	                  {/* Avatar */}
-	                  <Avatar size="md" name={comment.user.author} src={comment.user.avatar} mr="4"/>
+	                  <Avatar size="md" name={author} src={comment.user.avatar} mr="4"/>
 	                  {/* Author */}
 	                  <Box>
-		                  <Text fontWeight="bold" >{comment.user.name.firstName + " " + comment.user.name.lastName}</Text>
-		                  <Text fontWeight="bold" >{comment.user.username}</Text>
+		                  <Text fontWeight="bold" >{author}</Text>
+		                  <Text fontWeight="light" fontSize="sm" mb="2">@{comment.user.username}</Text>
 		                  <Text fontFamily="body">{comment.content}</Text>
 	                  </Box>
 	                </Flex>
