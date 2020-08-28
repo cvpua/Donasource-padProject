@@ -37,6 +37,7 @@ const Profile = () => {
 	const [feed, setFeed] = useState(profile.posts)
 
 	const fullName = profile.name.firstName + " " + profile.name.lastName
+	
 	const createPost = (post) => {
 		const newPost = {
 			...post,

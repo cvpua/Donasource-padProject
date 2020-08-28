@@ -43,9 +43,7 @@ const upload = multer({
 
 exports.getAllPosts = (req,res) => {
 
-
     Post.find()
-    .populate("username")
     .exec()
     .then(Posts => {
         const response = Posts.map(post => {
@@ -141,7 +139,7 @@ exports.makePost = (req,res) => {
                 userId: req.body.userId,
                 avatar : req.body.avatar,
                 title : req.body.title,
-                author : req.body.author,
+                name : JSON.parse(req.body.name),
                 username : req.body.username,
                 type : req.body.type,
                 status : req.body.status,
@@ -258,7 +256,10 @@ exports.makeComment = (req,res) => {
                 _id: new mongoose.Types.ObjectId(),
                 user: {
                     username : req.body.username,
-                    author : req.body.author,
+                    name : {
+                        firstName : req.body.firstName,
+                        lastName : req.body.lastName
+                    },
                     avatar : req.body.avatar,
                 },
                 content : req.body.content,
@@ -280,8 +281,11 @@ exports.makeComment = (req,res) => {
                         postId : post._id,
                         userId : req.body.userId,
                         username : req.body.username,
-                        name : req.body.name,
-                        response : req.body.name + " commented on your post"
+                        name : {
+                            firstName : req.body.firstName,
+                            lastName : req.body.lastName
+                        },
+                        response : req.body.name.firstName + " " + req.body.name.lastName + " commented on your post"
                     })
                     user.notifications.push(notification)
                     user.save()
@@ -361,8 +365,11 @@ exports.likePost = (req,res) => {
                                             postId : post._id,
                                             userId : req.body.userId,
                                             username : req.body.username,
-                                            name : req.body.name,
-                                            response : req.body.author + " liked your post",
+                                            name : {
+                                                firstName : req.body.firstName,
+                                                lastName : req.body.lastName
+                                            },
+                                            response : req.body.name.firstName + " " + req.body.name.lastName + " liked your post",
                                             date : Date.now()
                                         })
                                         targetUser.notifications.push(notification)
@@ -445,8 +452,11 @@ exports.donate = (req,res) => {
                             postId : post._id,
                             userId : req.body.userId,
                             username : req.body.username,
-                            name : req.body.name,
-                            response : req.body.author + " donated on your post",
+                            name : {
+                                firstName : req.body.firstName,
+                                lastName : req.body.lastName
+                            },
+                            response : req.body.name.firstName + " " + req.body.name.lastName + " donated on your post",
                             date : Date.now()
                         })
                         targetUser.notifications.push(notification)

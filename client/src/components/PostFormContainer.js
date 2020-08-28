@@ -12,8 +12,13 @@ const PostFormContainer = (props) => {
 	const { user, token } = USER
 
 	const initialValues = {
+		userId: user._id,
 		avatar: user.photo,
-		author: user.name.firstName + " " + user.name.lastName,
+		name: {
+			firstName: user.name.firstName,
+			lastName: user.name.lastName,
+		},
+		username: user.username,
 		title: '',
 		description: '',
 		type: 'donation',
@@ -45,12 +50,15 @@ const PostFormContainer = (props) => {
 
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
+
 		
 		// Eto nadagdag
 		let formData = new FormData();
 		for(var key in values){
 			if(key === "items"){
-				formData.append(key,JSON.stringify(values[key]));
+				formData.append(key,JSON.stringify(values[key]));	
+			}else if (key === "name"){
+				formData.append(key, JSON.stringify(values[key]));
 			}else if(key === "images"){
 				const imageLength = values[key].length;
 				for(let i = 0; i < imageLength ; i++){
@@ -74,6 +82,7 @@ const PostFormContainer = (props) => {
 					}
 				}
 			)
+			console.log('Post Form: ', formData)
 			alert(data.message)
 			createPost(values)
 			handleIsSubmitting(false)

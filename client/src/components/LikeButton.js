@@ -11,7 +11,7 @@ const LikeButton = (props) => {
 	// User Id
 	const [USER] = useContext(UserContext)
 	const { user } = USER
-	const { _id: userId } = user
+	const { _id: userId, name, username } = user
 
 	const state = likers.find((liker) => (liker === userId ? true : false))
 
@@ -19,7 +19,7 @@ const LikeButton = (props) => {
 
 	const toggle = async () => {
 		try{
-			const { data } = await axios.patch(`/api/posts/${postId}/likes`, {userId})
+			const { data } = await axios.patch(`/api/posts/${postId}/likes`, {userId, name, username})
 			alert(data.message)
 			setIsLiked(!isLiked)
 		}catch(error){

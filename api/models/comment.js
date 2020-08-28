@@ -6,7 +6,11 @@ const comment = new Schema({
     
     user : {
         type : {type : String},
-        name : {type: String, required : true},
+        name : {
+		        type: {type: String},
+		        firstName : {type: String, required : true},
+		        lastName : {type: String, required : true},
+		    },
         username : {type: String, required : true},
         avatar : {type: String,  default: null},
     },
