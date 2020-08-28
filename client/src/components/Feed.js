@@ -13,6 +13,7 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton, 
+  Skeleton,
 } from '@chakra-ui/core'
 import Post from './Post.js'
 import PostFormContainer from './PostFormContainer.js'
@@ -28,27 +29,13 @@ const Feed = (props) => {
 
 	return (
 		<>
-  			{
-  				isLoading 
-        	? <Flex justify="center">
-            <Spinner 
-        			thickness="4px"
-        			speed="0.65s" 
-        			emptyColor="gray.200" 
-        			color="blue.500" 
-        			size="xl"
-              mt="8"
-        		/>
-            </Flex>
-        	: <Stack px="5" >
-  		  			{
-  		    			posts.map((post) => (
-  		    				<Post key={post._id} data={post} isLinked={true} />
-  		    			))
-  		  			}
-  		  		</Stack>
-  			}
-	    
+	    <Stack px="5" >
+        {
+          posts.map((post) => (
+            <Post key={post._id} data={post} isLinked={true} isLoading={isLoading} />
+          ))
+        }
+      </Stack>
 	    {/* Post Form Modal */}
 	    <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -77,7 +64,7 @@ const Feed = (props) => {
     		right={{base: "6", md: "8"}} 
         isRound
     		variant="solid"
-    		variantColor="cyan"
+    		variantColor="secondary"
     		aria-label="Post"
     		shadow="md"
     		size="lg"

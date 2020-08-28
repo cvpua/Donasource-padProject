@@ -1,5 +1,5 @@
 import React,{ useContext, useState, useEffect } from 'react'
-import {	Avatar, Text, Box, Flex, Stat, StatGroup, StatLabel, StatNumber, Menu, MenuItem, MenuButton, MenuList, IconButton } from '@chakra-ui/core'
+import {	Avatar, Text, Box, Flex, Stat, StatGroup, StatLabel, StatNumber, Menu, MenuItem, MenuButton, MenuList, IconButton, Spinner } from '@chakra-ui/core'
 import SectionHeader from './SectionHeader.js'
 import { FaUserAlt, FaLocationArrow, FaSms, FaAt } from 'react-icons/fa'
 import {BiFace} from 'react-icons/bi'
@@ -32,6 +32,8 @@ const Profile = () => {
 	const { user } = USER
 	const { _id: userId } = user
 
+	const [isLoading, setIsLoading] = useState(true)
+
 	const [profile, setProfile] = useState(INIT_PROFILE)
 
 	const [feed, setFeed] = useState(profile.posts)
@@ -56,7 +58,7 @@ const Profile = () => {
 				const { data } = await axios.get(`/api/users/${userId}`)
 				setProfile(data.user)
 				setFeed(data.user.posts)
-				alert('Success')
+				setIsLoading(false)
 			}catch(error){
 				alert(error.message)
 			}
@@ -67,57 +69,71 @@ const Profile = () => {
 	return (
 		<div>
 			<SectionHeader title="Profile" icon={BiFace} />
-			<Box mx="4" my="2" shadow="sm" bg="white" rounded="lg">
-				<Flex justify="flex-end">
-					<IconButton variant="ghost" icon={FiEdit} size="lg" m="2"/>
-				</Flex>
-				<Flex pb="4" borderBottom="4px" borderColor="gray.200" mb="4" flexDirection="column" justify="center" align="center">
-					{/* Avatar */}
-					<Avatar size="2xl" src={profile.photo} name={fullName} mb="2"/>
-					{/* Name */}
-					<Text fontSize="2xl" fontWeight="semibold">{fullName}</Text>
-					{/* Username */}
-					<Text fontWeight="light">@{profile.username}</Text>
+			{
+				isLoading ? 
+					<Flex justify="center">
+            <Spinner 
+        			thickness="4px"
+        			speed="0.65s" 
+        			emptyColor="gray.200" 
+        			color="blue.500" 
+        			size="xl"
+              mt="8"
+        		/>
+          </Flex>
+        :
+        	<Box mx="4" my="2" shadow="sm" bg="white" rounded="lg">
+						<Flex justify="flex-end">
+							<IconButton variant="ghost" icon={FiEdit} size="lg" m="2"/>
+						</Flex>
+						<Flex pb="4" borderBottom="4px" borderColor="gray.200" mb="4" flexDirection="column" justify="center" align="center">
+							{/* Avatar */}
+							<Avatar size="2xl" src={profile.photo} name={fullName} mb="2"/>
+							{/* Name */}
+							<Text fontSize="2xl" fontWeight="semibold">{fullName}</Text>
+							{/* Username */}
+							<Text fontWeight="light">@{profile.username}</Text>
 
-					{/* Bio */}
-					<Flex px="8" pb="4" justify="center" >
-						<Text textAlign="center">{profile.bio}</Text>
-					</Flex>
-					<Flex flexDirection="column" mt="2">
-						{/* Location */}
-						<Flex align="center" justify="center">
-							<Box as={FaLocationArrow} color="primary.600" />
-							<Text ml="2">{profile.location}</Text>
+							{/* Bio */}
+							<Flex px="8" pb="4" justify="center" >
+								<Text textAlign="center">{profile.bio}</Text>
+							</Flex>
+							<Flex flexDirection="column" mt="2">
+								{/* Location */}
+								<Flex align="center" justify="center">
+									<Box as={FaLocationArrow} color="primary.600" />
+									<Text ml="2">{profile.location}</Text>
+								</Flex>
+								{/* Email */}
+								<Flex align="center" justify="center">
+									<Box as={FaAt} color="primary.600" />
+									<Text ml="2">{profile.email}</Text>
+								</Flex>
+								{/* Contact */}
+								<Flex align="center" justify="center">
+									<Box as={FaSms} color="primary.600" />
+									<Text ml="2">{profile.contactNumber}</Text> 
+								</Flex>
+							</Flex>
+							<StatGroup >
+								{/* Donations */}
+							  <Stat d="flex" p="4" flexDirection="column" justifyContent="center" alignItems="center">
+							    <StatNumber>{profile.donationGiven}</StatNumber>
+							    <StatLabel color="primary.600">Donations</StatLabel>
+							  </Stat>
+							  {/* Requests */}
+							  <Stat d="flex" p="4" flexDirection="column" justifyContent="center" alignItems="center">
+							    <StatNumber>{profile.donationRequested}</StatNumber>
+							    <StatLabel color="primary.600" >Requests</StatLabel>
+							  </Stat>
+							</StatGroup>
 						</Flex>
-						{/* Email */}
-						<Flex align="center" justify="center">
-							<Box as={FaAt} color="primary.600" />
-							<Text ml="2">{profile.email}</Text>
-						</Flex>
-						{/* Contact */}
-						<Flex align="center" justify="center">
-							<Box as={FaSms} color="primary.600" />
-							<Text ml="2">{profile.contactNumber}</Text> 
-						</Flex>
-					</Flex>
-					<StatGroup >
-						{/* Donations */}
-					  <Stat d="flex" p="4" flexDirection="column" justifyContent="center" alignItems="center">
-					    <StatNumber>{profile.donationGiven}</StatNumber>
-					    <StatLabel color="primary.600">Donations</StatLabel>
-					  </Stat>
-					  {/* Requests */}
-					  <Stat d="flex" p="4" flexDirection="column" justifyContent="center" alignItems="center">
-					    <StatNumber>{profile.donationRequested}</StatNumber>
-					    <StatLabel color="primary.600" >Requests</StatLabel>
-					  </Stat>
-					</StatGroup>
-				</Flex>
-				<Feed 
-					posts={feed}
-	      	createPost={createPost}
-				/>
-			</Box>
+						<Feed 
+							posts={feed}
+			      	createPost={createPost}
+						/>
+					</Box>
+			}
 		</div>
 	)
 }

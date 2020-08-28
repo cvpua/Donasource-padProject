@@ -257,8 +257,8 @@ exports.makeComment = (req,res) => {
                 user: {
                     username : req.body.username,
                     name : {
-                        firstName : req.body.firstName,
-                        lastName : req.body.lastName
+                        firstName : req.body.name.firstName,
+                        lastName : req.body.name.lastName
                     },
                     avatar : req.body.avatar,
                 },
@@ -282,8 +282,8 @@ exports.makeComment = (req,res) => {
                         userId : req.body.userId,
                         username : req.body.username,
                         name : {
-                            firstName : req.body.firstName,
-                            lastName : req.body.lastName
+                            firstName : req.body.name.firstName,
+                            lastName : req.body.name.lastName
                         },
                         response : req.body.name.firstName + " " + req.body.name.lastName + " commented on your post"
                     })
@@ -366,8 +366,8 @@ exports.likePost = (req,res) => {
                                             userId : req.body.userId,
                                             username : req.body.username,
                                             name : {
-                                                firstName : req.body.firstName,
-                                                lastName : req.body.lastName
+                                                firstName : req.body.name.firstName,
+                                                lastName : req.body.name.lastName
                                             },
                                             response : req.body.name.firstName + " " + req.body.name.lastName + " liked your post",
                                             date : Date.now()
@@ -453,8 +453,8 @@ exports.donate = (req,res) => {
                             userId : req.body.userId,
                             username : req.body.username,
                             name : {
-                                firstName : req.body.firstName,
-                                lastName : req.body.lastName
+                                firstName : req.body.name.firstName,
+                                lastName : req.body.name.lastName
                             },
                             response : req.body.name.firstName + " " + req.body.name.lastName + " donated on your post",
                             date : Date.now()

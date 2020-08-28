@@ -23,11 +23,12 @@ import LikeButton from './LikeButton.js'
 import { Link } from 'react-router-dom'
 import CommentFormContainer from './CommentFormContainer.js'
 import DonateFormContainer from './DonateFormContainer.js'
+import PostSkeleton from './PostSkeleton.js'
 
 // For now, let this be a request type post
 
 const Post = (props) => {
-	const { data, addComment, isLinked } = props
+	const { data, addComment, isLinked, isLoading } = props
 	const {
     _id,
 		avatar,
@@ -70,39 +71,42 @@ const Post = (props) => {
 
 	return (
     <div>
-  		<PseudoBox p="5" mb="4" shadow="sm" bg="white" rounded="lg" pos="relative" _hover={{ borderColor: "gray.200", bg: "gray.50" }}>
-        {
-          isLinked 
-          ? <Box as={Link} to={`/profile/post/${_id}`} w="full" h="full" pos="absolute" top="0" left="0" bottom="0" right="0"></Box>
-          : "" 
-        }
-        {/* Post Header */}
-        <PostHeader
-        	avatar={avatar} 
-  				title={title} 
-  				author={author} 
-  				deadline={deadline}
-        />
-      	{/* Post Content */}
-        <Box my="4">
-          <Text>{description}</Text>
-        </Box>
-      	{/* Item List */}
-        <ItemList items={items} />
-      	{/* Tags */}
-        <Tags tags={tags} />
-        {/* Post Actions */}
-        <Flex justify="space-around" borderTop="1px" borderColor="gray.200" py="2">
-          {/* Donate Button */}
-          <IconButton isDisabled={status === "PENDING" ? false : true} variant="ghost" isRound icon={FaDonate} onClick={onOpenDonate} />
-          {/* Comment Button */}
-          <IconButton variant="ghost" isRound icon={FaCommentDots} onClick={onOpenComment} />
-          {/* Like Button  */}
-          <LikeButton id={_id} likers={likers} />
-        </Flex>
-        {props.children}
-      </PseudoBox>
-      
+      {
+        isLoading ? <PostSkeleton />
+        :
+      		<PseudoBox p="5" mb="4" shadow="sm" bg="white" rounded="lg" pos="relative" _hover={{ borderColor: "gray.200", bg: "gray.50" }}>
+            {
+              isLinked
+              ? <Box as={Link} to={`/profile/post/${_id}`} w="full" h="full" pos="absolute" top="0" left="0" bottom="0" right="0"></Box>
+              : "" 
+            }
+            {/* Post Header */}
+            <PostHeader
+            	avatar={avatar} 
+      				title={title} 
+      				author={author} 
+      				deadline={deadline}
+            />
+          	{/* Post Content */}
+            <Box my="4">
+              <Text>{description}</Text>
+            </Box>
+          	{/* Item List */}
+            <ItemList items={items} />
+          	{/* Tags */}
+            <Tags tags={tags} />
+            {/* Post Actions */}
+            <Flex justify="space-around" borderTop="1px" borderColor="gray.200" py="2">
+              {/* Donate Button */}
+              <IconButton isDisabled={status === "PENDING" ? false : true} variant="ghost" isRound icon={FaDonate} onClick={onOpenDonate} />
+              {/* Comment Button */}
+              <IconButton variant="ghost" isRound icon={FaCommentDots} onClick={onOpenComment} />
+              {/* Like Button  */}
+              <LikeButton id={_id} likers={likers} />
+            </Flex>
+            {props.children}
+          </PseudoBox>
+      }
       {/* Donate Form Modal */}
       <Modal isOpen={isOpenDonate} onClose={onCloseDonate}>
         <ModalOverlay />
