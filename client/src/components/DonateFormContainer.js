@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
+import { FormErrorMessage, FormControl } from '@chakra-ui/core'
 import { UserContext } from '../App.js'
 import axios from 'axios'
 
@@ -29,6 +30,7 @@ const DonateFormContainer = (props) => {
 					]
 				}
 			)),
+		totalDonation: 0,
 		userId: userId,
 		username: username,
 		name: name,
@@ -44,12 +46,13 @@ const DonateFormContainer = (props) => {
 				donor: Yup.array().of(
 					Yup.object().shape({
 						userId: Yup.string(),
-						amountDonated: Yup.number().min(1, 'Donate at least one item').required('Required'),
+						amountDonated: Yup.number(),
 						date: Yup.date(),
 					})
 				)
 			})
-		).required('Required')
+		).required('Required'),
+		totalDonation: Yup.number().min(1, "Donate at least one item")
 	})
 
 	const onSubmit = async (values) => {
@@ -76,6 +79,7 @@ const DonateFormContainer = (props) => {
 		>
 			{
 				(formikProps) => {
+					console.log('Formik  Props: ', formikProps)
 					return (<div>
 							<Form id="donateform">
 								{
@@ -94,6 +98,13 @@ const DonateFormContainer = (props) => {
 									))
 								}
 							</Form>
+							<FormControl isInvalid={formikProps.errors.totalDonation}>
+								<FormErrorMessage>
+									{
+										formikProps.errors.totalDonation
+									}
+								</FormErrorMessage>
+							</FormControl>
 						</div>
 					)
 				}

@@ -9,7 +9,6 @@ const MyNumeric = (props) => {
 		<Field name={`${name}[${index}].donor[${donorLength - 1}].amountDonated`}>
 			{
 				({field,form}) => {
-					console.log('Form Values: ', form.values)
 					return(
 					<FormControl
 						isInvalid={
@@ -38,6 +37,7 @@ const MyNumeric = (props) => {
 							onChange={ (val) => {
 								form.setFieldValue(`${name}[${index}].amount`, val + amount)
 								form.setFieldValue(`${name}[${index}].donor[${donorLength-1}].amountDonated`, val)
+								form.setFieldValue('totalDonation', form.values.totalDonation + val)
 							}} 
 							onBlur={ (e) => {form.setFieldTouched(`${name}[${index}].donor[${donorLength-1}].amountDonated`,true)}} />
 						<FormErrorMessage>
