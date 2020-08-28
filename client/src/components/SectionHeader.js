@@ -12,14 +12,14 @@ const SectionHeader = (props) => {
       pl="5"
       pos="sticky"
       top="0"
-      bg="gray.50"
+      bg="gray.100"
     >
       <Box as={props.icon} size="6" color="primary.600" mr="2"></Box>
       <Text 
       	fontFamily="Ubuntu" 
       	fontWeight="semibold" 
       	fontSize="2xl" 
-      	color="primary.600"
+
       >
       	{ title }
       </Text>

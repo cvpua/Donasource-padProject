@@ -6,7 +6,7 @@ const ItemList = (props) => {
 	const { items } = props	
 
 	return (
-		<Box shadow="outline" p="4">
+		<Box border="2px" rounded="lg" borderColor="cyan.400" p="4">
       <Text>Need:</Text>
       <List spacing={3} ml="2">
       	{/* Item */}

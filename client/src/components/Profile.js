@@ -1,12 +1,21 @@
 import React,{ useContext, useState, useEffect } from 'react'
-import {	Avatar, Text, Box, Flex, Stat, StatGroup, StatLabel, StatNumber, Menu, MenuItem, MenuButton, MenuList, IconButton, Spinner } from '@chakra-ui/core'
+import {	
+	Avatar, Text, Box, 
+	Flex, Stat, StatGroup, 
+	StatLabel, StatNumber, Menu, 
+	MenuItem, MenuButton, MenuList, 
+	IconButton, Spinner, useDisclosure,
+	Modal, ModalHeader, ModalBody, 
+  ModalContent, ModalOverlay, ModalFooter, 
+  ModalCloseButton, Button,
+} from '@chakra-ui/core'
 import SectionHeader from './SectionHeader.js'
 import { FaUserAlt, FaLocationArrow, FaSms, FaAt } from 'react-icons/fa'
-import {BiFace} from 'react-icons/bi'
+import {BiFace, BiEdit, BiCompass, BiEnvelope, BiPhone} from 'react-icons/bi'
 import Feed from './Feed.js'
+import EditProfileFormContainer from './EditProfileFormContainer.js'
 import { UserContext } from '../App.js'
 import axios from 'axios'
-import {FiEdit} from 'react-icons/fi'
 
 // Dapat pala userid na lang yung nilalagay sa Comment Form at Post Form
 
@@ -32,6 +41,9 @@ const Profile = () => {
 	const { user } = USER
 	const { _id: userId } = user
 
+	const { isOpen, onOpen, onClose } = useDisclosure()
+	const [isSubmitting, setIsSubmitting] = useState(false)
+
 	const [isLoading, setIsLoading] = useState(true)
 
 	const [profile, setProfile] = useState(INIT_PROFILE)
@@ -56,7 +68,10 @@ const Profile = () => {
 		const fetchData = async () => {
 			try {
 				const { data } = await axios.get(`/api/users/${userId}`)
-				setProfile(data.user)
+				setProfile(prevState => ({
+					...prevState,
+					...data.user,
+				}))
 				setFeed(data.user.posts)
 				setIsLoading(false)
 			}catch(error){
@@ -71,20 +86,19 @@ const Profile = () => {
 			<SectionHeader title="Profile" icon={BiFace} />
 			{
 				isLoading ? 
-					<Flex justify="center">
-            <Spinner 
-        			thickness="4px"
-        			speed="0.65s" 
-        			emptyColor="gray.200" 
-        			color="blue.500" 
-        			size="xl"
-              mt="8"
-        		/>
-          </Flex>
+					<Flex justify="center" pt="8" >
+					<Spinner
+					  thickness="6px"
+					  speed="0.65s"
+					  emptyColor="gray.200"
+					  color="primary.600"
+					  size="xl"
+					/>
+					</Flex>
         :
-        	<Box mx="4" my="2" shadow="sm" bg="white" rounded="lg">
+        	<Box mx="4" mb="2" shadow="sm" bg="white" rounded="lg">
 						<Flex justify="flex-end">
-							<IconButton variant="ghost" icon={FiEdit} size="lg" m="2"/>
+							<IconButton onClick={onOpen} variant="ghost" icon={BiEdit} size="lg" m="2"/>
 						</Flex>
 						<Flex pb="4" borderBottom="4px" borderColor="gray.200" mb="4" flexDirection="column" justify="center" align="center">
 							{/* Avatar */}
@@ -101,18 +115,18 @@ const Profile = () => {
 							<Flex flexDirection="column" mt="2">
 								{/* Location */}
 								<Flex align="center" justify="center">
-									<Box as={FaLocationArrow} color="primary.600" />
-									<Text ml="2">{profile.location}</Text>
+									<Box as={BiCompass} color="primary.600" size="6" />
+									<Text ml="2">{profile.location || "---"}</Text>
 								</Flex>
 								{/* Email */}
 								<Flex align="center" justify="center">
-									<Box as={FaAt} color="primary.600" />
-									<Text ml="2">{profile.email}</Text>
+									<Box as={BiEnvelope} color="primary.600" size="6" />
+									<Text ml="2">{profile.email || "---"}</Text>
 								</Flex>
 								{/* Contact */}
 								<Flex align="center" justify="center">
-									<Box as={FaSms} color="primary.600" />
-									<Text ml="2">{profile.contactNumber}</Text> 
+									<Box as={BiPhone} color="primary.600" size="6" />
+									<Text ml="2">{profile.contactNumber || "---"}</Text> 
 								</Flex>
 							</Flex>
 							<StatGroup >
@@ -134,6 +148,27 @@ const Profile = () => {
 						/>
 					</Box>
 			}
+
+			{/* Edit Form Modal */}
+			<Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Edit Profile</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {/* Edit Profile Form */}
+            <EditProfileFormContainer onClose={onClose} handleIsSubmitting={setIsSubmitting} profile={profile} />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button variant="ghost" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button variantColor="cyan" type="submit" isLoading={isSubmitting} form="editProfileForm">Save</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+			
 		</div>
 	)
 }

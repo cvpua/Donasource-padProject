@@ -1,13 +1,15 @@
 import React,{ useState, useEffect, useContext } from 'react'
-import { Box } from '@chakra-ui/core'
+import { Box, Flex, Text } from '@chakra-ui/core'
 import SectionHeader from './SectionHeader.js'
 import Feed from './Feed.js'
 import {BiHomeSmile} from 'react-icons/bi'
 import axios from 'axios'
 import { PostContext } from './PostProvider.js'
 
+
 const Home = () => {
 	const [posts, setPosts] = useContext(PostContext)
+
 	// For better user experience; will set to false once the data fetching is done
 	const [isLoading, setIsLoading] = useState(true)
 
@@ -43,11 +45,14 @@ const Home = () => {
 		<Box>
 			{/* Section Header */}
       <SectionHeader title="Home" icon={BiHomeSmile}/>
-    	<Feed 
-      	posts={posts}
-      	createPost={createPost}
-      	isLoading={isLoading}
-      />  
+      {
+      		<Feed 
+		      	posts={posts}
+		      	createPost={createPost}
+		      	isLoading={isLoading}
+		      />
+      }
+    	
     </Box>
 	)
 }
