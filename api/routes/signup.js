@@ -17,4 +17,7 @@ router.post('/api/signup', Auth.signup)
 // login user
 router.post('/api/login', Auth.login)
 
+
+router.post('/api/logout',Auth.logout)
+
 module.exports = router;

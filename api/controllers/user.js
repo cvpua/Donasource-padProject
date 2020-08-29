@@ -1,6 +1,39 @@
 const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const fs = require('fs-extra');
 
+
+
+const storage = multer.diskStorage({
+    destination: function(req,file,cb){
+        cb(null, './profilePictures'); 
+    },
+    filename : function(req,file,cb){
+        cb(null, new Date().toISOString() + file.originalname);
+    }
+});
+
+// File type checker
+const fileFilter = (req,file,cb) => {
+    if(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg'){
+        cb(null,true);
+    }else{
+        cb(new Error("Wrong file format"),false);
+    }
+}
+
+const upload = multer({
+    storage, 
+    limits: {
+        fileSize: 1024 * 1024 * 1
+    },
+    fileFilter
+
+}).single('images');
+
+
+const Image = require('../models/image');
 const User = require('../models/user');
 const Notification = require('../models/notification');
 const Post = require('../models/post');
@@ -37,6 +70,13 @@ exports.getUser = (req,res) =>{
                 message : "Username/password does not exist"
             })
         }else{
+
+            user.posts.sort((a,b) => {
+                let dateA = new Date(a.datePosted);
+                let dateB = new Date(b.datePosted);
+                return dateB - dateA;
+            });
+
             return res.status(200).json({
                 user
             })
@@ -112,5 +152,7 @@ exports.getNotification = (req,res) => {
     .catch()
 }
 
+exports.editUser = (req,res) => {
 
+}
 
