@@ -44,17 +44,14 @@ const upload = multer({
 exports.getAllPosts = (req,res) => {
 
     Post.find()
+    .sort({datePosted : -1})
     .exec()
     .then(Posts => {
         const response = Posts.map(post => {
            
             return post
         })
-       response.sort((a,b) => {
-            let dateA = new Date(a.datePosted);
-            let dateB = new Date(b.datePosted);
-            return dateB - dateA;
-        });
+   
         res.status(200).json({
             postCount: response.length,
             response})

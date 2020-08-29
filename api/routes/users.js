@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-
 const UserController = require('../controllers/user');
 
 
@@ -33,5 +32,9 @@ router.get('/api/users/:userId/notifications',UserController.getAllNotifications
 
 // Go to a notif/ get notif
 router.get('/api/users/:userId/notifications/:notifId',UserController.getNotification)
+
+
+router.put('/api/user/:userId/editUser',UserController.editUser)
+
 
 module.exports = router;
