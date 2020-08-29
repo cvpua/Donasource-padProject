@@ -9,11 +9,12 @@ const Logout = () => {
 	const [user, setUser] = useContext(UserContext)
 
   const { token } = user
-
+  
 	const logout = async () => {
 		try {
       const { data } = await axios.post(
-        '/api/logout', 
+        '/api/logout',
+        {}, 
         {
           headers: {
             'Authorization': 'Bearer ' + token
