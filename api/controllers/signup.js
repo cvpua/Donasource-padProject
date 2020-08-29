@@ -117,7 +117,7 @@ exports.login = (req,res) => {
 
 
 exports.logout = (req,res) => {
-    console.log('Authorization: ', req.headers.authorization)
+    
     const token = req.headers.authorization.split(" ")[1]
     const blacklist = new Blacklist({
         _id: new mongoose.Types.ObjectId(),
