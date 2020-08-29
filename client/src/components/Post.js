@@ -16,7 +16,10 @@ import {
   ModalOverlay, 
   ModalFooter, 
   ModalCloseButton, 
-  Button
+  Button,
+  Image,
+  Stack,
+  Grid,
 } from '@chakra-ui/core'
 import { BiDonateHeart, BiCommentDots} from 'react-icons/bi'
 import LikeButton from './LikeButton.js'
@@ -28,7 +31,7 @@ import PostSkeleton from './PostSkeleton.js'
 // For now, let this be a request type post
 
 const Post = (props) => {
-	const { data, addComment, isLinked, isLoading } = props
+	const { data, addComment, isLinked, isLoading, isPostSection } = props
 	const {
     _id,
 		avatar,
@@ -40,6 +43,7 @@ const Post = (props) => {
 		tags,
     likers,
     status: mainStatus,
+    images,
 	} = data
 
   const author = name.firstName + " " + name.lastName
@@ -92,9 +96,21 @@ const Post = (props) => {
               <Text>{description}</Text>
             </Box>
           	{/* Item List */}
-            <ItemList items={items} />
+            <ItemList items={items}>
+              {
+                images && isPostSection ?
+                  (images.map((image) => (
+                    <Image src={image.image.url} w="full" h="64" mt="2" objectFit="cover" /> 
+                  )))
+                : images && images.length !== 0 ?
+                  <Image src={images[0].image.url} w="full" h="64" mt="2" objectFit="cover" /> 
+                : ""
+              }
+            </ItemList>
           	{/* Tags */}
             <Tags tags={tags} />
+            {/* Images */}
+            
             {/* Post Actions */}
             <Flex justify="space-around" borderTop="2px" borderColor="gray.300" pt="2">
               {/* Donate Button */}
@@ -119,7 +135,10 @@ const Post = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onCloseDonate}>
+            <Button variant="ghost" mr={3} onClick={() => {
+              onCloseDonate()
+              setIsSubmitting(false)
+            }}>
               Cancel
             </Button>
             <Button variantColor="cyan" type="submit" isLoading={isSubmitting} form="donateform">Donate</Button>
@@ -140,7 +159,10 @@ const Post = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onCloseComment}>
+            <Button variant="ghost" mr={3} onClick={() => {
+              onCloseComment()
+              setIsSubmitting(false)
+            }}>
               Cancel
             </Button>
             <Button variantColor="cyan" type="submit" isLoading={isSubmitting} form="commentform">Comment</Button>

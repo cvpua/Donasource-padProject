@@ -16,6 +16,7 @@ const ItemList = (props) => {
         	))
         }
       </List>
+      { props.children }
     </Box>
 	)
 }

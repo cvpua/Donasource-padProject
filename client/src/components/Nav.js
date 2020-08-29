@@ -77,6 +77,7 @@ const Nav = (props) => {
         >
           <Box as={BiBox} size="8" color="primary.600" />
         </Box>
+        <Box size="8" />
         {/* Notification */}
         <Box 
           as={NavLink} 

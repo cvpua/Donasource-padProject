@@ -34,12 +34,12 @@ const Feed = (props) => {
 		<>
       {
         posts.length === 0 ? 
-          <Flex align="center" py="4" flexDirection="column">
-            <Box as={BiMeh} size="32" />
+          <Flex align="center" py="8" flexDirection="column">
+            <Box as={BiMeh} size="20" />
             <Text>Oooops! Your feed is empty. Make a post now!</Text>
           </Flex>
         : 
-          <Stack px="5" >
+          <Stack mb={{base: "16", md: "4"}} px={{base: "0", sm: "4"}} >
             {
               posts.map((post) => (
                 <Post key={post._id} data={post} isLinked={true} isLoading={isLoading} />
@@ -72,15 +72,20 @@ const Feed = (props) => {
 	    {/* Floating Action Button / Post Button */}
     	<IconButton 
     		pos="fixed" 
-    		bottom={{base: "4.5rem", md: "8"}}
-        icon="add" 
-    		right={{base: "6", md: "8"}} 
+    		bottom={{base: "2rem", md: "8"}}
+        icon="add"
+    		right={{base: "0", md: "8"}}
+        left={{base: "0", md: "initial"}}
+        mx={{base: "auto", md: "initial"}}
+        zIndex="sticky"
         isRound
     		variant="solid"
     		variantColor="secondary"
     		aria-label="Post"
     		shadow="md"
     		size="lg"
+        w="16"
+        h="16"
     		onClick={onOpen}
     	/>
     </>

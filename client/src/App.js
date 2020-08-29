@@ -11,6 +11,7 @@ import axios from 'axios'
 import Toast from './components/Toast.js'
 import PostProvider from './components/PostProvider.js'
 import { BiHomeSmile, BiBell, BiFace, BiBox, BiPlus } from 'react-icons/bi'
+
 // To do: 
 // Add Avails Component
 // Add Notification Component
@@ -20,11 +21,12 @@ import { BiHomeSmile, BiBell, BiFace, BiBox, BiPlus } from 'react-icons/bi'
   (Done) Buttom Navigation for mobile
   (Done) Spinner for Profile Section
   Toast Message for every alert
-  Edit Profile Form
-  Add Image Feature
-  Add Empty Messages
+  (Done) Edit Profile Form
+  (Done) Add Image Feature
+  (Done) Add Empty Messages
   Add Error Toast Messages
-
+  Add Deadline Featutre/Unfulfilled
+  Add design to Search
 */
 
 // ThemeProvider - provides 'customTheme' to every component using context api

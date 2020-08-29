@@ -96,7 +96,7 @@ const Profile = () => {
 					/>
 					</Flex>
         :
-        	<Box mx="4" mb="2" shadow="sm" bg="white" rounded="lg">
+        	<Box mx="4" mb={{base: "24", md: "2"}} shadow="sm" bg="white" rounded="lg">
 						<Flex justify="flex-end">
 							<IconButton onClick={onOpen} variant="ghost" icon={BiEdit} size="lg" m="2"/>
 						</Flex>

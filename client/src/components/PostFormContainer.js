@@ -45,12 +45,18 @@ const PostFormContainer = (props) => {
 		tags: Yup.array()
 			.of(
 				Yup.string().required('Required')
-			).required('Required')
+			).required('Required'),
+		images: Yup.mixed()
+        .test(
+          "length",
+          "Only 3 images are allowed per post",
+          value => value && value.length <= 3
+        )
 	})
 
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
-
+		console.log('Form Values', values)
 		
 		// Eto nadagdag
 		let formData = new FormData();
@@ -82,7 +88,6 @@ const PostFormContainer = (props) => {
 					}
 				}
 			)
-			console.log('Post Form: ', formData)
 			alert(data.message)
 			createPost(values)
 			handleIsSubmitting(false)

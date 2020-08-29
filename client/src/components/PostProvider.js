@@ -17,6 +17,7 @@ const INIT_POSTS = [
 		tags: [],
 	  likers: [],
 	  status: '',
+	  images: [],
 	},
 	{
 		_id: '2',
@@ -32,6 +33,7 @@ const INIT_POSTS = [
 		tags: [],
 	  likers: [],
 	  status: '',
+	  images: [],
 	},
 	{
 		_id: '3',
@@ -47,6 +49,7 @@ const INIT_POSTS = [
 		tags: [],
 	  likers: [],
 	  status: '',
+	  images: [],
 	},
 ]
 

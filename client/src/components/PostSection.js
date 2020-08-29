@@ -5,6 +5,7 @@ import { Stack, Box, Flex, Avatar, Text } from '@chakra-ui/core'
 import { BiNote } from 'react-icons/bi'
 import Post from './Post.js'
 import SectionHeader from './SectionHeader.js'
+import PostSkeleton from './PostSkeleton.js'
 
 const INIT_POST = {
 		avatar: null,
@@ -69,32 +70,36 @@ const PostSection = ({match}) => {
 		<div>
 			<SectionHeader title="Post" icon={BiNote} />
 			{/* Post */}
-			<Box px="5">
-				<Post data={post} addComment={addComment} isLinked={false}>
-					{/* Comment Stack */}
-		      <Stack mt="2">
-		        {
-		          comments.map((comment) => {
-		          	const author = comment.user.name.firstName + " " + comment.user.name.lastName
-		            return (
-		              <Box key={comment._id} borderTop="1px" borderColor="gray.200" mb="4" pt="4">
-		                <Flex mb="2">
-		                  {/* Avatar */}
-		                  <Avatar size="md" name={author} src={comment.user.avatar} mr="4"/>
-		                  {/* Author */}
-		                  <Box>
-			                  <Text fontWeight="bold" >{author}</Text>
-			                  <Text fontWeight="light" fontSize="sm" mb="2">@{comment.user.username}</Text>
-			                  <Text fontFamily="body">{comment.content}</Text>
-		                  </Box>
-		                </Flex>
-		              </Box>
-		            )
-		          })
-		        }
-	      	</Stack>
-	      </Post>
-      </Box>
+			<Box px="5" mb={{base: "20", md: "2"}} >
+			{
+				isLoading ? <PostSkeleton />
+				:
+					<Post data={post} addComment={addComment} isLinked={false} isPostSection={true} >
+						{/* Comment Stack */}
+			      <Stack mt="2">
+			        {
+			          comments.map((comment) => {
+			          	const author = comment.user.name.firstName + " " + comment.user.name.lastName
+			            return (
+			              <Box key={comment._id} borderTop="1px" borderColor="gray.200" mb="4" pt="4">
+			                <Flex mb="2">
+			                  {/* Avatar */}
+			                  <Avatar size="md" name={author} src={comment.user.avatar} mr="4"/>
+			                  {/* Author */}
+			                  <Box>
+				                  <Text fontWeight="bold" >{author}</Text>
+				                  <Text fontWeight="light" fontSize="sm" mb="2">@{comment.user.username}</Text>
+				                  <Text fontFamily="body">{comment.content}</Text>
+			                  </Box>
+			                </Flex>
+			              </Box>
+			            )
+			          })
+			        }
+		      	</Stack>
+		      </Post>
+			}
+			</Box>
 		</div>
 	)
 }
