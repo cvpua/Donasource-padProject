@@ -1,5 +1,6 @@
 import React,{ useContext, useState } from 'react'
 import { PostContext } from './PostProvider.js'
+import { Input, Button, InputGroup, InputLeftElement, Icon , Box, RadioButtonGroup, Text} from '@chakra-ui/core'
 
 const Search = () => {
     const [posts, setPosts] = useContext(PostContext)
@@ -12,10 +13,11 @@ const Search = () => {
 
         let filteredPost = posts.filter(
             (post) => {
+                const author = post.name.firstName + " " + post.name.lastName
                 if (category === "title") {
                     return post.title.toLowerCase().indexOf(search.toLowerCase()) !== -1;
                 } else if (category === "author") {
-                    return post.author.toLowerCase().indexOf(search.toLowerCase()) !== -1;
+                    return author.toLowerCase().indexOf(search.toLowerCase()) !== -1;
                 } else if (category === "tags"){
                     let indicator = post.tags.map((item) => {
                         if (item.toLowerCase() === search.toLowerCase()){
@@ -38,28 +40,45 @@ const Search = () => {
         setCategory('')
     }
 
+    const CustomRadio = React.forwardRef((props, ref) => {
+      const { isChecked, isDisabled, value, ...rest } = props;
+      return (
+        <Button
+          ref={ref}
+          size="sm"
+          variant="ghost"
+          variantColor={isChecked ? "cyan" : "gray"}
+          aria-checked={isChecked}
+          role="radio"
+          isDisabled={isDisabled}
+          {...rest}
+        />
+      );
+    });
+
     return (
-         <div>
+         <Box p="4" pos="sticky" top="0" h="100vh">
             <form onSubmit ={handleFormSubmit} onReset = {handleFormReset}>
-                <input
-                    onChange={e => setSearch(e.target.value)}
-                    name="search"
-                    value={search}
-                    type="text"
-                    placeholder="Search Bar"
+                <InputGroup>
+                    <InputLeftElement children={<Icon name="search" color="primary.600" />} />
+                    <Input 
+                        placeholder="Search Donasource"
+                        onChange={e => setSearch(e.target.value)}
+                        name="search"
+                        value={search}
+                        type="text"
+                        size="md"
+                        focusBorderColor="primary.600"
                     />
-                <br />
-                <div onChange={e => setCategory(e.target.value)} >
-                    <input type="radio" id="title" name="categories" value="title" checked={category === 'title'} />
-                    <label for="title" />Title <br />
-                    <input type="radio" id="author" name="categories" value="author" checked={category === 'author'}/>
-                    <label for="author" />Author<br />
-                    <input type="radio" id="tags" name="categories" value="tags" checked={category === 'tags'}/>
-                    <label for="tags" />Tags <br />
-                </div>
-                <button style={{ backgroundColor: "lightblue" }}> Search </button>
+                </InputGroup>
+                <RadioButtonGroup d="flex" mt="2" defautlValue="title" onChange={val => setCategory(val)} value={category} >
+                    <CustomRadio m="0" value="title" >Title</CustomRadio>
+                    <CustomRadio m="0"  value="author" >Author</CustomRadio>
+                    <CustomRadio m="0" value="tags">Tags</CustomRadio>
+                </RadioButtonGroup>
+                <Button variantColor="cyan" type="submit" >Search</Button>
             </form>
-        </div>
+        </Box>
     )
 }
 
