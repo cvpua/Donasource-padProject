@@ -3,13 +3,28 @@ import { Flex, Button, Box, Text } from '@chakra-ui/core'
 import { Link } from 'react-router-dom'
 import { BiLogOut } from 'react-icons/bi'
 import { UserContext } from '../App.js'
+import axios from 'axios'
 
 const Logout = () => {
 	const [user, setUser] = useContext(UserContext)
 
-	const logout = () => {
-		localStorage.removeItem('user')
-		setUser()
+  const { token } = user
+
+	const logout = async () => {
+		try {
+      const { data } = await axios.post(
+        '/api/logout', 
+        {
+          headers: {
+            'Authorization': 'Bearer ' + token
+          }
+        }
+      )
+      alert(data.message)
+      setUser()
+    }catch(error){
+      alert(error.message)
+    }
 	}
 
 	return (

@@ -27,6 +27,7 @@ import { BiHomeSmile, BiBell, BiFace, BiBox, BiPlus } from 'react-icons/bi'
   Add Error Toast Messages
   Add Deadline Featutre/Unfulfilled
   Add design to Search
+  Add logout api
 */
 
 // ThemeProvider - provides 'customTheme' to every component using context api
