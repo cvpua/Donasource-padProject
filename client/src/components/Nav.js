@@ -14,16 +14,15 @@ const Nav = (props) => {
         h="40vh"
         {...rest}
       >
-        <Flex 
-          as={NavLink} 
-          to="/home" 
-          p="2" 
-          activeClassname="active"
-          rounded="full" 
-        >
-          <Box ml="4" as={BiHomeSmile} size="8" color="primary.600" />
-          <Text color="primary.600" fontWeight="bold" fontFamily="Ubuntu" fontSize="xl" lineHeight="tall" ml="1">Home</Text>
-        </Flex>
+        <NavLink exact to="/" activeClassname="active">
+          <Flex  
+            p="2" 
+            rounded="full" 
+          >
+            <Box ml="4" as={BiHomeSmile} size="8" color="primary.600" />
+            <Text color="primary.600" fontWeight="bold" fontFamily="Ubuntu" fontSize="xl" lineHeight="tall" ml="1">Home</Text>
+          </Flex>
+        </NavLink>
         <Flex 
           as={NavLink} 
           to="/notfication" 
@@ -60,7 +59,7 @@ const Nav = (props) => {
         {/* Home */}
         <Box 
           as={NavLink} 
-          to="/home" 
+          to="/" 
           p="2" 
           activeClassname="active"
           rounded="lg" 

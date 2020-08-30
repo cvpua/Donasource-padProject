@@ -1,12 +1,13 @@
 import React from 'react'
-import { Flex, Avatar, Text, Badge } from '@chakra-ui/core'
+import { Flex, Avatar, Text, Badge, Box } from '@chakra-ui/core'
 
 const PostHeader = (props) => {
 	const { 
 		avatar, 
 		title, 
 		author, 
-		deadline 
+		deadline: mainDeadline,
+    status
 	} = props
 // Compute for the the time remaining from the deadline
 // In terms of days
@@ -14,7 +15,13 @@ const PostHeader = (props) => {
 // If hrs < 1 then display in terms of mins
 // If mins < 1 then display in terms of sec
 // Create a CountdownTimer Component
-	const timeRemaining = 10
+  const currentDate = new Date()
+  const deadline = new Date(mainDeadline)
+	const timeRemaining = deadline.getTime() - currentDate.getTime() 
+
+  const daysRemaining = Math.floor(timeRemaining / (1000 * 3600 * 24))
+  const hoursRemaining = Math.floor(timeRemaining / (1000 * 3600))
+  const minsRemaining = Math.floor(timeRemaining / (1000 * 60))
 
 	return (
 		<Flex align="center" mb="2">
@@ -26,7 +33,22 @@ const PostHeader = (props) => {
       {/* Author */}
       <Text fontWeight="medium" >{author}</Text>
       {/* Deadline */}
-      <Badge variantColor="pink">{timeRemaining} days left</Badge>
+      <Box>
+        <Badge 
+          variantColor={
+            status === "PENDING" ? "pink"
+            : status === "UNFULFILLED" ? "brown"
+            : "green"
+          }
+        >
+          {
+            status !== "PENDING" ? status
+            :hoursRemaining <= 1 ? `${minsRemaining} mins left`
+            : daysRemaining <= 1 ? `${hoursRemaining} hrs left`
+            : `${daysRemaining} days left`
+          }
+        </Badge>
+      </Box>
       </Flex>
     </Flex>
 	)

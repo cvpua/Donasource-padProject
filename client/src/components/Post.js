@@ -90,6 +90,7 @@ const Post = (props) => {
       				title={title} 
       				author={author} 
       				deadline={deadline}
+              status={status}
             />
           	{/* Post Content */}
             <Box my="4">

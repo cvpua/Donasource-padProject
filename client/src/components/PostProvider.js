@@ -55,9 +55,15 @@ const INIT_POSTS = [
 
 const PostProvider = ({children}) => {
 	const [posts, setPosts] = useState(INIT_POSTS)
+	const [filteredPosts, setFilteredPosts] = useState([])
+
+	const store = {
+		post: [posts, setPosts],
+		filteredPost: [filteredPosts, setFilteredPosts],
+	}
 
 	return (
-		<PostContext.Provider value={[posts, setPosts]} >
+		<PostContext.Provider value={store} >
 			{children}
 		</PostContext.Provider>
 	)

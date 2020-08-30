@@ -7,7 +7,7 @@ const SectionHeader = (props) => {
 	return (
 		<Flex 
       h="16"  
-      zIndex="banner" 
+      zIndex="sticky" 
       align="center"
       pl="5"
       pos="sticky"

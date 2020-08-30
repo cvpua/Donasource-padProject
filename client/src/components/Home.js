@@ -8,8 +8,9 @@ import { PostContext } from './PostProvider.js'
 
 
 const Home = () => {
-	const [posts, setPosts] = useContext(PostContext)
-
+	const store = useContext(PostContext)
+	const {post} = store
+	const [posts, setPosts] = post
 	// For better user experience; will set to false once the data fetching is done
 	const [isLoading, setIsLoading] = useState(true)
 

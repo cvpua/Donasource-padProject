@@ -28,4 +28,5 @@ code {
 
 .active {
   background-color: #bfe9e4;
+  border-radius: 9999px;
 }

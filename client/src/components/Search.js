@@ -1,12 +1,20 @@
 import React,{ useContext, useState } from 'react'
 import { PostContext } from './PostProvider.js'
 import { Input, Button, InputGroup, InputLeftElement, Icon , Box, RadioButtonGroup, Text} from '@chakra-ui/core'
+import { useHistory } from 'react-router-dom'
 
 const Search = () => {
-    const [posts, setPosts] = useContext(PostContext)
+    const store = useContext(PostContext)
+
+    const {post, filteredPost} = store
+
+    const [posts] = post
+    const [filteredPosts, setFilteredPosts] = filteredPost
 
     const [search, setSearch] = useState('')
     const [category, setCategory] = useState('title')
+
+    const history = useHistory()
 
     const handleFormSubmit = (event) => {
         event.preventDefault();
@@ -32,7 +40,8 @@ const Search = () => {
                 }
             }
         );
-        setPosts(filteredPost)
+        setFilteredPosts(filteredPost)
+        history.push('/search')
     }
 
     const handleFormReset = () => {

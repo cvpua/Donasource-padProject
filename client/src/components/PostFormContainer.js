@@ -89,7 +89,7 @@ const PostFormContainer = (props) => {
 				}
 			)
 			alert(data.message)
-			createPost(values)
+			createPost(data.post)
 			handleIsSubmitting(false)
 			onClose()
 		}catch(error){

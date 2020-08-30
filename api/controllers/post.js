@@ -287,7 +287,7 @@ exports.makeComment = (req,res) => {
                     user.notifications.push(notification)
                     user.save()
                     .then(response =>{
-                        res.status(200).json({message : "Comment created!", post})
+                        res.status(200).json({message : "Comment created!", comment})
                     })
                 })
                 .catch(err =>{

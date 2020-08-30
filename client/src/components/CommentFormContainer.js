@@ -29,7 +29,7 @@ const CommentFormContainer = (props) => {
 			const { data } = await axios.patch(`/api/posts/${postId}/comments`, values)
 			alert(data.message)
 			if (addComment) {
-				addComment(values)
+				addComment(data.comment)
 			}
 			handleIsSubmitting(false)
 			onClose()

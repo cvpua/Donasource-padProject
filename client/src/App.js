@@ -7,6 +7,7 @@ import PostSection from './components/PostSection.js'
 import Profile from './components/Profile.js'
 import Search from './components/Search.js'
 import LoginSignup from './components/LoginSignup.js'
+import SearchSection from './components/SearchSection.js'
 import axios from 'axios'
 import Toast from './components/Toast.js'
 import PostProvider from './components/PostProvider.js'
@@ -20,14 +21,22 @@ import { BiHomeSmile, BiBell, BiFace, BiBox, BiPlus } from 'react-icons/bi'
   
   (Done) Buttom Navigation for mobile
   (Done) Spinner for Profile Section
-  Toast Message for every alert
   (Done) Edit Profile Form
   (Done) Add Image Feature
   (Done) Add Empty Messages
+  (Done) Add design to Search
+  (Done) Add logout api
+  (Done) Add Deadline Featutre/Unfulfilled
+  (Done) Add  Search Section
+  (Done) Account Button
   Add Error Toast Messages
-  Add Deadline Featutre/Unfulfilled
-  Add design to Search
-  Add logout api
+  Prevent Search Section to render if there is no input
+  Fix logout
+  Add Back Button
+  Toast Message for every alert
+  Don't send the comple user object in login
+  Change Password
+
 */
 
 // ThemeProvider - provides 'customTheme' to every component using context api
@@ -39,8 +48,6 @@ export const UserContext = React.createContext(null)
 
 const App = () => {
   console.log('Theme: ', customTheme)
-
-  const history = useHistory()
 
   const [user, setUser] = useState()
   // Toast Message
@@ -55,7 +62,6 @@ const App = () => {
       }
       setUser(info)
       localStorage.setItem("user", JSON.stringify(info))
-      history.push("/home")
       setMessage({
         title: "Success",
         description: data.message,
@@ -117,8 +123,6 @@ const App = () => {
                 <Left>
                   {/* Navigation */}
                   <Nav variant="side" />
-                  {/* Logout */}
-                  <Logout />
                 </Left>
                 {/* End of Left/Sidebar */}
 
@@ -127,8 +131,9 @@ const App = () => {
                   <Middle>
                     {/* Section */}
                     <Switch>
-                      <Route path="/home" component={Home} />
+                      <Route path="/" component={Home} exact />
                       <Route exact path="/profile" component={Profile} />
+                      <Route path="/search" component={SearchSection} />
                       {/*<Route path="/notification" component={Notification} />
                       <Route path="/avail" component={Avails} />
                       */}
