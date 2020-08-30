@@ -37,4 +37,10 @@ router.get('/api/users/:userId/notifications/:notifId',UserController.getNotific
 router.patch('/api/user/:userId/editUser',UserController.editUser)
 
 
+//oldPassword
+//newPassword
+//newPasswordCopy
+router.patch('/api/user/:userId/changePassword',UserController.changePassword)
+
+
 module.exports = router;

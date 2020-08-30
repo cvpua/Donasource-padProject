@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const brcypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
@@ -21,8 +21,8 @@ exports.signup = (req,res) => {
             
             const salt = req.body.username;
             
-            brcypt.genSalt(10,(err,salt) => {
-                brcypt.hash(req.body.password,salt,(err,hash) => {
+            bcrypt.genSalt(10,(err,salt) => {
+                bcrypt.hash(req.body.password,salt,(err,hash) => {
 
                     if(err){
                         res.status(500).json({err});
@@ -77,7 +77,7 @@ exports.login = (req,res) => {
             })
         }
         
-        brcypt.compare(req.body.password,user.password, (err,result) => {
+        bcrypt.compare(req.body.password,user.password, (err,result) => {
             
             if (!result || err){   
                 

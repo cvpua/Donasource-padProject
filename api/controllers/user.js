@@ -2,7 +2,13 @@ const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const fs = require('fs-extra');
+const bcrypt = require('bcrypt');
 
+const Image = require('../models/image');
+const User = require('../models/user');
+const Notification = require('../models/notification');
+const Post = require('../models/post');
+const { response } = require("express");
 
 
 const storage = multer.diskStorage({
@@ -33,11 +39,7 @@ const upload = multer({
 }).single('images');
 
 
-const Image = require('../models/image');
-const User = require('../models/user');
-const Notification = require('../models/notification');
-const Post = require('../models/post');
-const { response } = require("express");
+
 
 exports.getAllUsers = (req,res) => {
     User.find()
@@ -154,5 +156,61 @@ exports.getNotification = (req,res) => {
 
 exports.editUser = (req,res) => {
 
+}
+
+exports.changePassword = (req,res) => {
+    User.findById(req.params.userId)
+    .exec()
+    .then(user => {
+
+        if(req.body.newPassword !== req.body.newPasswordCopy){
+            res.status(400).json({message : "New password doesn't match"})
+        }
+
+        else{
+            bcrypt.compare(req.body.oldPassword,user.password, (err,result)=> {
+
+                if (!result || err){   
+                    
+                    return res.status(401).json({
+                        message: "Incorrect password",err
+                    });
+                }
+                if(result){
+                    bcrypt.genSalt(10,(err,salt) => {
+                        bcrypt.hash(req.body.newPassword,salt,(err,hash) => {
+                            if(err){
+                                res.status(500).json({err});
+                                return;
+                            }else{
+                                
+                                user.password = hash;
+                                user.save()
+                                .then( user => {
+                                    if (user){
+                                        res.status(200).json({
+                                            message : "Password updated!"
+                                        })
+                                    }
+                                })
+                                .catch(error =>{
+                                    // const message = error.keyValue ? "Username is already used" : "Invalid email format"
+                                        res.status(401).json({
+                                            error
+                                        })
+                                })
+                            }
+
+
+                        })
+                    })
+
+                }
+            })
+        }
+    })
+    .catch(err =>{
+        console.log(err)
+    })
 }
 
