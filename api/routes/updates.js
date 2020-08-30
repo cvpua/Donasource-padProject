@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const User = require('../models/user');
+const Post = require('../models/post');
 const { response } = require('express');
 
 
@@ -50,6 +51,29 @@ router.get('/api/update/posts', (req,res)=> {
         res.json({message: "Posts not updated", err})
     })
 })
+
+
+router.get('/api/checkDeadlines', (req,res) =>{
+    Post.find()
+    .exec()
+    .then(posts => {
+        posts.map(post => {
+            if (post.deadline - Date.now() <= 0 && post.status === "PENDING"){
+                post.status = "UNFULFILLED";
+                post.save()
+                .then(response => console.log("Post updated!"))
+                .catch(err => console.log(err))
+            }
+            
+        })
+        res.json({message : "Done checking"})
+        console.log("Done checking!")
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
 
 
 
