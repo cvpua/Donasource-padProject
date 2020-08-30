@@ -21,6 +21,7 @@ const Logout = () => {
           }
         }
       )
+      localStorage.clear();
       alert(data.message)
       setUser()
     }catch(error){
