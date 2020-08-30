@@ -409,75 +409,83 @@ exports.donate = (req,res) => {
     Post.findById(req.params.postId)
     .exec()
     .then(post => {
-        let items = null;
-        if(req.body.items && req.body.items.length > 0){
-            items = req.body.items.map(item =>{
-                const newItem = new Item({
-                    name : item.name,
-                    amount : item.amount,
-                    total : item.total,
-                    donor : item.donor,
-                    date : Date.now()
-                });
-                return newItem;
-            });
+
+        if (post.status === "FULFILLED" || post.status === "UNFULFILLED"){
+            res.status(406).json({
+                message : "Post is already either FULFILLED or UNFULFILLED"
+            })
         }
-        post.items = items; 
-        let isFulfilled = true;
-        post.items.forEach(item => {
-            if(item.amount !== item.total){
-                isFulfilled = false;
+        else{
+            let items = null;
+            if(req.body.items && req.body.items.length > 0){
+                items = req.body.items.map(item =>{
+                    const newItem = new Item({
+                        name : item.name,
+                        amount : item.amount,
+                        total : item.total,
+                        donor : item.donor,
+                        date : Date.now()
+                    });
+                    return newItem;
+                });
             }
-        });
+            post.items = items; 
+            let isFulfilled = true;
+            post.items.forEach(item => {
+                if(item.amount !== item.total){
+                    isFulfilled = false;
+                }
+            });
 
-        if (isFulfilled) post.status = "FULFILLED"
-        
-        post.save()
-        .then( response => {
+            if (isFulfilled) post.status = "FULFILLED"
+            
+            post.save()
+            .then( response => {
 
-            User.findById(req.body.userId)
-            .exec()
-            .then(user => {
-                user.donationGiven = user.donationGiven + 1;
-                user.save()
-                .then(response => {
+                User.findById(req.body.userId)
+                .exec()
+                .then(user => {
+                    user.donationGiven = user.donationGiven + 1;
+                    user.save()
+                    .then(response => {
 
-                    User.findById(post.userId)
-                    .exec()
-                    .then(targetUser => {
-                        const notification = new Notification({
-                            postId : post._id,
-                            userId : req.body.userId,
-                            username : req.body.username,
-                            name : {
-                                firstName : req.body.name.firstName,
-                                lastName : req.body.name.lastName
-                            },
-                            response : req.body.name.firstName + " " + req.body.name.lastName + " donated on your post",
-                            date : Date.now()
-                        })
-                        targetUser.notifications.push(notification)
-                        targetUser.save()
-                        .then(response => {
-                            res.status(200).json({message : "Item/s donated. Thank you!"})
+                        User.findById(post.userId)
+                        .exec()
+                        .then(targetUser => {
+                            const notification = new Notification({
+                                postId : post._id,
+                                userId : req.body.userId,
+                                username : req.body.username,
+                                name : {
+                                    firstName : req.body.name.firstName,
+                                    lastName : req.body.name.lastName
+                                },
+                                response : req.body.name.firstName + " " + req.body.name.lastName + " donated on your post",
+                                date : Date.now()
+                            })
+                            targetUser.notifications.push(notification)
+                            targetUser.save()
+                            .then(response => {
+                                res.status(200).json({message : "Item/s donated. Thank you!"})
+                            })
+                            .catch(err =>{
+                                console.log(err)
+                            })
                         })
                         .catch(err =>{
                             console.log(err)
                         })
                     })
-                    .catch(err =>{
-                        console.log(err)
-                    })
                 })
+                .catch(err =>{
+                    res.json({message: "User not found"})
+                })
+                
             })
-            .catch(err =>{
-                res.json({message: "User not found"})
+            .catch( err => {
+                res.status(500).json({message : "Item/s not donated", err})
             })
-            
-        })
-        .catch( err => {
-            res.status(500).json({message : "Item/s not donated", err})
-        })
+        }
     })
     .catch( err => {
       

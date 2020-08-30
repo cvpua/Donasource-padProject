@@ -34,7 +34,7 @@ router.get('/api/users/:userId/notifications',UserController.getAllNotifications
 router.get('/api/users/:userId/notifications/:notifId',UserController.getNotification)
 
 
-router.put('/api/user/:userId/editUser',UserController.editUser)
+router.patch('/api/user/:userId/editUser',UserController.editUser)
 
 
 module.exports = router;
