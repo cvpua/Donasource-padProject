@@ -61,7 +61,6 @@ const Post = (props) => {
 
   const donate = (newItems) => {
     setItems(newItems)
-    console.log('New Items: ', items)
     const isFulfilled = newItems.every((item) => ((item.total - item.amount) === 0 ? true : false))
     if (isFulfilled){
       setStatus("FULFILLED")

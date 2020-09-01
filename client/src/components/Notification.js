@@ -1,54 +1,75 @@
-import React,{ useState } from 'react';
-import styled from 'styled-components'
-import Typography from '../components/home/Typography.js'
-import theme from '../components/home/theme.js'
-import Avatar from '../components/home/Avatar.js'
-import MarcoPic from '../assets/dp.jpg'
+import React from 'react'
+import { Box, Flex, Avatar, Text, Divider } from '@chakra-ui/core'
+import { Link } from 'react-router-dom'
 
-const INITIAL_STATE = [{
-	id: 1,
-	avatar: MarcoPic,
-	title: "I need alcohol pls guys",
-},
-]
+const Notification = ({notif, seenNotif}) => {
+	const {
+		notifId,
+		type,
+		name,
+		postId,
+		date,
+		avatar,
+		title,
+		seen,
+	} = notif
 
-const ProfileHeader = styled.div `
-	border-bottom: 1px solid ${theme.color.gainsboro};	
-	min-height: 150px;	
-	: hover {
-		background: white;
-		cursor: pointer;
-	}
-`
+	const fullName = name.firstName + " " + name.lastName
+	const currentDate = new Date()
+ 	const time = currentDate.getTime() - date.getTime()
 
-const Element = styled.div `
-	padding-bottom: ${props => props.bottom};
-	padding-right: ${props => props.right};
-	padding-left: ${props => props.left};
-	padding-top: ${props => props.top};
-`
-//Multiple icon needs fix
-const Notification = () => {
-	const [posts] = useState(INITIAL_STATE)
+ 	const days = Math.floor(time / (1000 * 3600 * 24))
+  const hours = Math.floor(time / (1000 * 3600))
+  const mins = Math.floor(time / (1000 * 60))
+  const sec = Math.floor(time / (1000))
 
 	return (
 		<React.Fragment>
-			{posts.map((post) => (
-				<ProfileHeader>	
-					<Element left={theme.spacing(3)} top={theme.spacing(3)}>
-						{/* Hindi nagana yung size idk why hahahah nagstrestretch siya need fix */}
-						<Avatar src={post.avatar} size="30px"/>
-					</Element>
-					<Element top={theme.spacing(2)}left={theme.spacing(3)}>
-						Jeff has donated on your request.
-					</Element>
-					<Element top={theme.spacing(2)}left={theme.spacing(3)}>
-						<Typography>
-							{post.title}
-						</Typography>
-					</Element>
-				</ProfileHeader>
-			))}
+			<Link to={`/profile/post/${postId}`} onClick={() => seenNotif(notifId)} >
+				<Flex 
+					pl="4" 
+					py="4" 
+					align="center" 
+					bg={
+						type === "like" && !seen ? "cyan.200"
+						: type === "comment" && !seen ? "blue.200"
+						: type === "donate" && !seen ? "yellow.200"
+						: type === "accept" && !seen ? "green.200"
+						: type === "reject" && !seen ? "red.200"
+						: "none"
+					} 
+					mx="4" 
+					rounded="lg"
+				>
+					{/* Avatar */}
+					<Avatar name="Bullet Pua" src={avatar} />
+					<Box ml="4">
+						{/* Response */}
+						<Text>
+							<b>{fullName + " "}</b>
+							{
+								type === "like" ? "liked your posts: "
+								: type === "comment" ? "commented on your post: "
+								: type === "donate" ? "donated on your post: "
+								: type === "accept" ? "accepted your request on post: "
+								: type === "reject" ? "reject your request on post: "
+								: ""
+							}
+							<b>"{title}"</b>
+						</Text>
+						{/* time */}
+						<Text fontSize="sm" color="gray.700">
+							{
+								sec > 60 ? `${mins} min ago`
+								: mins > 60 ? `${hours} hr ago`
+								: hours > 24 ? `${days} d ago`
+								: `${sec} sec ago`
+							}
+						</Text>
+					</Box>
+				</Flex>
+			</Link>
+			<Divider />
 		</React.Fragment>
 	)
 }

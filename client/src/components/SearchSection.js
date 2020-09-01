@@ -1,6 +1,7 @@
 import React, {useContext, useState, useEffect} from 'react'
 import { BiSearchAlt } from 'react-icons/bi'
-import { Stack, Spinner, Flex } from '@chakra-ui/core'
+import { Stack, Spinner, Flex, Box, Text } from '@chakra-ui/core'
+import {BiMeh} from 'react-icons/bi'
 import SectionHeader from './SectionHeader.js'
 import Post from './Post.js'
 import { PostContext } from './PostProvider.js'
@@ -33,8 +34,12 @@ const SearchSection = () => {
 						  size="xl"
 						/>
 					</Flex>
-				: 
-					<Stack mb={{base: "16", md: "4"}} px={{base: "0", sm: "4"}} >
+				: filteredPosts.length === 0 ?
+					<Flex align="center" py="8" flexDirection="column">
+            <Box as={BiMeh} size="20" />
+            <Text>Oooops! Your feed is empty. Make a post now!</Text>
+          </Flex>
+				:	<Stack mb={{base: "16", md: "4"}} px={{base: "0", sm: "4"}} >
 		        {
 		          filteredPosts.map((post) => (
 		            <Post key={post._id} data={post} isLinked={true}/>

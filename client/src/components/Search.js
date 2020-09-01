@@ -19,6 +19,10 @@ const Search = () => {
     const handleFormSubmit = (event) => {
         event.preventDefault();
 
+        if (search === "") {
+            return(null)
+        }
+
         let filteredPost = posts.filter(
             (post) => {
                 const author = post.name.firstName + " " + post.name.lastName

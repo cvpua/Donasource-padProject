@@ -35,17 +35,9 @@ const PostSection = ({match}) => {
 	const [isLoading, setIsLoading] = useState(true)
 
 	const addComment = (comment) => {
-		const newComment = {
-			content: comment.content,
-			user: {
-				avatar: comment.avatar,
-				username: comment.username,
-				name: comment.name
-			}
-		}
     setComments((prevState) => ([
       ...prevState,
-      newComment,
+      comment,
     ]))
   }
 

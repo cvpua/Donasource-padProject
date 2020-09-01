@@ -48,7 +48,6 @@ exports.getAllPosts = (req,res) => {
     .exec()
     .then(Posts => {
         const response = Posts.map(post => {
-           
             return post
         })
    
