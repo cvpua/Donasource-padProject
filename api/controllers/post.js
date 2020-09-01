@@ -10,6 +10,7 @@ const Notification = require('../models/notification');
 const Item = require('../models/item');
 const Image = require('../models/image');
 const Comment = require('../models/comment');
+const Donor = require ('../models/donor');
 const { response } = require("express");
 
 
@@ -45,16 +46,23 @@ exports.getAllPosts = (req,res) => {
 
     Post.find()
     .sort({datePosted : -1})
+    .populate("user","avatar name username")
+    .populate("comments")
+    .populate({path: 'items',
+        populate : {
+            path :' donor',
+            populate : {
+                path: 'user',
+                select : 'name avatar'
+            }
+        }
+    })
     .exec()
-    .then(Posts => {
-        const response = Posts.map(post => {
-           
-            return post
-        })
-   
+    .then(posts => {
         res.status(200).json({
-            postCount: response.length,
-            response})
+            postCount: posts.length,
+            response : posts
+        })
     })
     
 
@@ -63,6 +71,17 @@ exports.getAllPosts = (req,res) => {
 exports.getPost = (req,res) => {
 
     Post.findOne({_id : req.params.postId})
+    .populate("user","avatar name username")
+    .populate("comments")
+    .populate({path: 'items',
+        populate : {
+            path :' donor',
+            populate : {
+                path: 'user',
+                select : 'name avatar'
+            }
+        }
+    })
     .exec()
     .then(post=>{
         res.status(200).json(post)
@@ -71,7 +90,6 @@ exports.getPost = (req,res) => {
         res.status(400).json({message : "Post not found",err})
     })
 }
-
 
 exports.makePost = (req,res) => {
 
@@ -87,7 +105,10 @@ exports.makePost = (req,res) => {
             });
         }
         else{
-          
+            
+            User.findById(req.body.userId)
+            .exec()
+            .then(user => {
             req.body.items = JSON.parse(req.body.items)
             
             let title = req.body.title.replace(/\s/g, ''); //remove spaces on strings
@@ -102,12 +123,17 @@ exports.makePost = (req,res) => {
                 items = req.body.items.map(item =>{
                     
                     const newItem = new Item({
+                        _id : new mongoose.Types.ObjectId(),
                         name : item.name,
                         amount : item.amount,
                         total : item.total,
                         donor : [],
                         donee : []
                     });
+                    newItem.save()
+                    .then(response => {
+                        console.log("Item saved!")
+                    })
                     return newItem;
                 });
             }
@@ -129,15 +155,10 @@ exports.makePost = (req,res) => {
                 })
                 
             }
-            
-           
             const post = new Post({
                 _id: new mongoose.Types.ObjectId(),
-                userId: req.body.userId,
-                avatar : req.body.avatar,
+                user: req.body.userId,
                 title : req.body.title,
-                name : JSON.parse(req.body.name),
-                username : req.body.username,
                 type : req.body.type,
                 status : req.body.status,
                 description : req.body.description,
@@ -152,95 +173,75 @@ exports.makePost = (req,res) => {
             
             // There is images and needs to create folders and move images
             if(req.files.length > 0){ 
-
                 fs.move('./uploads',dir,(error)=>{
-                
                     if (error){
-                
                         res.status(500).json({
                             message: "Error in moving images to the assets folder",
                             error
-                            
                     });
                     }else{
-                        User.findOne({email : req.userData.email}).exec()
-                        .then(user => {
-                            user.posts.push(post);
+                        user.posts.push(post);
 
-                            if(post.type === "request"){
-                                user.requestPostCount = user.requestPostCount + 1;
-                            }else{
-                                user.donationPostCount = user.donationPostCount + 1;
-                            }
-                            user.postCount = user.postCount + 1;
-                            user.save()
+                        if(post.type === "request"){
+                            user.requestPostCount = user.requestPostCount + 1;
+                        }else{
+                            user.donationPostCount = user.donationPostCount + 1;
+                        }
+                        user.postCount = user.postCount + 1;
+                        user.save()
+                        .then(
+                            post.save()
                             .then(
-                                post.save()
-                                .then(
-                                    res.status(200).json({
-                                        message:"Post created!",
-                                        post
-                                    })
-                                )
-                                .catch(err => {
-                                    console.log(err)
-                                    res.json(err)
+                                res.status(200).json({
+                                    message:"Post created!",
+                                    post
                                 })
                             )
                             .catch(err => {
                                 console.log(err)
                                 res.json(err)
                             })
-                        })
-                        .catch( err => {
-                            
+                        )
+                        .catch(err => {
                             console.log(err)
-                            res.status(500).json("Error occured")
-                        })                   
+                            res.json(err)
+                        })              
                     }
                     
                 })
             }
             // There are no images, no need to make folders
             else{
-                User.findOne({email : req.userData.email}).exec()
-                        .then(user => {
-                            user.posts.push(post);
-                            post.type === "request" ? user.requestPostCount = user.requestPostCount + 1 : user.donationPostCount = user.donationPostCount + 1
-                            user.postCount = user.postCount + 1;
-                            user.save()
-                            .then(
-                                post.save()
-                                .then(
-                                    res.status(200).json({
-                                        message:"Post created!",
-                                        post
-                                    })
-                                )
-                                .catch(err => {
-                                    console.log(err)
-                                    res.json(err)
-                                })
-                            )
-                            .catch(err => {
-                                console.log(err)
-                                res.json(err)
-                            })
+               
+                user.posts.push(post);
+                post.type === "request" ? user.requestPostCount = user.requestPostCount + 1 : user.donationPostCount = user.donationPostCount + 1
+                user.postCount = user.postCount + 1;
+                user.save()
+                .then(
+                    post.save()
+                    .then(
+                        res.status(200).json({
+                            message:"Post created!",
+                            post
                         })
-                        .catch( err => {
-                            
-                            console.log(err)
-                            res.status(500).json("Error occured")
-                        })                   
+                    )
+                    .catch(err => {
+                        console.log(err)
+                        res.json(err)
+                    })
+                )
+                .catch(err => {
+                    console.log(err)
+                    res.json(err)
+                })
+                       
+                                        
             }
+        })
         }
     });    
     
 }
-
-
-
-
 
 exports.makeComment = (req,res) => {
     
@@ -251,54 +252,55 @@ exports.makeComment = (req,res) => {
             
             const comment = new Comment({
                 _id: new mongoose.Types.ObjectId(),
-                user: {
-                    username : req.body.username,
-                    name : {
-                        firstName : req.body.name.firstName,
-                        lastName : req.body.name.lastName
-                    },
-                    avatar : req.body.avatar,
-                },
+                userId : req.body.userId,
                 content : req.body.content,
                 postId : post._id
             })
-            
-            let comments = post.comments;
-            comments.push(comment)
-            post.comments = comments;
-            
+            post.comments.push(comment) 
             post.save()
             .then( response => {    
-                  
-                User.findById(post.userId)
+                User.findById(post._doc.user)
+                .populate('posts')
                 .exec()
                 .then(user =>{
-                    
-                    const notification = new Notification({
-                        postId : post._id,
-                        userId : req.body.userId,
-                        username : req.body.username,
-                        name : {
-                            firstName : req.body.name.firstName,
-                            lastName : req.body.name.lastName
-                        },
-                        response : req.body.name.firstName + " " + req.body.name.lastName + " commented on your post"
-                    })
-                    user.notifications.push(notification)
+                    if(user._id != req.body.userId){
+                        const notification = new Notification({
+                            type : "comment",
+                            postId : post._id,
+                            title : post.title,
+                            user : req.body.userId,
+                            date : Date.now(),
+                        })
+                        user.notifications.push(notification)
+                        notification.save()
+                        .then(response => console.log("Notif sent"))
+                    }
                     user.save()
                     .then(response =>{
-                        res.status(200).json({message : "Comment created!", comment})
+                        User.findById(req.body.userId)
+                        .exec()
+                        .then(userComment => {
+                            userComment.postsCommented.push(post)
+                            userComment.save()
+                            .then( secondResponse =>{
+                                comment.save()
+                                .then(thirdResponse => {
+                                    res.status(200).json({message : "Comment created!", comment})
+                                })
+                                
+                            })
+                        })
+                        .catch(err => console.log({err,message: "Comment not created (1)"}))
+
+                        
                     })
                 })
                 .catch(err =>{
                     console.log(err)
                 })
-
-
-                
             })
             .catch(err =>{
-                res.status(500).json({message : "Comment not created",err:err.response})
+                res.status(500).json({message : "Comment not created (2)",err:err.response})
             })
     })
     .catch(err => {
@@ -355,21 +357,23 @@ exports.likePost = (req,res) => {
                             foundUser.likedPostsCount = foundUser.likedPostsCount + 1;
                             foundUser.save()
                                 .then (response => {
-                                    User.findById(post.userId)
+                                    User.findById(post.user)
                                     .exec()
                                     .then(targetUser => {
-                                        const notification = new Notification({
-                                            postId : post._id,
-                                            userId : req.body.userId,
-                                            username : req.body.username,
-                                            name : {
-                                                firstName : req.body.name.firstName,
-                                                lastName : req.body.name.lastName
-                                            },
-                                            response : req.body.name.firstName + " " + req.body.name.lastName + " liked your post",
-                                            date : Date.now()
-                                        })
-                                        targetUser.notifications.push(notification)
+                                        if(post.user != req.body.userId){
+                                            const notification = new Notification({
+                                                type : "like",
+                                                postId : post._id,
+                                                title : post.title,
+                                                user : req.body.userId,
+                                                date : Date.now(),
+                                            })
+                                            targetUser.notifications.push(notification)
+                                            notification.save()
+                                            .then(response => {
+                                                console.log("Notif sent!")
+                                            })
+                                        }
                                         targetUser.save()
                                         .then(response => {
                                             res.status(200).json({message : "Post liked!", post})
@@ -400,16 +404,13 @@ exports.likePost = (req,res) => {
     
 }
 
-
-
-
 exports.donate = (req,res) => {
    
-    
     Post.findById(req.params.postId)
+    .populate('items')
     .exec()
     .then(post => {
-
+        
         if (post.status === "FULFILLED" || post.status === "UNFULFILLED"){
             res.status(406).json({
                 message : "Post is already either FULFILLED or UNFULFILLED"
@@ -424,12 +425,51 @@ exports.donate = (req,res) => {
                         amount : item.amount,
                         total : item.total,
                         donor : item.donor,
-                        date : Date.now()
+                       
                     });
                     return newItem;
                 });
             }
-            post.items = items; 
+            
+            const newItems = req.body.items.map( item => {
+                return item.name
+            })
+            
+            const oldItems = post.items.map(item => {
+                return item.name
+            })
+            
+            newItems.forEach((item,index) => {
+                const itemIndex = oldItems.indexOf(item)
+                if(itemIndex >= 0){
+                   
+                    post.items[itemIndex].name = req.body.items[index].name;
+                    post.items[itemIndex].amount = req.body.items[index].amount;
+                    post.items[itemIndex].total = req.body.items[index].total;
+                   
+                    const donor = new Donor({
+                        _id : mongoose.Types.ObjectId(),
+                        user : req.body.items[index].donor.user,
+                        amountDonated : req.body.items[index].donor.amountDonated,
+                        date : Date.now()
+                    })
+
+                    
+                    post.items[itemIndex].donor.push(donor)
+                    post.items[itemIndex].save()
+                    .then(response => {
+                        donor.save()
+                        .then(response => {
+                            console.log("Items updated!")
+                        })  
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+              }
+                                
+            })
+    
             let isFulfilled = true;
             post.items.forEach(item => {
                 if(item.amount !== item.total){
@@ -438,10 +478,8 @@ exports.donate = (req,res) => {
             });
 
             if (isFulfilled) post.status = "FULFILLED"
-            
             post.save()
             .then( response => {
-
                 User.findById(req.body.userId)
                 .exec()
                 .then(user => {
@@ -449,24 +487,24 @@ exports.donate = (req,res) => {
                     user.save()
                     .then(response => {
 
-                        User.findById(post.userId)
+                        User.findById(post.user)
                         .exec()
                         .then(targetUser => {
                             const notification = new Notification({
+                                type : "donate",
                                 postId : post._id,
-                                userId : req.body.userId,
-                                username : req.body.username,
-                                name : {
-                                    firstName : req.body.name.firstName,
-                                    lastName : req.body.name.lastName
-                                },
-                                response : req.body.name.firstName + " " + req.body.name.lastName + " donated on your post",
+                                user : req.body.userId,
+                                title : post.title,
                                 date : Date.now()
                             })
                             targetUser.notifications.push(notification)
                             targetUser.save()
                             .then(response => {
-                                res.status(200).json({message : "Item/s donated. Thank you!"})
+                                notification.save()
+                                .then( response => {
+                                    res.status(200).json({message : "Item/s donated. Thank you!"})
+                                })
+                                
                             })
                             .catch(err =>{
                                 console.log(err)
@@ -489,7 +527,7 @@ exports.donate = (req,res) => {
     })
     .catch( err => {
       
-        res.status(500).json({message : "Post not found", err})
+        res.status(500).json({message : "Post not found", err : err.response})
     })
 }
 
@@ -499,8 +537,8 @@ exports.deletePost = (req,res) => {
     Post.findById(req.params.postId)
     .exec()
     .then(post => {
-        
-        if(post.images){
+       
+        if(post && post.images && post.images.length > 0){
             post.images.map(image => {
                 
                 let imageDir = image.image.url.replace("http://localhost:5000/","");
@@ -513,16 +551,13 @@ exports.deletePost = (req,res) => {
         }
         Post.deleteOne({_id : req.params.postId})
         .exec()
-        .then(post => {
-        
-            User.findOne({username : req.body.username})
+        .then(response => {
+            User.findOne({_id : post.user})
             .exec()
             .then(user =>{
                 user.posts = user.posts.filter(post => String(post._id) !== req.params.postId)
                 user.postCount = user.postCount - 1;
-
                 post.type === "request" ? post.requestPostCount = post.requestPostCount - 1 : post.donationPostCount = post.donationPostCount - 1;
-
                 user.save()
                 .then(response => {
                     res.status(200).json({message : "Post deleted!",post})
@@ -538,7 +573,6 @@ exports.deletePost = (req,res) => {
         .catch(err => {
             res.status(500).json({message: "Unable to delete post",
             err})
-        
     })
     })
     .catch(err =>{

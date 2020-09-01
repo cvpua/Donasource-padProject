@@ -45,6 +45,8 @@ const Post = (props) => {
     status: mainStatus,
     images,
 	} = data
+  
+  // const{userId,name,username,avatar} = data.user;
 
   const author = name.firstName + " " + name.lastName
 

@@ -31,14 +31,11 @@ app.use('/assets',express.static('assets'))
 
 
 
+const task = cron.schedule('59 23 * * *', () => {
+   axios.get('http://localhost:5000/api/checkDeadlines')
+})
 
-
-
-// const task = cron.schedule('* * * * * *', () => {
-//    axios.get('http://localhost:5000/api/checkDeadlines')
-// })
-
-// task.start()
+task.start()
 
 
 const port = process.env.PORT || 5000;

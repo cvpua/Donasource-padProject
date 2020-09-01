@@ -5,6 +5,15 @@ export const PostContext = React.createContext(null)
 const INIT_POSTS = [
 	{
 		_id: '1',
+		user : {	
+			name: {
+				firstName: '',
+				lastName: '',
+			},
+			avatar : null,
+			username : '',
+			userId : 1
+		},
 		avatar: null,
 		title: '',
 		name: {
@@ -21,6 +30,15 @@ const INIT_POSTS = [
 	},
 	{
 		_id: '2',
+		user : {	
+			name: {
+				firstName: '',
+				lastName: '',
+			},
+			avatar : null,
+			username : '',
+			userId : 2
+		},
 		avatar: null,
 		title: '',
 		name: {
@@ -37,6 +55,15 @@ const INIT_POSTS = [
 	},
 	{
 		_id: '3',
+		user : {	
+			name: {
+				firstName: '',
+				lastName: '',
+			},
+			avatar : null,
+			username : '',
+			userId : 3
+		},
 		avatar: null,
 		title: '',
 		name: {

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Image = require('./image');
-const Notification = require('./notification');
+
 
 
 mongoose.set('useCreateIndex', true);
@@ -20,7 +20,7 @@ const user = new Schema({
         firstName : {type: String, required : true},
         lastName : {type: String, required : true},
     },
-    photo : {type : Image.schema, default : null},
+    avatar : {type : Image.schema, default : null},
     email : {
         type: String, 
         required : true,
@@ -30,7 +30,7 @@ const user = new Schema({
     location : String,
     contactNumber : {type : String, required : true},
     bio : {type : String, default : null},
-    notifications : [Notification.schema],
+    notifications : [{type: mongoose.Schema.Types.ObjectId, ref: 'Notification'}],
     avails : [{
         post :{type: mongoose.Schema.Types.ObjectId, ref: 'Post'},
         status : { type : String , default : "Pending"}
@@ -42,7 +42,8 @@ const user = new Schema({
     requestPostCount: {type : Number, default : 0},
     posts : [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
     likedPostsCount : {type : Number, default : 0},
-    likedPosts : [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}]
+    likedPosts : [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
+    postsCommented : [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}]
 })
 
 module.exports = mongoose.model('User',user);

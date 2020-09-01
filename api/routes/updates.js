@@ -8,19 +8,19 @@ const { response } = require('express');
 
 // req.body === properties to be updated : initial value
 
-router.patch('/api/update/userSchema', (req,res)=> {
+router.get('/api/update/userSchema', (req,res)=> {
    
-    const toUpdate = {}
+    const toUpdate = {avatar : null}
     
     
-    if(req.body && req.body.length >= 1){
-        for(const property of req.body){
-            toUpdate[property.propName] = ops.value;
-        }
-    }else{
-        let  keys = Object.keys(req.body);
-        toUpdate[keys] = req.body.keys;
-    }
+    // if(req.body && req.body.length >= 1){
+    //     for(const property of req.body){
+    //         toUpdate[property.propName] = ops.value;
+    //     }
+    // }else{
+    //     let  keys = Object.keys(req.body);
+    //     toUpdate[keys] = req.body.keys;
+    // }
 
 
     User.updateMany({}, {$set : toUpdate})
@@ -31,24 +31,49 @@ router.patch('/api/update/userSchema', (req,res)=> {
     .catch(err => {
         res.json({message: "Users not updated", err})
     })
+
+    // User.findOne({username : "mkb"})
+    // .exec()
+    // .then(user => {
+    //     user.notifications = [];
+    //     user.save()
+    //     .then(response => {
+    //         res.json({message : "Users updated!"})
+    //     })
+    // })
 })
 
 
 
 // req.body === properties to be updated : initial value
-router.get('/api/update/posts', (req,res)=> {
+router.get('/api/update/postSchema', (req,res)=> {
    
-    const toUpdate = {}
-    for(const property of req.body){
-        toUpdate[property.propName] = ops.value;
-    }
-    User.updateMany({}, {$set : toUpdate})
+    // const toUpdate = {userId: "",avatar : "", name : "",username : ""};
+    // // for(const property of req.body){
+    // //     toUpdate[property.propName] = ops.value;
+    // // }
+    // Post.updateMany({}, {$unset : toUpdate })
+    // .exec()
+    // .then(response => {
+    //     res.json({message : "Posts updated!"})
+    // })
+    // .catch(err => {
+    //     res.json({message: "Posts not updated", err})
+    // })
+
+    Post.find()
     .exec()
-    .then(response => {
-        res.json({message : "Posts updated!"})
-    })
-    .catch(err => {
-        res.json({message: "Posts not updated", err})
+    .then(posts => {
+        posts.map(post => {
+            // post.userId = undefined;
+            // post.username = undefined;
+            // post.name = undefined;
+            // post.avatar = undefined;
+            console.log(post._doc.userId)
+            post.user = post._doc.userId;
+            post.save()
+            .then(response => console.log("Post updated!"))
+        })
     })
 })
 
