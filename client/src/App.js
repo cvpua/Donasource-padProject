@@ -33,13 +33,14 @@ import AvailsSection from './components/AvailsSection.js'
   (Done) Account Button
   (Done) Prevent Search Section to render if there is no input
   (Done) Fix logout
+  (Done) Don't send the complete user object in login
+  (Done) Change Password
+  (Done) Change user info to userId
+  (Done) Edit Profile
   
   Add Error Toast Messages
   Add Back Button
   Toast Message for every alert
-  Don't send the complete user object in login
-  Change Password
-  Change user info to userId
   
   
 */

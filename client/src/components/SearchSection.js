@@ -22,7 +22,7 @@ const SearchSection = () => {
 
 	return (
 		<div>
-			<SectionHeader title={`Search results:`} icon={BiSearchAlt} />
+			<SectionHeader title={`Search results:`} icon={BiSearchAlt} hasBackButton={true} />
 			{
 				isLoading ? 
 					<Flex justify="center" pt="8" >

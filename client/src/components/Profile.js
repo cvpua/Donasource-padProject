@@ -87,7 +87,7 @@ const Profile = () => {
 
 	return (
 		<div>
-			<SectionHeader title="Profile" icon={BiFace} />
+			<SectionHeader title="Profile" icon={BiFace} hasBackButton={true} />
 			{
 				isLoading ? 
 					<Flex justify="center" pt="8" >
