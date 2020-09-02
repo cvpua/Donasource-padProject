@@ -31,10 +31,7 @@ const user = new Schema({
     contactNumber : {type : String, required : true},
     bio : {type : String, default : null},
     notifications : [{type: mongoose.Schema.Types.ObjectId, ref: 'Notification'}],
-    avails : [{
-        post :{type: mongoose.Schema.Types.ObjectId, ref: 'Post'},
-        status : { type : String , default : "Pending"}
-    }],
+    avails : [{type: mongoose.Schema.Types.ObjectId, ref: 'Avail'}],
     donationGiven : {type : Number,default : 0},
     donationRequested : {type : Number,default : 0},
     postCount : {type : Number, default : 0},

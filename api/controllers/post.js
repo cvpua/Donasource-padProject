@@ -3,6 +3,7 @@ const multer = require('multer');
 const fs = require('fs-extra');
 
 const checkAuth = require('../auth/check-auth');
+const {cloudinary} = require('../../config/cloudinary');
 
 const Post = require('../models/post');
 const User = require('../models/user');
@@ -11,7 +12,9 @@ const Item = require('../models/item');
 const Image = require('../models/image');
 const Comment = require('../models/comment');
 const Donor = require ('../models/donor');
+const Avail = require('../models/avail')
 const { response } = require("express");
+const image = require("../models/image");
 
 
 const storage = multer.diskStorage({
@@ -91,9 +94,10 @@ exports.getPost = (req,res) => {
     })
 }
 
-exports.makePost = (req,res) => {
+exports.makePost =  (req,res) => {
 
-    
+
+
     fs.ensureDirSync('./uploads');
 
     upload(req,res,function(err){
@@ -111,50 +115,61 @@ exports.makePost = (req,res) => {
             .then(user => {
             req.body.items = JSON.parse(req.body.items)
             
-            let title = req.body.title.replace(/\s/g, ''); //remove spaces on strings
-
-            const dir = 'assets/' + req.body.author + '/posts/' + title + '_' + Date.now() + '/images/';
-
             let imageArray = null;
             
             let items = null;    
             
-            if(req.body.items && req.body.items.length > 0){
-                items = req.body.items.map(item =>{
+            // if(req.body.items && req.body.items.length > 0){
+            //     items = req.body.items.map(item =>{
                     
-                    const newItem = new Item({
-                        _id : new mongoose.Types.ObjectId(),
-                        name : item.name,
-                        amount : item.amount,
-                        total : item.total,
-                        donor : [],
-                        donee : []
-                    });
-                    newItem.save()
-                    .then(response => {
-                        console.log("Item saved!")
-                    })
-                    return newItem;
-                });
-            }
-            
+            //         const newItem = new Item({
+            //             _id : new mongoose.Types.ObjectId(),
+            //             name : item.name,
+            //             amount : item.amount,
+            //             total : item.total,
+            //             donor : [],
+            //             donee : []
+            //         });
+            //         newItem.save()
+            //         .then(response => {
+            //             console.log("Item saved!")
+            //         })
+            //         return newItem;
+            //     });
+            // }
+            // const uploader = (path) => {
+            //     cloudinary.uploads(file.path,"Images")
+            //     .then(result => console.log(result))
+            // }
             
             if(req.files && req.files.length >= 1){
                 
                      imageArray = req.files.map(file =>{
-                       
-                         image = new Image({
+                     
+                         const image = new Image({
                             _id: new mongoose.Types.ObjectId(),
                             total: req.body.total,
                             image: {
                                 imageName : file.filename, 
-                                url: 'http://localhost:5000/'+dir+file.filename 
+                                
                             }
                     });
-                        return(image)
+                    
+                    cloudinary.uploader.upload(file.path)
+                    .then(response => {
+                        image.url = response.url;
+                        image.publicId = response.public_id;
+                        image.save()
+                        .then(response => {console.log("Image saved!")})
+                    })
+                    .catch(err =>{
+                        console.log(err)
+                    })
+                    return(image)
                 })
                 
             }
+            console.log(imageArray)
             const post = new Post({
                 _id: new mongoose.Types.ObjectId(),
                 user: req.body.userId,
@@ -173,42 +188,48 @@ exports.makePost = (req,res) => {
             
             // There is images and needs to create folders and move images
             if(req.files.length > 0){ 
-                fs.move('./uploads',dir,(error)=>{
-                    if (error){
-                        res.status(500).json({
-                            message: "Error in moving images to the assets folder",
-                            error
-                    });
-                    }else{
-                        user.posts.push(post);
+                // let title = post.title.replace(/\s/g, ''); //remove spaces on strings
+                // const dir = 'assets/' + post.user + '/posts/' + title + '_' + Date.now() + '/images/';
 
-                        if(post.type === "request"){
-                            user.requestPostCount = user.requestPostCount + 1;
-                        }else{
-                            user.donationPostCount = user.donationPostCount + 1;
-                        }
-                        user.postCount = user.postCount + 1;
-                        user.save()
-                        .then(
-                            post.save()
-                            .then(
-                                res.status(200).json({
-                                    message:"Post created!",
-                                    post
-                                })
-                            )
-                            .catch(err => {
-                                console.log(err)
-                                res.json(err)
-                            })
-                        )
-                        .catch(err => {
-                            console.log(err)
-                            res.json(err)
-                        })              
-                    }
+                // fs.move('./uploads',dir,(error)=>{
+                //     if (error){
+                //         res.status(500).json({
+                //             message: "Error in moving images to the assets folder",
+                //             error
+                //     });
+                //     }else{
+                //         user.posts.push(post);
+
+                //         if(post.type === "request"){
+                //             user.requestPostCount = user.requestPostCount + 1;
+                //         }else{
+                //             user.donationPostCount = user.donationPostCount + 1;
+                //         }
+                //         user.postCount = user.postCount + 1;
+                //         user.save()
+                //         .then(
+                //             post.save()
+                //             .then(
+                             
+                //                 res.status(200).json({
+                //                     message:"Post created!",
+                //                     post,
+                //                     user : {name : user.name, avatar : user.avatar, username :user.username}
+                //                 })
+    
+                //             )
+                //             .catch(err => {
+                //                 console.log(err)
+                //                 res.json(err)
+                //             })
+                //         )
+                //         .catch(err => {
+                //             console.log(err)
+                //             res.json(err)
+                //         })              
+                //     }
                     
-                })
+                // })
             }
             // There are no images, no need to make folders
             else{
@@ -222,7 +243,8 @@ exports.makePost = (req,res) => {
                     .then(
                         res.status(200).json({
                             message:"Post created!",
-                            post
+                            post,
+                            user : {name : user.name, avatar : user.avatar, username :user.username}
                         })
                     )
                     .catch(err => {
@@ -528,6 +550,43 @@ exports.donate = (req,res) => {
     .catch( err => {
       
         res.status(500).json({message : "Post not found", err : err.response})
+    })
+}
+
+exports.request = (req,res) => {
+
+    Post.findById(req.params.postId)
+    .populate(
+        {path: 'user',
+         select: 'avails'
+    })
+    .exec()
+    .then(post => {
+        User.findById(req.body.userId)
+        .select("username name avatar")
+        .exec()
+        .then(user => {
+            const avail = new Avail({
+                _id : mongoose.Types.ObjectId(),
+                user : user,
+                post : post,
+                reason : req.body.reason,
+                title : post.title,
+                items : req.body.items,
+                status : "PENDING"
+            })
+
+            post.user.avails.push(avail)
+            avail.save()
+            .then(response =>{
+                post.user.save()
+                .then(response => {
+                    res.json({
+                        message : "Request sent to the OP"
+                    })
+                })
+            })
+        })
     })
 }
 

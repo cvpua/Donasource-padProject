@@ -52,7 +52,15 @@ exports.getAllUsers = (req,res) => {
 
 exports.getUser = (req,res) =>{
     User.findOne({_id : req.params.userId})
-    .populate('posts')
+    .populate({path : 'posts',
+        populate : {path :'user',
+            select: 'avatar name username'
+    }
+    })
+    .populate({path : 'posts',
+     populate : {path :'items'
+    }
+    })
     .exec()
     .then( user => {
         if (!user){
@@ -208,3 +216,19 @@ exports.changePassword = (req,res) => {
     })
 }
 
+exports.getAvails = (req,res) => {
+    User.findById(req.params.userId)
+    .populate('avails')
+    .select('avatar name username avails')
+    .exec()
+    .then(user => {
+        res.json(user)
+    })
+    .catch(error => {
+        console.log(err)
+    })
+}
+
+exports.respondToAvails = (req,res) => {
+    
+}
