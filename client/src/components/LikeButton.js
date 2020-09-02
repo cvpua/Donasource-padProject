@@ -6,7 +6,7 @@ import axios from 'axios'
 
 const LikeButton = (props) => {
 	// Post Id
-	const { id: postId, likers } = props
+	const { postId, likers } = props
 
 	// User Id
 	const [USER] = useContext(UserContext)
@@ -22,7 +22,6 @@ const LikeButton = (props) => {
 			const { data } = await axios.patch(`/api/posts/${postId}/likes`, {userId, name, username})
 			setIsLoading(false)
 			setIsLiked(!isLiked)
-			
 		}catch(error){
 			alert(error.message)
 		}

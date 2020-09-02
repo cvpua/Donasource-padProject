@@ -35,17 +35,10 @@ const PostSection = ({match}) => {
 	const [isLoading, setIsLoading] = useState(true)
 
 	const addComment = (comment) => {
-		const newComment = {
-			content: comment.content,
-			user: {
-				avatar: comment.avatar,
-				username: comment.username,
-				name: comment.name
-			}
-		}
+		console.log('Comment: ', comment)
     setComments((prevState) => ([
       ...prevState,
-      newComment,
+      comment,
     ]))
   }
 
@@ -53,6 +46,7 @@ const PostSection = ({match}) => {
   	const fetchData = async () => {
   		try{
 	      const { data } = await axios.get(`/api/posts/${postId}`)
+	      console.log('Comments: ', data.comments)
   			setPost(prevState => ({
   				...prevState,
   				...data,

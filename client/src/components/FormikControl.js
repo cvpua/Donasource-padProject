@@ -7,6 +7,8 @@ import MyTags from './MyTags.js'
 import MyImages from './MyImages.js'
 import MyPassword from './MyPassword.js'
 import MyNumeric from './MyNumeric.js'
+import MyDate from './MyDate.js'
+import MyRequest from './MyRequest.js'
 
 const FormikControl = (props) => {
 	const { control, ...rest } = props
@@ -17,12 +19,13 @@ const FormikControl = (props) => {
 		// case 'select': return <Input {...rest} />
 		case 'radio': return <MyRadio {...rest} />
 		// case 'checkbox': return <Input {...rest} />
-		// case 'date':
+		case 'date': return <MyDate {...rest} />
 		case 'items': return <MyItems {...rest} />
 		case 'tags' : return <MyTags {...rest} />
 		case 'images': return <MyImages {...rest} />
 		case 'password': return <MyPassword {...rest} />
 		case 'numeric': return <MyNumeric {...rest} />
+		case 'request': return <MyRequest {...rest} />
 		default: return null
 	}
 }

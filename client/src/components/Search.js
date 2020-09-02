@@ -19,9 +19,13 @@ const Search = () => {
     const handleFormSubmit = (event) => {
         event.preventDefault();
 
+        if (search === "") {
+            return(null)
+        }
+
         let filteredPost = posts.filter(
             (post) => {
-                const author = post.name.firstName + " " + post.name.lastName
+                const author = post.user.name.firstName + " " + post.user.name.lastName
                 if (category === "title") {
                     return post.title.toLowerCase().indexOf(search.toLowerCase()) !== -1;
                 } else if (category === "author") {

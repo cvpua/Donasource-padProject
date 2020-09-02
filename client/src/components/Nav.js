@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { Flex, IconButton, Box, Text, PseudoBox } from '@chakra-ui/core'
-import { BiHomeSmile, BiBell, BiFace, BiBox, BiPlus } from 'react-icons/bi'
+import { BiHomeSmile, BiBell, BiFace, BiMessageAltDetail, BiPlus } from 'react-icons/bi'
 
 const Nav = (props) => {
   const { variant, ...rest } = props
@@ -14,10 +14,9 @@ const Nav = (props) => {
         h="40vh"
         {...rest}
       >
-        <NavLink exact to="/" activeClassname="active">
+        <NavLink exact to="/" activeclassname="active">
           <Flex  
             p="2" 
-            rounded="full" 
           >
             <Box ml="4" as={BiHomeSmile} size="8" color="primary.600" />
             <Text color="primary.600" fontWeight="bold" fontFamily="Ubuntu" fontSize="xl" lineHeight="tall" ml="1">Home</Text>
@@ -25,7 +24,7 @@ const Nav = (props) => {
         </NavLink>
         <Flex 
           as={NavLink} 
-          to="/notfication" 
+          to="/notification" 
           p="2" 
           activeClassname="active"
           rounded="full" 
@@ -40,7 +39,7 @@ const Nav = (props) => {
           activeClassname="active"
           rounded="full" 
         >
-          <Box ml="4" as={BiBox} size="8" color="primary.600" />
+          <Box ml="4" as={BiMessageAltDetail} size="8" color="primary.600" />
           <Text color="primary.600" fontWeight="bold" fontFamily="Ubuntu" fontSize="xl" lineHeight="tall" ml="1">Avails</Text>
         </Flex>
         <Flex 
@@ -57,15 +56,14 @@ const Nav = (props) => {
     : 
       <Flex pos="fixed" bottom="0" bg="gray.50" justify="space-evenly" w="full" py="2" {...rest} >
         {/* Home */}
-        <Box 
-          as={NavLink} 
-          to="/" 
-          p="2" 
-          activeClassname="active"
-          rounded="lg" 
-        >
-          <Box as={BiHomeSmile} size="8" color="primary.600" />
+        <NavLink exact to="/" activeclassname="active" > 
+          <Box
+            p="2" 
+            rounded="lg" 
+          >
+            <Box as={BiHomeSmile} size="8" color="primary.600" />
         </Box>
+        </NavLink>
         {/* Avails */}
         <Box 
           as={NavLink} 
@@ -74,9 +72,8 @@ const Nav = (props) => {
           rounded="lg" 
           activeClassname="active"
         >
-          <Box as={BiBox} size="8" color="primary.600" />
+          <Box as={BiMessageAltDetail} size="8" color="primary.600" />
         </Box>
-        <Box size="8" />
         {/* Notification */}
         <Box 
           as={NavLink} 

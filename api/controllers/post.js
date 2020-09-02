@@ -72,19 +72,26 @@ exports.getAllPosts = (req,res) => {
 }
 
 exports.getPost = (req,res) => {
-
     Post.findOne({_id : req.params.postId})
     .populate("user","avatar name username")
-    .populate("comments")
-    .populate({path: 'items',
+    .populate({
+        path: 'comments',
+        populate: {
+            path: 'user',
+            select: 'name username avatar'
+        }
+    })
+    .populate({
+        path: 'items',
         populate : {
             path :' donor',
             populate : {
                 path: 'user',
-                select : 'name avatar'
+                select : 'name username avatar'
             }
         }
     })
+    .populate('images')
     .exec()
     .then(post=>{
         res.status(200).json(post)
@@ -95,11 +102,7 @@ exports.getPost = (req,res) => {
 }
 
 exports.makePost =  (req,res) => {
-
-
-
     fs.ensureDirSync('./uploads');
-
     upload(req,res,function(err){
         if(err){
             console.log(err)
@@ -109,7 +112,6 @@ exports.makePost =  (req,res) => {
             });
         }
         else{
-            
             User.findById(req.body.userId)
             .exec()
             .then(user => {
@@ -119,146 +121,101 @@ exports.makePost =  (req,res) => {
             
             let items = null;    
             
-            // if(req.body.items && req.body.items.length > 0){
-            //     items = req.body.items.map(item =>{
+            if(req.body.items && req.body.items.length > 0){
+                items = req.body.items.map(item =>{
                     
-            //         const newItem = new Item({
-            //             _id : new mongoose.Types.ObjectId(),
-            //             name : item.name,
-            //             amount : item.amount,
-            //             total : item.total,
-            //             donor : [],
-            //             donee : []
-            //         });
-            //         newItem.save()
-            //         .then(response => {
-            //             console.log("Item saved!")
-            //         })
-            //         return newItem;
-            //     });
-            // }
-            // const uploader = (path) => {
-            //     cloudinary.uploads(file.path,"Images")
-            //     .then(result => console.log(result))
-            // }
+                    const newItem = new Item({
+                        _id : new mongoose.Types.ObjectId(),
+                        name : item.name,
+                        amount : item.amount,
+                        total : item.total,
+                        donor : [],
+                        donee : []
+                    });
+                    newItem.save()
+                    .then(response => {
+                        console.log("Item saved!")
+                    })
+                    return newItem;
+                });
+            }
             
             if(req.files && req.files.length >= 1){
-                
-                     imageArray = req.files.map(file =>{
-                     
-                         const image = new Image({
-                            _id: new mongoose.Types.ObjectId(),
-                            total: req.body.total,
-                            image: {
-                                imageName : file.filename, 
-                                
-                            }
-                    });
-                    
-                    cloudinary.uploader.upload(file.path)
-                    .then(response => {
-                        image.url = response.url;
-                        image.publicId = response.public_id;
-                        image.save()
-                        .then(response => {console.log("Image saved!")})
+                imageArray = req.files.map(file => {
+                    const image = new Image ({
+                        _id: new mongoose.Types.ObjectId(),
+                        imageName: file.filename,
+                        imagePath : file.path
                     })
-                    .catch(err =>{
-                        console.log(err)
-                    })
-                    return(image)
-                })
-                
+                    return image;
+                })                
+         }
+         fs.rmdir('./uploads', { recursive: true }, (err) => {
+            if (err) {
+                throw err;
             }
-            console.log(imageArray)
-            const post = new Post({
-                _id: new mongoose.Types.ObjectId(),
-                user: req.body.userId,
-                title : req.body.title,
-                type : req.body.type,
-                status : req.body.status,
-                description : req.body.description,
-                items : items,
-                location : req.body.location,
-                tags : req.body.tags,
-                datePosted : Date.now(),
-                deadline: req.body.deadline,
-                images : imageArray,
-                comments : []
-            })   
-            
-            // There is images and needs to create folders and move images
-            if(req.files.length > 0){ 
-                // let title = post.title.replace(/\s/g, ''); //remove spaces on strings
-                // const dir = 'assets/' + post.user + '/posts/' + title + '_' + Date.now() + '/images/';
+            console.log(`./uploads deleted!`);
+        });
+        const post = new Post({
+            _id: new mongoose.Types.ObjectId(),
+            user: req.body.userId,
+            title : req.body.title,
+            type : req.body.type,
+            status : req.body.status,
+            description : req.body.description,
+            items : items,
+            location : req.body.location,
+            tags : req.body.tags,
+            datePosted : Date.now(),
+            deadline: req.body.deadline,
+            images : imageArray,
+            comments : []
+        })   
 
-                // fs.move('./uploads',dir,(error)=>{
-                //     if (error){
-                //         res.status(500).json({
-                //             message: "Error in moving images to the assets folder",
-                //             error
-                //     });
-                //     }else{
-                //         user.posts.push(post);
-
-                //         if(post.type === "request"){
-                //             user.requestPostCount = user.requestPostCount + 1;
-                //         }else{
-                //             user.donationPostCount = user.donationPostCount + 1;
-                //         }
-                //         user.postCount = user.postCount + 1;
-                //         user.save()
-                //         .then(
-                //             post.save()
-                //             .then(
-                             
-                //                 res.status(200).json({
-                //                     message:"Post created!",
-                //                     post,
-                //                     user : {name : user.name, avatar : user.avatar, username :user.username}
-                //                 })
-    
-                //             )
-                //             .catch(err => {
-                //                 console.log(err)
-                //                 res.json(err)
-                //             })
-                //         )
-                //         .catch(err => {
-                //             console.log(err)
-                //             res.json(err)
-                //         })              
-                //     }
-                    
-                // })
-            }
-            // There are no images, no need to make folders
-            else{
-               
-                user.posts.push(post);
-                post.type === "request" ? user.requestPostCount = user.requestPostCount + 1 : user.donationPostCount = user.donationPostCount + 1
-                user.postCount = user.postCount + 1;
-                user.save()
-                .then(
-                    post.save()
-                    .then(
-                        res.status(200).json({
-                            message:"Post created!",
-                            post,
-                            user : {name : user.name, avatar : user.avatar, username :user.username}
-                        })
-                    )
-                    .catch(err => {
+        if(imageArray){
+            imageArray.map(async image =>{
+                try{
+                    const path = image.imagePath;
+                    const uploadedResponse = await cloudinary.uploader.upload(path);
+                    image.url = uploadedResponse.url;
+                    image.publicId = uploadedResponse.public_id;
+                    image.save()
+                    .then(console.log("Image saved!"))
+                } catch(err){
                         console.log(err)
-                        res.json(err)
-                    })
-                )
-                .catch(err => {
-                    console.log(err)
-                    res.json(err)
+                } 
+            })
+        } 
+        user.posts.push(post);
+        if(post.type === "request"){
+            user.requestPostCount = user.requestPostCount + 1;
+        }else{
+            user.donationPostCount = user.donationPostCount + 1;
+        }
+        user.postCount = user.postCount + 1;
+        user.save()
+        .then(
+            post.save()
+            .then(
+                res.status(200).json({
+                    message:"Post created!",
+                    post,
+                    user: {
+                        name: user.name,
+                        avatar: user.avatar,
+                        username: user.username
+                    }
                 })
-                       
-                                        
-            }
+            )
+            .catch(err => {
+                console.log(err)
+                res.json(err)
+            })
+        )
+        .catch(err => {
+            console.log(err)
+            res.json(err)
+        }) 
         })
         }
     });    
@@ -271,10 +228,9 @@ exports.makeComment = (req,res) => {
     .exec()
     .then(
         post => {
-            
             const comment = new Comment({
                 _id: new mongoose.Types.ObjectId(),
-                userId : req.body.userId,
+                user : req.body.userId,
                 content : req.body.content,
                 postId : post._id
             })
@@ -287,6 +243,7 @@ exports.makeComment = (req,res) => {
                 .then(user =>{
                     if(user._id != req.body.userId){
                         const notification = new Notification({
+                            _id: mongoose.Types.ObjectId(),
                             type : "comment",
                             postId : post._id,
                             title : post.title,
@@ -307,7 +264,14 @@ exports.makeComment = (req,res) => {
                             .then( secondResponse =>{
                                 comment.save()
                                 .then(thirdResponse => {
-                                    res.status(200).json({message : "Comment created!", comment})
+                                    res.status(200).json({message : "Comment created!",
+                                        comment: comment,
+                                        user: {
+                                            name: user.name,
+                                            username: user.username,
+                                            avatar: user.avatar,
+                                        }
+                                    })
                                 })
                                 
                             })
@@ -384,6 +348,7 @@ exports.likePost = (req,res) => {
                                     .then(targetUser => {
                                         if(post.user != req.body.userId){
                                             const notification = new Notification({
+                                                _id: mongoose.Types.ObjectId(),
                                                 type : "like",
                                                 postId : post._id,
                                                 title : post.title,
@@ -398,7 +363,7 @@ exports.likePost = (req,res) => {
                                         }
                                         targetUser.save()
                                         .then(response => {
-                                            res.status(200).json({message : "Post liked!", post})
+                                            res.status(200).json({message : "Post liked!"})
                                         })
                                         .catch(err =>{
                                             console.log(err)
@@ -513,6 +478,7 @@ exports.donate = (req,res) => {
                         .exec()
                         .then(targetUser => {
                             const notification = new Notification({
+                                _id: mongoose.Types.ObjectId(),
                                 type : "donate",
                                 postId : post._id,
                                 user : req.body.userId,
@@ -524,7 +490,7 @@ exports.donate = (req,res) => {
                             .then(response => {
                                 notification.save()
                                 .then( response => {
-                                    res.status(200).json({message : "Item/s donated. Thank you!"})
+                                    res.status(200).json({message : "Item/s donated. Thank you!", items: post.items} )
                                 })
                                 
                             })
