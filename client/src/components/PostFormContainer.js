@@ -13,19 +13,13 @@ const PostFormContainer = (props) => {
 
 	const initialValues = {
 		userId: user._id,
-		avatar: user.photo,
-		name: {
-			firstName: user.name.firstName,
-			lastName: user.name.lastName,
-		},
-		username: user.username,
 		title: '',
 		description: '',
 		type: 'donation',
 		location: '',
 		deadline: new Date(),
-		items: [{name: '', total: 1, amount: 0, donor:[]}],
-		tags: ['Food'],
+		items: [{name: '', total: 1, amount: 0}],
+		tags: [''],
 		images: [],
 		status: "PENDING",
 	}
@@ -56,7 +50,6 @@ const PostFormContainer = (props) => {
 
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
-		console.log('Form Values', values)
 		
 		// Eto nadagdag
 		let formData = new FormData();
@@ -89,7 +82,12 @@ const PostFormContainer = (props) => {
 				}
 			)
 			alert(data.message)
-			createPost(data.post)
+			createPost({
+				...data.post,
+				user: {
+					...data.user
+				}
+			})
 			handleIsSubmitting(false)
 			onClose()
 		}catch(error){
@@ -108,12 +106,12 @@ const PostFormContainer = (props) => {
 			{
 				(formikProps) => {
 					return (<div>
-							<Form id="postform" >
+							<Form id="postForm" >
 								<FormikControl control="radio" label="Type" name="type" />
 								<FormikControl control="input" type="text" label="Title" name="title" />
 								<FormikControl control="textarea" label="Description" name="description" />
 								<FormikControl control="input" type="text" label="Location" name="location" />
-								<FormikControl control="input" type="date" label="Deadline" name="deadline" />
+								<FormikControl control="date" label="Deadline" name="deadline" />
 								<FormikControl control="items" label="Items" name="items" />
 								<FormikControl control="tags" label="Tags" name="tags" />
 								<FormikControl control="images" type="file" name="images" label="Add Image" multiple="multiple" accept="image/*" form={formikProps}/>

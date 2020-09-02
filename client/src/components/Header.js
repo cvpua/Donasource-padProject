@@ -1,6 +1,15 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import Logout from './Logout.js'
-import { Flex, Text, Avatar, Grid, Box, Menu, MenuItem, MenuButton, MenuList, MenuDivider, Button } from '@chakra-ui/core'
+import { 
+  Flex, Text, Avatar, 
+  Grid, Box, Menu, 
+  MenuItem, MenuButton, MenuList, 
+  MenuDivider, Button, Modal, 
+  ModalHeader, ModalBody, ModalContent, 
+  ModalFooter, ModalOverlay, ModalCloseButton,
+  useDisclosure 
+} from '@chakra-ui/core'
+import ChangePasswordFormContainer from './ChangePasswordFormContainer.js'
 import { UserContext } from '../App.js'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
@@ -9,15 +18,15 @@ const Header = (props) => {
 	const { title } = props
 
   const [USER, setUser] = useContext(UserContext)
-
   const { user, token } = USER
-
   const {
     photo,
     name,
   } = user
-
   const fullName = name.firstName + " " + name.lastName
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const logout = async () => {
     try {
@@ -39,6 +48,7 @@ const Header = (props) => {
   }
 
 	return (
+    <React.Fragment>
 		<Grid 
       h="16" 
       bg="primary.600" 
@@ -72,7 +82,7 @@ const Header = (props) => {
               </Text>
             </MenuButton>
             <MenuList zIndex="popover">
-              <MenuItem leftIcon="add">Change Password</MenuItem>
+              <MenuItem leftIcon="add" onClick={onOpen} >Change Password</MenuItem>
               <MenuDivider />
               <MenuItem 
                 as={Link} 
@@ -86,6 +96,30 @@ const Header = (props) => {
           
         </Flex>
     </Grid>
+
+    {/* Change Password Form Modal */}
+    <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Change Password</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {/* Comment Form */}
+            <ChangePasswordFormContainer onClose={onClose} handleIsSubmitting={setIsSubmitting} />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button variant="ghost" mr={3} onClick={() => {
+              onClose()
+              setIsSubmitting(false)
+            }}>
+              Cancel
+            </Button>
+            <Button variantColor="cyan" type="submit" isLoading={isSubmitting} form="changePasswordForm">Save</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      </React.Fragment>
 	)
 }
 

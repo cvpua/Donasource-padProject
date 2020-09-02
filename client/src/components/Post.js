@@ -1,4 +1,4 @@
-import React,{ useState, useEffect } from 'react'
+import React,{ useState, useEffect, useContext } from 'react'
 import PostHeader from './PostHeader.js'
 import ItemList from './ItemList.js'
 import Tags from './Tags.js'
@@ -9,34 +9,27 @@ import {
   Text, 
   PseudoBox, 
   useDisclosure, 
-  Modal, 
-  ModalHeader, 
-  ModalBody, 
-  ModalContent, 
-  ModalOverlay, 
-  ModalFooter, 
-  ModalCloseButton, 
   Button,
   Image,
   Stack,
   Grid,
 } from '@chakra-ui/core'
-import { BiDonateHeart, BiCommentDots} from 'react-icons/bi'
+import { BiDonateHeart, BiCommentDots, BiMessageAltEdit} from 'react-icons/bi'
 import LikeButton from './LikeButton.js'
 import { Link } from 'react-router-dom'
-import CommentFormContainer from './CommentFormContainer.js'
-import DonateFormContainer from './DonateFormContainer.js'
 import PostSkeleton from './PostSkeleton.js'
-
-// For now, let this be a request type post
+import {UserContext} from '../App.js'
+import CommentFormModal from './CommentFormModal.js'
+import RequestFormModal from './RequestFormModal.js'
+import DonateFormModal from './DonateFormModal.js'
 
 const Post = (props) => {
 	const { data, addComment, isLinked, isLoading, isPostSection } = props
 	const {
-    _id,
-		avatar,
+    _id: postId,
+    user,
+    type,
 		title,
-		name,
 		deadline,
 		description,
 		items: mainItems,
@@ -45,13 +38,19 @@ const Post = (props) => {
     status: mainStatus,
     images,
 	} = data
+  
+  const{ _id: userId, name, username, avatar } = user;
 
   const author = name.firstName + " " + name.lastName
+
+  const [USER] = useContext(UserContext)
+  const { user: currentUser } = USER
+  const { _id: currentUserId } = currentUser
 
   //  A custom hook to help handle common open, close, or toggle scenarios. 
   // See this docs for more information: https://chakra-ui.com/usedisclosure
   const { isOpen: isOpenComment, onOpen: onOpenComment, onClose: onCloseComment } = useDisclosure()
-  const { isOpen: isOpenDonate, onOpen: onOpenDonate, onClose: onCloseDonate } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   // Form modal will close if the form is successfully submitted
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -80,7 +79,7 @@ const Post = (props) => {
       		<PseudoBox p="5" pb="2" mb="4" bg="white" shadow="sm" rounded="lg" pos="relative" _hover={{ borderColor: "gray.200", bg: "gray.50" }}>
             {
               isLinked
-              ? <Box as={Link} to={`/profile/post/${_id}`} w="full" h="full" pos="absolute" top="0" left="0" bottom="0" right="0"></Box>
+              ? <Box as={Link} to={`/profile/post/${postId}`} w="full" h="full" pos="absolute" top="0" left="0" bottom="0" right="0"></Box>
               : "" 
             }
             {/* Post Header */}
@@ -96,7 +95,7 @@ const Post = (props) => {
               <Text>{description}</Text>
             </Box>
           	{/* Item List */}
-            <ItemList items={items}>
+            <ItemList items={items} type={type}>
               {
                 images && isPostSection ?
                   (images.map((image) => (
@@ -114,61 +113,43 @@ const Post = (props) => {
             {/* Post Actions */}
             <Flex justify="space-around" borderTop="2px" borderColor="gray.300" pt="2">
               {/* Donate Button */}
-              <IconButton isDisabled={status === "PENDING" ? false : true} size="lg" variant="ghost" isRound icon={BiDonateHeart} onClick={onOpenDonate} />
+              <IconButton 
+                isDisabled={status !== "PENDING" || userId === currentUserId ? true : false} 
+                size="lg" variant="ghost" 
+                isRound icon={type === "donation" ? BiMessageAltEdit : BiDonateHeart} 
+                onClick={onOpen} 
+              />
               {/* Comment Button */}
               <IconButton variant="ghost" size="lg" isRound icon={BiCommentDots} onClick={onOpenComment} />
               {/* Like Button  */}
-              <LikeButton id={_id} likers={likers} />
+              <LikeButton postId={postId} likers={likers} />
             </Flex>
             {props.children}
           </PseudoBox>
       }
-      {/* Donate Form Modal */}
-      <Modal isOpen={isOpenDonate} onClose={onCloseDonate}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Donate</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {/* Comment Form */}
-            <DonateFormContainer onClose={onCloseDonate} handleIsSubmitting={setIsSubmitting} items={items} donate={donate} postId={_id} />
-          </ModalBody>
-
-          <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={() => {
-              onCloseDonate()
-              setIsSubmitting(false)
-            }}>
-              Cancel
-            </Button>
-            <Button variantColor="cyan" type="submit" isLoading={isSubmitting} form="donateform">Donate</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
-
-      {/* Comment Form Modal */}
-      <Modal isOpen={isOpenComment} onClose={onCloseComment}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader></ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {/* Comment Form */}
-            <CommentFormContainer onClose={onCloseComment} handleIsSubmitting={setIsSubmitting} addComment={addComment} postId={_id} />
-          </ModalBody>
-
-          <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={() => {
-              onCloseComment()
-              setIsSubmitting(false)
-            }}>
-              Cancel
-            </Button>
-            <Button variantColor="cyan" type="submit" isLoading={isSubmitting} form="commentform">Comment</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {/* Modals */}
+      {
+        type === "donation" ? 
+          <RequestFormModal 
+            isOpen={isOpen} 
+            onClose={onClose}
+            items={items}
+            postId={postId}
+          />
+        : 
+          <DonateFormModal 
+            isOpen={isOpen} 
+            onClose={onClose}
+            items={items}
+            donate={donate}
+            postId={postId} 
+          />
+      }
+      <CommentFormModal 
+        isOpen={isOpenComment} 
+        onClose={onCloseComment}
+        addComment={addComment} 
+      />
     </div>
 	)
 }

@@ -64,7 +64,7 @@ const Feed = (props) => {
             <Button variant="ghost" mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button variantColor="primary" type="submit" isLoading={isSubmitting} form="postform">Post</Button>
+            <Button variantColor="cyan" type="submit" isLoading={isSubmitting} form="postForm">Post</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

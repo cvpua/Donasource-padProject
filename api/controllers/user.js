@@ -9,6 +9,7 @@ const User = require('../models/user');
 const Notification = require('../models/notification');
 const Post = require('../models/post');
 const { response } = require("express");
+const notification = require("../models/notification");
 
 
 const storage = multer.diskStorage({
@@ -45,26 +46,31 @@ exports.getAllUsers = (req,res) => {
     User.find()
     .exec()
     .then((users) =>{
-    
-    const response =  
-    users.map(user =>{
-            return (
-                {
-                    userId: user._id,
-                    email : user.email,
-                    username : user.username,
-                    name : user.name.firstName + " " + user.name.lastName,
-                    posts : user.posts
-                }
-            )
-        })
-        res.status(200).json(response)
+        res.status(200).json(users)
     })
 }
 
 exports.getUser = (req,res) =>{
     User.findOne({_id : req.params.userId})
-    .populate('posts')
+    .populate({
+        path: 'posts',
+        populate: {
+            path: 'user',
+            select: 'username avatar name'
+        }})
+    .populate({
+        path: 'posts',
+        populate: {
+            path: 'items',
+            populate : {
+                path :' donor',
+                populate : {
+                    path: 'user',
+                    select : 'name username avatar'
+                }
+            }
+        }
+    })
     .exec()
     .then( user => {
         if (!user){
@@ -99,7 +105,6 @@ exports.getLikedPosts = (req,res) => {
     .populate("likedPosts")
     .exec()
     .then(user => {
-       
         res.status(200).json(user.likedPosts)
     })
     .catch(err => {
@@ -113,12 +118,17 @@ exports.getLikedPosts = (req,res) => {
 exports.getAllNotifications = (req,res) => {
 
     User.findById(req.params.userId)
+    .populate({path: 'notifications',
+    populate : {
+        path: 'user',
+        select : 'name avatar'
+    }
+    })
     .exec()
     .then(user => {
         res.status(200).json(
             {
-                username : user.username,
-                name : user.name.firstName + " " + user.name.lastName,
+                notificationCount : user.notifications.length,
                 notifications : user.notifications
             }
         )
@@ -128,34 +138,36 @@ exports.getAllNotifications = (req,res) => {
     })
 }
 
-exports.getNotification = (req,res) => {
+exports.seeNotification = (req,res) => {
     
-    User.findById(req.params.userId)
+    Notification.findById(req.params.notifId)
     .exec()
-    .then(user => {
-        
-        const notifIndex = user.notifications.findIndex((notif,index) => {
-            return String(notif._id) === req.params.notifId;
+    .then( notification => {
+        notification.seen = true;
+        notification.save()
+        .then(response => {
+            res.json({message : "Notif seen"})
         })
-        
-        Post.findById(user.notifications[notifIndex].postId)
-        .exec()
-        .then(post => {
-            user.notifications[notifIndex].isRead = true;
-            user.save()
-            .then(response => {
-                res.status(200).json(post);
-            })
-            .catch()
-        })
-        .catch()
-        
     })
     .catch()
 }
 
 exports.editUser = (req,res) => {
+    const toUpdate = {}
+    for(const property of Object.entries(req.body)){
+        toUpdate[property[0]] = property[1];
+    }    
+    User.updateOne({_id : req.params.userId},{$set : toUpdate})
+    .exec()
+    .then(response => {
 
+            res.json({message : "User updated!"})
+       
+          
+    })
+    .catch(err => {
+        res.json({message: "User not updated", err})
+    })
 }
 
 exports.changePassword = (req,res) => {

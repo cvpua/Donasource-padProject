@@ -4,19 +4,21 @@ import { Link } from 'react-router-dom'
 
 const Notification = ({notif, seenNotif}) => {
 	const {
-		notifId,
+		_id: notifId,
+		user,
 		type,
-		name,
 		postId,
 		date,
-		avatar,
 		title,
 		seen,
 	} = notif
 
+	const { avatar, name } = user
+
 	const fullName = name.firstName + " " + name.lastName
 	const currentDate = new Date()
- 	const time = currentDate.getTime() - date.getTime()
+	const notifDate = new Date(date)
+ 	const time = currentDate.getTime() - notifDate.getTime()
 
  	const days = Math.floor(time / (1000 * 3600 * 24))
   const hours = Math.floor(time / (1000 * 3600))
@@ -31,11 +33,11 @@ const Notification = ({notif, seenNotif}) => {
 					py="4" 
 					align="center" 
 					bg={
-						type === "like" && !seen ? "cyan.200"
-						: type === "comment" && !seen ? "blue.200"
-						: type === "donate" && !seen ? "yellow.200"
-						: type === "accept" && !seen ? "green.200"
-						: type === "reject" && !seen ? "red.200"
+						type === "like" && !seen ? "cyan.100"
+						: type === "comment" && !seen ? "blue.100"
+						: type === "donate" && !seen ? "yellow.100"
+						: type === "accept" && !seen ? "green.100"
+						: type === "reject" && !seen ? "red.100"
 						: "none"
 					} 
 					mx="4" 
@@ -52,7 +54,7 @@ const Notification = ({notif, seenNotif}) => {
 								: type === "comment" ? "commented on your post: "
 								: type === "donate" ? "donated on your post: "
 								: type === "accept" ? "accepted your request on post: "
-								: type === "reject" ? "reject your request on post: "
+								: type === "reject" ? "rejected your request on post: "
 								: ""
 							}
 							<b>"{title}"</b>
@@ -60,9 +62,9 @@ const Notification = ({notif, seenNotif}) => {
 						{/* time */}
 						<Text fontSize="sm" color="gray.700">
 							{
-								sec > 60 ? `${mins} min ago`
-								: mins > 60 ? `${hours} hr ago`
-								: hours > 24 ? `${days} d ago`
+								hours > 24 ? `${days}d ago`
+								: mins > 60 ? `${hours}hr ago`
+								: sec > 60 ? `${mins}min ago`
 								: `${sec} sec ago`
 							}
 						</Text>

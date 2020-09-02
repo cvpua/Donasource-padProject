@@ -15,14 +15,9 @@ const Home = () => {
 	const [isLoading, setIsLoading] = useState(true)
 
 	const createPost = (post) => {
-		const newPost = {
-			...post,
-			likers: [],
-			comments: []
-		}
 		setPosts((prevState) => ([
 			...prevState,
-			newPost,
+			post,
 		]))
 	}
 

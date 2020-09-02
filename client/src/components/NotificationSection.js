@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
-import { Box, Flex, Avatar, Text, Divider, Badge } from '@chakra-ui/core'
+import { Box, Flex, Avatar, Text, Divider, Badge, Spinner } from '@chakra-ui/core'
 import { BiBell } from 'react-icons/bi'
 import SectionHeader from './SectionHeader.js'
 import Notification from './Notification.js'
@@ -59,6 +59,8 @@ const NotificationSection = () => {
 
 	const [notifications, setNotifications] = useState([])
 
+	const [isLoading, setIsLoading] = useState(true)
+
 	const seenNotif = async (notifId) => {
 		try{
 			const { data } = await axios.patch(`/api/users/${userId}/notifications/${notifId}`)
@@ -88,7 +90,8 @@ const NotificationSection = () => {
 				let prevDay = currentDay
 
 				data.notifications.forEach((item) => {
-					const notifDay = Math.floor(item.date.getTime() / (1000 * 3600 * 24))
+					const itemDate = new Date(item.date)
+					const notifDay = Math.floor(itemDate.getTime() / (1000 * 3600 * 24))
 					const label = `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}`
 
 					if (notifDay === currentDay) {
@@ -112,6 +115,7 @@ const NotificationSection = () => {
 					}
 				})
 				setNotifications(notifications)
+				setIsLoading(false)
 			}catch(error){
 				alert(error.message)
 			}
@@ -122,21 +126,34 @@ const NotificationSection = () => {
 	return (
 		<React.Fragment>
 			<SectionHeader title="Notification" icon={BiBell} />
-			<Box mx="4" rounded="lg" bg="white" shadow="sm" pb="2">
-				{
-					notifications.map((notification) => {
-						return(<React.Fragment>
-							<Text ml="6" fontSize="sm" fontWeight="semibold" pt="4" pb="2" color="gray.800">{notification.label}</Text>
-							<Divider />
+			{
+				isLoading ? 
+						<Flex justify="center" pt="8" >
+							<Spinner
+							  thickness="6px"
+							  speed="0.65s"
+							  emptyColor="gray.200"
+							  color="primary.600"
+							  size="xl"
+							/>
+						</Flex>
+					:
+						<Box mx="4" rounded="lg" bg="white" shadow="sm" pb="2">
 							{
-								notification.contents.map((notif) => {
-									return(<Notification notif={notif} seenNotif={seenNotif} />)
+								notifications.map((notification) => {
+									return(<React.Fragment>
+										<Text ml="6" fontSize="sm" fontWeight="semibold" pt="4" pb="2" color="gray.800">{notification.label}</Text>
+										<Divider />
+										{
+											notification.contents.map((notif) => {
+												return(<Notification notif={notif} seenNotif={seenNotif} />)
+											})
+										}
+									</React.Fragment>)
 								})
 							}
-						</React.Fragment>)
-					})
-				}
-		</Box>
+						</Box>
+			}
 		</React.Fragment>
 	)
 }

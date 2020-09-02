@@ -53,14 +53,9 @@ const Profile = () => {
 	const fullName = profile.name.firstName + " " + profile.name.lastName
 	
 	const createPost = (post) => {
-		const newPost = {
-			...post,
-			likers: [],
-			comments: []
-		}
 		setFeed((prevState) => ([
 			...prevState,
-			newPost,
+			post,
 		]))
 	}
 
@@ -72,6 +67,7 @@ const Profile = () => {
 					...prevState,
 					...data.user,
 				}))
+				console.log('Feed: ', data.user.posts)
 				setFeed(data.user.posts)
 				setIsLoading(false)
 			}catch(error){
@@ -87,13 +83,13 @@ const Profile = () => {
 			{
 				isLoading ? 
 					<Flex justify="center" pt="8" >
-					<Spinner
-					  thickness="6px"
-					  speed="0.65s"
-					  emptyColor="gray.200"
-					  color="primary.600"
-					  size="xl"
-					/>
+						<Spinner
+						  thickness="6px"
+						  speed="0.65s"
+						  emptyColor="gray.200"
+						  color="primary.600"
+						  size="xl"
+						/>
 					</Flex>
         :
         	<Box mx="4" mb={{base: "24", md: "2"}} shadow="sm" bg="white" rounded="lg">

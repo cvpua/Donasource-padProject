@@ -5,7 +5,7 @@ import FormikControl from './FormikControl.js'
 import axios from 'axios'
 import { UserContext } from '../App.js'
 
-const CommentFormContainer = (props) => {
+const ChangePasswordFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, addComment, postId } = props
 
 	const [USER] = useContext(UserContext)
@@ -14,26 +14,22 @@ const CommentFormContainer = (props) => {
 
 	const initialValues = {
 		userId: userId,
-		content: '',
+		oldPassword: '',
+		newPassword: '',
+		newPasswordCopy: '',
 	}
 
 	const validationSchema = Yup.object().shape({
-		content: Yup.string().required('Required')
+		oldPassword: Yup.string().required('Required'),
+		newPassword: Yup.string().required('Required'),
+		newPasswordCopy: Yup.string().oneOf([Yup.ref('newPassword')],'Password does not match').required('Required'),
 	})
 
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
 		try {
-			const { data } = await axios.patch(`/api/posts/${postId}/comments`, values)
+			const { data } = await axios.patch(`/api/user/${userId}/changePassword`, values)
 			alert(data.message)
-			if (addComment) {
-				addComment({
-					...data.comment,
-					user: {
-						...data.user
-					}
-				})
-			}
 			handleIsSubmitting(false)
 			onClose()
 		}catch (error){
@@ -50,8 +46,10 @@ const CommentFormContainer = (props) => {
 			{
 				(formikProps) => {
 					return (<div>
-							<Form id="commentForm">
-								<FormikControl control="textarea" label="Comment" name="content" />
+							<Form id="changePasswordForm">
+								<FormikControl control="password" label="Old Password" name="oldPassword" />
+								<FormikControl control="password" label="New Password" name="newPassword" />
+								<FormikControl control="password" name="newPasswordCopy" placeholder="Enter your new password again" />
 							</Form>
 						</div>
 					)
@@ -61,4 +59,4 @@ const CommentFormContainer = (props) => {
 	)
 }
 
-export default CommentFormContainer
+export default ChangePasswordFormContainer

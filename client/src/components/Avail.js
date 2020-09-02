@@ -1,9 +1,19 @@
 import React,{useState} from 'react'
 import { Box, Flex, Avatar, Text, Collapse, Button, Divider } from '@chakra-ui/core'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 
-const Avail = ({avail, acceptRequest, rejectRequest}) => {
-	const { name, postId, reason, title, date, avatar } = avail
+const Avail = ({avail}) => {
+	const {
+		_id: availId, 
+		user, 
+		post, 
+		reason,  
+		date, 
+	} = avail
+
+	const {_id: userId, avatar, name, username } = user
+	const { _id: postId, title } = post
 
 	const fullName = name.firstName + " " + name.lastName
 	const currentDate = new Date()
@@ -15,7 +25,23 @@ const Avail = ({avail, acceptRequest, rejectRequest}) => {
   const sec = Math.floor(time / (1000))
 
   const [show, setShow] = useState(false)
- 
+
+	const acceptRequest = async () => {
+		try{
+			const { data } = axios.patch(`/api/posts/${postId}/avails/${availId}`)
+		}catch(error){
+			alert(error.message)
+		}
+	}
+
+	const rejectRequest = async () => {
+		try{
+			const { data } = axios.delete(`/api/posts/${postId}/avails/${availId}`)
+		}catch(error){
+			alert(error.message)
+		}
+	}
+
 	return (
 		<React.Fragment>
 			<Box pt="4" px="6">

@@ -47,24 +47,7 @@ const AvailsSection = () => {
 	const { user } = USER
 	const { _id: userId } = user
 
-	const [avails, setAvails] = useState(INIT_AVAILS)
-
-	const acceptRequest = async () => {
-		try{
-			const { data } = axios.patch()
-		}catch(error){
-			alert(error.message)
-		}
-	}
-
-	const rejectRequest = async () => {
-		try{
-			const { data } = axios.patch()
-		}catch(error){
-			alert(error.message)
-		}
-	}
-
+	const [avails, setAvails] = useState([])
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -84,7 +67,7 @@ const AvailsSection = () => {
 				<Divider />
 					{
 						avails.map((avail) => {
-							return (<Avail avail={avail} acceptRequest={acceptRequest} rejectRequest={rejectRequest} />)
+							return (<Avail avail={avail} />)
 						})
 					}
 			</Box>
