@@ -17,7 +17,7 @@ import {
   Skeleton,
   Text,
 } from '@chakra-ui/core'
-import { BiMeh } from 'react-icons/bi'
+import { BiGhost } from 'react-icons/bi'
 import Post from './Post.js'
 import PostFormContainer from './PostFormContainer.js'
 
@@ -35,8 +35,9 @@ const Feed = (props) => {
       {
         posts.length === 0 ? 
           <Flex align="center" py="8" flexDirection="column">
-            <Box as={BiMeh} size="20" />
-            <Text>Oooops! Your feed is empty. Make a post now!</Text>
+            <Box as={BiGhost} size="20" />
+            <Text fontWeight="bold" fontSize="lg">Oooops!</Text>
+            <Text>Your feed is empty. Make a post now!</Text>
           </Flex>
         : 
           <Stack mb={{base: "16", md: "4"}} px={{base: "0", sm: "4"}} >

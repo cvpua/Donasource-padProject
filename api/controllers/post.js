@@ -562,18 +562,6 @@ exports.deletePost = (req,res) => {
     Post.findById(req.params.postId)
     .exec()
     .then(post => {
-       
-        if(post && post.images && post.images.length > 0){
-            post.images.map(image => {
-                
-                let imageDir = image.image.url.replace("http://localhost:5000/","");
-                fs.unlink(imageDir,(err => {
-                    if(err) throw err;
-                    
-                }))
-            })
-            console.log("Folder/s deleted");
-        }
         Post.deleteOne({_id : req.params.postId})
         .exec()
         .then(response => {

@@ -59,6 +59,14 @@ const Profile = () => {
 		]))
 	}
 
+	const updateProfile = (user) => {
+		console.log('Updated User: ', user)
+		setProfile((prevState) => ({
+			...prevState,
+			...user,
+		}))
+	}
+
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
@@ -105,7 +113,7 @@ const Profile = () => {
 							<Text fontWeight="light">@{profile.username}</Text>
 
 							{/* Bio */}
-							<Flex px="8" pb="4" justify="center" >
+							<Flex px="8" py="4" justify="center" >
 								<Text textAlign="center">{profile.bio}</Text>
 							</Flex>
 							<Flex flexDirection="column" mt="2">
@@ -153,7 +161,7 @@ const Profile = () => {
           <ModalCloseButton />
           <ModalBody>
             {/* Edit Profile Form */}
-            <EditProfileFormContainer onClose={onClose} handleIsSubmitting={setIsSubmitting} profile={profile} />
+            <EditProfileFormContainer onClose={onClose} handleIsSubmitting={setIsSubmitting} profile={profile} updateProfile={updateProfile} />
           </ModalBody>
 
           <ModalFooter>
