@@ -32,7 +32,9 @@ router.patch('/api/user/:userId/editUser',UserController.editUser)
 //oldPassword
 //newPassword
 //newPasswordCopy
-router.patch('/api/user/:userId/changePassword',UserController.changePassword)
+router.patch('/api/users/:userId/changePassword',UserController.changePassword)
+
+router.get('/api/users/:userId/avails',UserController.getAvails)
 
 
 module.exports = router;

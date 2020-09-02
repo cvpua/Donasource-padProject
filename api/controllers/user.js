@@ -152,18 +152,43 @@ exports.seeNotification = (req,res) => {
     .catch()
 }
 
-exports.editUser = (req,res) => {
+exports.editUser = async(req,res) => {
     const toUpdate = {}
     for(const property of Object.entries(req.body)){
+        if( toUpdate[property[0]] === "name"){
+            toUpdate[property[0]] = JSON.parse(property[1])
+        }else{
         toUpdate[property[0]] = property[1];
+        }
     }    
+
+    if(req.files && req.files.length > 0){
+        const image = new Image ({
+            _id : mongoose.Types.ObjectId(),
+            imageName : req.files[0].filename,
+            imagePath : req.files[0].filepath,
+        })
+        toUpdate[avatar] = image;
+
+        try{
+            const path = image.imagePath;
+            const uploadedResponse = await cloudinary.uploader.upload(path);
+            image.url = uploadedResponse.url;
+            image.publicId = uploadedResponse.public_id;
+            image.save()
+            .then(console.log("Image saved!"))
+        } catch(err){
+                console.log(err)
+        } 
+    }
+
     User.updateOne({_id : req.params.userId},{$set : toUpdate})
     .exec()
     .then(response => {
         User.findById(req.params.userId)
         .exec()
-        .then(user =>  {
-            res.json({message : "User updated!", user: user})
+        .then(user => { 
+            res.json({message : "User updated!", user});
         })
     })
     .catch(err => {
@@ -227,3 +252,19 @@ exports.changePassword = (req,res) => {
     })
 }
 
+exports.getAvails = (req,res) => {
+    User.findById(req.params.userId)
+    .populate('avails')
+    .select('avatar name username avails')
+    .exec()
+    .then(user => {
+        res.json(user)
+    })
+    .catch(error => {
+        console.log(err)
+    })
+}
+
+exports.respondToAvails = (req,res) => {
+    
+}

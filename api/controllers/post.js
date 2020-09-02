@@ -3,6 +3,7 @@ const multer = require('multer');
 const fs = require('fs-extra');
 
 const checkAuth = require('../auth/check-auth');
+const {cloudinary} = require('../../config/cloudinary');
 
 const Post = require('../models/post');
 const User = require('../models/user');
@@ -11,7 +12,9 @@ const Item = require('../models/item');
 const Image = require('../models/image');
 const Comment = require('../models/comment');
 const Donor = require ('../models/donor');
+const Avail = require('../models/avail')
 const { response } = require("express");
+const image = require("../models/image");
 
 
 const storage = multer.diskStorage({
@@ -88,6 +91,7 @@ exports.getPost = (req,res) => {
             }
         }
     })
+    .populate('images')
     .exec()
     .then(post=>{
         res.status(200).json(post)
@@ -97,11 +101,8 @@ exports.getPost = (req,res) => {
     })
 }
 
-exports.makePost = (req,res) => {
-
-    
+exports.makePost =  (req,res) => {
     fs.ensureDirSync('./uploads');
-
     upload(req,res,function(err){
         if(err){
             console.log(err)
@@ -111,16 +112,11 @@ exports.makePost = (req,res) => {
             });
         }
         else{
-            
             User.findById(req.body.userId)
             .exec()
             .then(user => {
             req.body.items = JSON.parse(req.body.items)
             
-            let title = req.body.title.replace(/\s/g, ''); //remove spaces on strings
-
-            const dir = 'assets/' + req.body.author + '/posts/' + title + '_' + Date.now() + '/images/';
-
             let imageArray = null;
             
             let items = null;    
@@ -144,115 +140,82 @@ exports.makePost = (req,res) => {
                 });
             }
             
-            
             if(req.files && req.files.length >= 1){
-                
-                     imageArray = req.files.map(file =>{
-                       
-                         image = new Image({
-                            _id: new mongoose.Types.ObjectId(),
-                            total: req.body.total,
-                            image: {
-                                imageName : file.filename, 
-                                url: 'http://localhost:5000/'+dir+file.filename 
-                            }
-                    });
-                        return(image)
-                })
-                
-            }
-            const post = new Post({
-                _id: new mongoose.Types.ObjectId(),
-                user: req.body.userId,
-                title : req.body.title,
-                type : req.body.type,
-                status : req.body.status,
-                description : req.body.description,
-                items : items,
-                location : req.body.location,
-                tags : req.body.tags,
-                datePosted : Date.now(),
-                deadline: req.body.deadline,
-                images : imageArray,
-                comments : []
-            })   
-            
-            // There is images and needs to create folders and move images
-            if(req.files.length > 0){ 
-                fs.move('./uploads',dir,(error)=>{
-                    if (error){
-                        res.status(500).json({
-                            message: "Error in moving images to the assets folder",
-                            error
-                    });
-                    }else{
-                        user.posts.push(post);
-
-                        if(post.type === "request"){
-                            user.requestPostCount = user.requestPostCount + 1;
-                        }else{
-                            user.donationPostCount = user.donationPostCount + 1;
-                        }
-                        user.postCount = user.postCount + 1;
-                        user.save()
-                        .then(
-                            post.save()
-                            .then(
-                                res.status(200).json({
-                                    message:"Post created!",
-                                    post,
-                                    user: {
-                                        name: user.name,
-                                        avatar: user.avatar,
-                                        username: user.username
-                                    }
-                                })
-                            )
-                            .catch(err => {
-                                console.log(err)
-                                res.json(err)
-                            })
-                        )
-                        .catch(err => {
-                            console.log(err)
-                            res.json(err)
-                        })              
-                    }
-                    
-                })
-            }
-            // There are no images, no need to make folders
-            else{
-               
-                user.posts.push(post);
-                post.type === "request" ? user.requestPostCount = user.requestPostCount + 1 : user.donationPostCount = user.donationPostCount + 1
-                user.postCount = user.postCount + 1;
-                user.save()
-                .then(
-                    post.save()
-                    .then(
-                        res.status(200).json({
-                            message:"Post created!",
-                            post,
-                            user: {
-                                name: user.name,
-                                avatar: user.avatar,
-                                username: user.username
-                            }
-                        })
-                    )
-                    .catch(err => {
-                        console.log(err)
-                        res.json(err)
+                imageArray = req.files.map(file => {
+                    const image = new Image ({
+                        _id: new mongoose.Types.ObjectId(),
+                        imageName: file.filename,
+                        imagePath : file.path
                     })
-                )
-                .catch(err => {
-                    console.log(err)
-                    res.json(err)
-                })
-                       
-                                        
+                    return image;
+                })                
+         }
+         fs.rmdir('./uploads', { recursive: true }, (err) => {
+            if (err) {
+                throw err;
             }
+            console.log(`./uploads deleted!`);
+        });
+        const post = new Post({
+            _id: new mongoose.Types.ObjectId(),
+            user: req.body.userId,
+            title : req.body.title,
+            type : req.body.type,
+            status : req.body.status,
+            description : req.body.description,
+            items : items,
+            location : req.body.location,
+            tags : req.body.tags,
+            datePosted : Date.now(),
+            deadline: req.body.deadline,
+            images : imageArray,
+            comments : []
+        })   
+
+        if(imageArray){
+            imageArray.map(async image =>{
+                try{
+                    const path = image.imagePath;
+                    const uploadedResponse = await cloudinary.uploader.upload(path);
+                    image.url = uploadedResponse.url;
+                    image.publicId = uploadedResponse.public_id;
+                    image.save()
+                    .then(console.log("Image saved!"))
+                } catch(err){
+                        console.log(err)
+                } 
+            })
+        } 
+        user.posts.push(post);
+        if(post.type === "request"){
+            user.requestPostCount = user.requestPostCount + 1;
+        }else{
+            user.donationPostCount = user.donationPostCount + 1;
+        }
+        user.postCount = user.postCount + 1;
+        user.save()
+        .then(
+            post.save()
+            .then(
+                res.status(200).json({
+                    message:"Post created!",
+                    post,
+                    user: {
+                        name: user.name,
+                        avatar: user.avatar,
+                        username: user.username
+                    }
+                })
+            )
+            .catch(err => {
+                console.log(err)
+                res.json(err)
+            })
+        )
+        .catch(err => {
+            console.log(err)
+            res.json(err)
+        }) 
         })
         }
     });    
@@ -265,7 +228,6 @@ exports.makeComment = (req,res) => {
     .exec()
     .then(
         post => {
-            
             const comment = new Comment({
                 _id: new mongoose.Types.ObjectId(),
                 user : req.body.userId,
@@ -557,24 +519,49 @@ exports.donate = (req,res) => {
     })
 }
 
+exports.request = (req,res) => {
+
+    Post.findById(req.params.postId)
+    .populate(
+        {path: 'user',
+         select: 'avails'
+    })
+    .exec()
+    .then(post => {
+        User.findById(req.body.userId)
+        .select("username name avatar")
+        .exec()
+        .then(user => {
+            const avail = new Avail({
+                _id : mongoose.Types.ObjectId(),
+                user : user,
+                post : post,
+                reason : req.body.reason,
+                title : post.title,
+                items : req.body.items,
+                status : "PENDING"
+            })
+
+            post.user.avails.push(avail)
+            avail.save()
+            .then(response =>{
+                post.user.save()
+                .then(response => {
+                    res.json({
+                        message : "Request sent to the OP"
+                    })
+                })
+            })
+        })
+    })
+}
+
 
 exports.deletePost = (req,res) => {
     
     Post.findById(req.params.postId)
     .exec()
     .then(post => {
-       
-        if(post && post.images && post.images.length > 0){
-            post.images.map(image => {
-                
-                let imageDir = image.image.url.replace("http://localhost:5000/","");
-                fs.unlink(imageDir,(err => {
-                    if(err) throw err;
-                    
-                }))
-            })
-            console.log("Folder/s deleted");
-        }
         Post.deleteOne({_id : req.params.postId})
         .exec()
         .then(response => {

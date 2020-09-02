@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const Image = require('./image');
+
 
 
 const post = new Schema({
@@ -18,7 +18,7 @@ const post = new Schema({
     likes : {type: Number, default : 0},
     likers : [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     comments : [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}],
-    images : [Image.schema]
+    images : [{type: mongoose.Schema.Types.ObjectId, ref: 'Image'}]
 })
 
 module.exports = mongoose.model('Post',post);

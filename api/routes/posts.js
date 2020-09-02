@@ -24,6 +24,10 @@ router.patch('/api/posts/:postId/likes',PostController.likePost);
 //donate 
 router.put('/api/posts/:postId/donate',PostController.donate);
 
+//request
+router.patch('/api/posts/:postId/request',PostController.request);
+
+
 // delete a post
 router.delete('/api/posts/:postId',PostController.deletePost);
 
