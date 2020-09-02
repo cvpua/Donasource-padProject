@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react'
 import { Box, Flex, Avatar, Text, Divider, Badge, Spinner } from '@chakra-ui/core'
-import { BiBell } from 'react-icons/bi'
+import { BiBell, BiBellOff } from 'react-icons/bi'
 import SectionHeader from './SectionHeader.js'
 import Notification from './Notification.js'
 import axios from 'axios'
@@ -73,20 +73,11 @@ const NotificationSection = () => {
 		const fetchData = async () => {
 			try {
 				const { data } = await axios.get(`/api/users/${userId}/notifications`)
-				const notifications = [
-					{
-						label: "Today",
-						contents: [],
-					},
-					{
-						label: "Yesterday",
-						contents: [],
-					},
-				]
+				const notifications = []
 				const currentDate = new Date()
 				const currentDay = Math.floor(currentDate.getTime() / (1000 * 3600 * 24))
 
-				let index = 1
+				let index = 0
 				let prevDay = currentDay
 
 				data.notifications.forEach((item) => {
@@ -94,11 +85,19 @@ const NotificationSection = () => {
 					const notifDay = Math.floor(itemDate.getTime() / (1000 * 3600 * 24))
 					const label = `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}`
 
-					if (notifDay === currentDay) {
-						notifications[0].contents.push(item)
+					if (notifDay === currentDay && notifications.length === 0) {
+						notifications.push({
+							label: "Today",
+							contents: [item]
+						})
 					}
-					else if (notifDay === currentDay - 1) {
-						notifications[1].contents.push(item)
+					else if (notifDay === currentDay - 1 && notifications.length === 1) {
+						notifications.push({
+							label: "Yesterday",
+							contents: [item]
+						})
+						prevDay = notifDay
+						index = index + 1
 					}
 					else if (prevDay !== notifDay){
 						notifications.push(
@@ -128,31 +127,37 @@ const NotificationSection = () => {
 			<SectionHeader title="Notification" icon={BiBell} />
 			{
 				isLoading ? 
-						<Flex justify="center" pt="8" >
-							<Spinner
-							  thickness="6px"
-							  speed="0.65s"
-							  emptyColor="gray.200"
-							  color="primary.600"
-							  size="xl"
-							/>
-						</Flex>
-					:
-						<Box mx="4" rounded="lg" bg="white" shadow="sm" pb="2">
-							{
-								notifications.map((notification) => {
-									return(<React.Fragment>
-										<Text ml="6" fontSize="sm" fontWeight="semibold" pt="4" pb="2" color="gray.800">{notification.label}</Text>
-										<Divider />
-										{
-											notification.contents.map((notif) => {
-												return(<Notification notif={notif} seenNotif={seenNotif} />)
-											})
-										}
-									</React.Fragment>)
-								})
-							}
-						</Box>
+					<Flex justify="center" pt="8" >
+						<Spinner
+						  thickness="6px"
+						  speed="0.65s"
+						  emptyColor="gray.200"
+						  color="primary.600"
+						  size="xl"
+						/>
+					</Flex>
+				: notifications.length === 0 ? 
+					<Flex align="center" py="8" flexDirection="column">
+            <Box as={BiBellOff} size="20" />
+            <Text fontWeight="bold" fontSize="lg">No notifications yet</Text>
+            <Text>Stay tuned! Notifications about your activity will show up here.</Text>
+          </Flex>
+        :
+					<Box mx="4" rounded="lg" bg="white" shadow="sm" pb="2">
+						{
+							notifications.map((notification) => {
+								return(<React.Fragment>
+									<Text ml="6" fontSize="sm" fontWeight="semibold" pt="4" pb="2" color="gray.800">{notification.label}</Text>
+									<Divider />
+									{
+										notification.contents.map((notif) => {
+											return(<Notification key={notif._id} notif={notif} seenNotif={seenNotif} />)
+										})
+									}
+								</React.Fragment>)
+							})
+						}
+					</Box>
 			}
 		</React.Fragment>
 	)

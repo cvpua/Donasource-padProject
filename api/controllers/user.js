@@ -160,10 +160,11 @@ exports.editUser = (req,res) => {
     User.updateOne({_id : req.params.userId},{$set : toUpdate})
     .exec()
     .then(response => {
-
-            res.json({message : "User updated!"})
-       
-          
+        User.findById(req.params.userId)
+        .exec()
+        .then(user =>  {
+            res.json({message : "User updated!", user: user})
+        })
     })
     .catch(err => {
         res.json({message: "User not updated", err})

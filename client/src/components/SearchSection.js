@@ -1,7 +1,7 @@
 import React, {useContext, useState, useEffect} from 'react'
 import { BiSearchAlt } from 'react-icons/bi'
 import { Stack, Spinner, Flex, Box, Text } from '@chakra-ui/core'
-import {BiMeh} from 'react-icons/bi'
+import {BiDizzy} from 'react-icons/bi'
 import SectionHeader from './SectionHeader.js'
 import Post from './Post.js'
 import { PostContext } from './PostProvider.js'
@@ -36,8 +36,9 @@ const SearchSection = () => {
 					</Flex>
 				: filteredPosts.length === 0 ?
 					<Flex align="center" py="8" flexDirection="column">
-            <Box as={BiMeh} size="20" />
-            <Text>Oooops! Your feed is empty. Make a post now!</Text>
+            <Box as={BiDizzy} size="20" />
+            <Text fontWeight="bold" fontSize="lg">No results found.</Text>
+            <Text>We cannot find the post you are looking for. Try searching with another term.</Text>
           </Flex>
 				:	<Stack mb={{base: "16", md: "4"}} px={{base: "0", sm: "4"}} >
 		        {

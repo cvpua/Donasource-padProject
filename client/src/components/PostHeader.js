@@ -19,9 +19,9 @@ const PostHeader = (props) => {
   const deadline = new Date(mainDeadline)
 	const timeRemaining = deadline.getTime() - currentDate.getTime() 
 
-  const daysRemaining = Math.floor(timeRemaining / (1000 * 3600 * 24))
-  const hoursRemaining = Math.floor(timeRemaining / (1000 * 3600))
-  const minsRemaining = Math.floor(timeRemaining / (1000 * 60))
+  const daysRemaining = Math.ceil(timeRemaining / (1000 * 3600 * 24))
+  const hoursRemaining = Math.ceil(timeRemaining / (1000 * 3600))
+  const minsRemaining = Math.ceil(timeRemaining / (1000 * 60))
 
 	return (
 		<Flex align="center" mb="2">
