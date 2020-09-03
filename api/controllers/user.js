@@ -259,8 +259,17 @@ exports.changePassword = (req,res) => {
 
 exports.getAvails = (req,res) => {
     User.findById(req.params.userId)
-    .populate('avails')
-    .select('avatar name username avails')
+    .select('username avatar name avails')
+    .populate({path: 'avails',
+        populate : {path: 'user',
+        select : 'username name avatar'
+        }
+    })
+    .populate({path: 'avails',
+        populate : {path: 'post',
+        select : 'title items'
+        }
+    })
     .exec()
     .then(user => {
         res.json(user)
