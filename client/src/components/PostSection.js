@@ -62,7 +62,7 @@ const PostSection = ({match}) => {
 
 	return (
 		<div>
-			<SectionHeader title="Post" icon={BiNote} />
+			<SectionHeader title="Post" icon={BiNote} hasBackButton={true} />
 			{/* Post */}
 			<Box px="5" mb={{base: "20", md: "2"}} >
 			{
