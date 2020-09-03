@@ -6,12 +6,11 @@ const avail = new Schema({
     user : {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     post : {type: mongoose.Schema.Types.ObjectId, ref: 'Post'},
     reason : {type : String , required : true},
-    title : {type : String , required : true},
     items : [{
-        name : {type : String, required : true},
-        amount : {type : Number, required : true},
+        itemId : {type: mongoose.Schema.Types.ObjectId, ref: 'Item'},
+        amountRequested : {type : Number, required : true},
     }],
-    status : {type : String, required : true},
+    status : {type : String, default : "PENDING"},
     date : {type : Date, default : Date.now()}
     
 })

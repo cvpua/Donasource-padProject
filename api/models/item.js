@@ -8,7 +8,7 @@ const item = new Schema({
     amount : {type: Number,required : true},
     total : {type: Number, required : true},
     donor : [{type: mongoose.Schema.Types.ObjectId, ref: 'Donor'}],
-    donee :[String]
+    donee :[{type: mongoose.Schema.Types.ObjectId, ref: 'Donee'}]
     
 })
 

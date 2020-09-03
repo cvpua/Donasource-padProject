@@ -10,6 +10,8 @@ const Notification = require('../models/notification');
 const Post = require('../models/post');
 const { response } = require("express");
 const notification = require("../models/notification");
+const Avail = require("../models/avail");
+const Donee = require("../models/donee");
 
 
 const storage = multer.diskStorage({
@@ -37,7 +39,7 @@ const upload = multer({
     },
     fileFilter
 
-}).single('images');
+}).single('avatar');
 
 
 
@@ -71,6 +73,11 @@ exports.getUser = (req,res) =>{
             }
         }
     })
+    .populate({
+        path: 'posts',
+        populate: {
+            path: 'images'
+        }})
     .exec()
     .then( user => {
         if (!user){
@@ -112,8 +119,6 @@ exports.getLikedPosts = (req,res) => {
     })
     
 }
-
-
 
 exports.getAllNotifications = (req,res) => {
 
@@ -267,4 +272,24 @@ exports.getAvails = (req,res) => {
 
 exports.respondToAvails = (req,res) => {
     
+    if(req.body.response === "ACCEPT"){
+        Avail.findById(req.params.availId)
+        .populate({path: 'post',
+            populate : { path : 'items',
+            }
+        })
+        .populate({path: 'user'})
+        .exec()
+        .then(avail => {
+            
+            avail.items.map(item => {
+                const donee = new Donee({
+                    _id : mongoose.Types.ObjectId(),
+                    user : avail.user,
+                    reason : avail.reason,
+                    amountRequested : item.amountRequested
+                })
+            })
+        })
+    }
 }

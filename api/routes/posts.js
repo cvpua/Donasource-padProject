@@ -11,6 +11,8 @@ router.get('/api/posts',PostController.getAllPosts)
 // get a post
 router.get('/api/posts/:postId',PostController.getPost)
 
+// get images
+router.get('/api/posts/images',PostController.getImages)
 
 //make a post
 router.post('/api/posts',checkAuth,PostController.makePost);

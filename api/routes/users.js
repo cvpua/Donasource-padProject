@@ -36,5 +36,7 @@ router.patch('/api/users/:userId/changePassword',UserController.changePassword)
 
 router.get('/api/users/:userId/avails',UserController.getAvails)
 
+//respond to request
+router.put('/api/users/:userId/avails/:availId',UserController.respondToAvails);
 
 module.exports = router;

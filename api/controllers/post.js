@@ -60,6 +60,7 @@ exports.getAllPosts = (req,res) => {
             }
         }
     })
+    .populate('images')
     .exec()
     .then(posts => {
         res.status(200).json({
@@ -101,11 +102,17 @@ exports.getPost = (req,res) => {
     })
 }
 
+
+exports.getImages = async (req,res) => {
+    
+    // const data = await cloudinary.search
+}
+
 exports.makePost =  (req,res) => {
     fs.ensureDirSync('./uploads');
     upload(req,res,function(err){
         if(err){
-            console.log(err)
+           
             res.status(415).json({
                 message:"Error in uploading images in the uploads folder (only 3 images are allowed per post)",
                 response: err
@@ -115,108 +122,115 @@ exports.makePost =  (req,res) => {
             User.findById(req.body.userId)
             .exec()
             .then(user => {
-            req.body.items = JSON.parse(req.body.items)
-            
-            let imageArray = null;
-            
-            let items = null;    
-            
-            if(req.body.items && req.body.items.length > 0){
-                items = req.body.items.map(item =>{
-                    
-                    const newItem = new Item({
-                        _id : new mongoose.Types.ObjectId(),
-                        name : item.name,
-                        amount : item.amount,
-                        total : item.total,
-                        donor : [],
-                        donee : []
+                req.body.items = JSON.parse(req.body.items)
+                
+                let imageArray = null;
+                
+                let items = null;    
+                
+                if(req.body.items && req.body.items.length > 0){
+                    items = req.body.items.map(item =>{
+                        
+                        const newItem = new Item({
+                            _id : new mongoose.Types.ObjectId(),
+                            name : item.name,
+                            amount : item.amount,
+                            total : item.total,
+                            donor : [],
+                            donee : []
+                        });
+                        newItem.save()
+                        .then(response => {
+                            console.log("Item saved!")
+                        })
+                        return newItem;
                     });
-                    newItem.save()
-                    .then(response => {
-                        console.log("Item saved!")
-                    })
-                    return newItem;
-                });
+                }
+                
+                if(req.files && req.files.length >= 1){
+                    imageArray = req.files.map(file => {
+                        const image = new Image ({
+                            _id: new mongoose.Types.ObjectId(),
+                            imageName: file.filename,
+                            imagePath : file.path
+                        })
+                        return image;
+                    })                
             }
-            
-            if(req.files && req.files.length >= 1){
-                imageArray = req.files.map(file => {
-                    const image = new Image ({
-                        _id: new mongoose.Types.ObjectId(),
-                        imageName: file.filename,
-                        imagePath : file.path
-                    })
-                    return image;
-                })                
-         }
-         fs.rmdir('./uploads', { recursive: true }, (err) => {
-            if (err) {
-                throw err;
-            }
-            console.log(`./uploads deleted!`);
-        });
-        const post = new Post({
-            _id: new mongoose.Types.ObjectId(),
-            user: req.body.userId,
-            title : req.body.title,
-            type : req.body.type,
-            status : req.body.status,
-            description : req.body.description,
-            items : items,
-            location : req.body.location,
-            tags : req.body.tags,
-            datePosted : Date.now(),
-            deadline: req.body.deadline,
-            images : imageArray,
-            comments : []
-        })   
+            fs.rmdir('./uploads', { recursive: true }, (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log(`./uploads deleted!`);
+            });
+            const post = new Post({
+                _id: new mongoose.Types.ObjectId(),
+                user: req.body.userId,
+                title : req.body.title,
+                type : req.body.type,
+                status : req.body.status,
+                description : req.body.description,
+                items : items,
+                location : req.body.location,
+                tags : req.body.tags,
+                datePosted : Date.now(),
+                deadline: req.body.deadline,
+                images : imageArray,
+                comments : []
+            })   
 
-        if(imageArray){
-            imageArray.map(async image =>{
-                try{
-                    const path = image.imagePath;
-                    const uploadedResponse = await cloudinary.uploader.upload(path);
-                    image.url = uploadedResponse.url;
-                    image.publicId = uploadedResponse.public_id;
-                    image.save()
-                    .then(console.log("Image saved!"))
-                } catch(err){
-                        console.log(err)
-                } 
-            })
-        } 
-        user.posts.push(post);
-        if(post.type === "request"){
-            user.requestPostCount = user.requestPostCount + 1;
-        }else{
-            user.donationPostCount = user.donationPostCount + 1;
-        }
-        user.postCount = user.postCount + 1;
-        user.save()
-        .then(
-            post.save()
-            .then(
-                res.status(200).json({
-                    message:"Post created!",
-                    post,
-                    user: {
-                        name: user.name,
-                        avatar: user.avatar,
-                        username: user.username
-                    }
+            if(imageArray){
+                imageArray.map(async image =>{
+                    try{
+                        const title = post.title.replace(/\s/g, '');
+                        let dir = 'posts/'+post.user+'/'+title+post._id+'/';
+                        const path = image.imagePath;
+                        const uploadedResponse = await cloudinary.uploader.upload(path,
+                            {
+                            folder : dir,
+                            public_id : image.imageName
+                            }, 
+                            function(error,result){ console.log("Images uploaded to folder")});
+                        image.url = uploadedResponse.url;
+                        image.publicId = uploadedResponse.public_id;
+                        image.save()
+                        .then(console.log("Image saved!"))
+                    } catch(err){
+                            console.log(err)
+                    } 
                 })
-            )
-            .catch(err => {
-                console.log(err)
-                res.json(err)
+            } 
+            user.posts.push(post);
+            if(post.type === "request"){
+                user.requestPostCount = user.requestPostCount + 1;
+            }else{
+                user.donationPostCount = user.donationPostCount + 1;
+            }
+                user.postCount = user.postCount + 1;
+                user.save()
+                .then(
+                    post.save()
+                    .then(
+                        res.status(200).json({
+                            message:"Post created!",
+                            post,
+                            user: {
+                                name: user.name,
+                                avatar: user.avatar,
+                                username: user.username
+                            }
+                        })
+                    )
+                    .catch(err => {
+                        console.log(err)
+                        res.json(err)
+                    })
+                )
+                .catch(err => {
+                    console.log(err)
+                    res.json(err)
+                }) 
             })
-        )
-        .catch(err => {
-            console.log(err)
-            res.json(err)
-        }) 
-        })
         }
     });    
     
@@ -537,11 +551,9 @@ exports.request = (req,res) => {
                 user : user,
                 post : post,
                 reason : req.body.reason,
-                title : post.title,
                 items : req.body.items,
-                status : "PENDING"
+                
             })
-
             post.user.avails.push(avail)
             avail.save()
             .then(response =>{
