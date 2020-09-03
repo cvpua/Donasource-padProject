@@ -538,7 +538,7 @@ exports.request = (req,res) => {
     Post.findById(req.params.postId)
     .populate(
         {path: 'user',
-         select: 'avails'
+         select: 'avails notifications'
     })
     .exec()
     .then(post => {
@@ -554,9 +554,21 @@ exports.request = (req,res) => {
                 items : req.body.items,
                 
             })
+
+            const notification = new Notification({
+                _id: mongoose.Types.ObjectId(),
+                type : "request",
+                postId : req.params.postId,
+                user : req.body.userId,
+                title : post.title,
+                date : Date.now()
+            })
+
+
             post.user.avails.push(avail)
             avail.save()
             .then(response =>{
+                post.user.notifications.push(notification)
                 post.user.save()
                 .then(response => {
                     res.json({
