@@ -37,11 +37,10 @@ import AvailsSection from './components/AvailsSection.js'
   (Done) Change Password
   (Done) Change user info to userId
   (Done) Edit Profile
+  (Done) Add Back Button
   
   Add Error Toast Messages
-  Add Back Button
   Toast Message for every alert
-  
   
 */
 
@@ -138,11 +137,11 @@ const App = () => {
                     {/* Section */}
                     <Switch>
                       <Route exact path="/" component={Home} />
-                      <Route exact path="/profile" component={Profile} />
                       <Route path="/search" component={SearchSection} />
                       <Route path="/notification" component={NotificationSection} />
                       <Route path="/avails" component={AvailsSection} />
-                      <Route path="/profile/post/:id" component={PostSection} />
+                      <Route exact path="/:username" component={Profile} />
+                      <Route path="/:username/post/:id" component={PostSection} />
                     </Switch>
                   </Middle>
                   {/* End of Middle */}

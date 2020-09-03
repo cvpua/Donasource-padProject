@@ -78,28 +78,16 @@ const NotificationSection = () => {
 				const currentDay = Math.floor(currentDate.getTime() / (1000 * 3600 * 24))
 
 				let index = 0
-				let prevDay = currentDay
+				let prevDay = 0
 
 				data.notifications.forEach((item) => {
 					const itemDate = new Date(item.date)
 					const notifDay = Math.floor(itemDate.getTime() / (1000 * 3600 * 24))
-					const label = `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}`
+					const isToday = notifDay === currentDay ? true : false
+					const isYesterday = notifDay === currentDay - 1 ? true : false
+					const label = isToday ? "Today" : isYesterday ? "Yesterday" : `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}`
 
-					if (notifDay === currentDay && notifications.length === 0) {
-						notifications.push({
-							label: "Today",
-							contents: [item]
-						})
-					}
-					else if (notifDay === currentDay - 1 && notifications.length === 1) {
-						notifications.push({
-							label: "Yesterday",
-							contents: [item]
-						})
-						prevDay = notifDay
-						index = index + 1
-					}
-					else if (prevDay !== notifDay){
+					if (prevDay !== notifDay){
 						notifications.push(
 							{
 								label: label,
@@ -110,7 +98,7 @@ const NotificationSection = () => {
 						prevDay = notifDay
 					}
 					else {
-						notifications[index].contents.push(item)
+						notifications[index - 1].contents.push(item)
 					}
 				})
 				setNotifications(notifications)

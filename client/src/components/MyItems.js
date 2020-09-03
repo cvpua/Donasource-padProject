@@ -5,7 +5,10 @@ import {
 	Input, 
 	FormControl, 
 	FormLabel, 
-	FormErrorMessage 
+	FormErrorMessage,
+	Button,
+	Box,
+	Flex,
 } from '@chakra-ui/core'
 
 const MyItems = (props) => {
@@ -23,19 +26,12 @@ const MyItems = (props) => {
 						<div>
 							{
 								items.map((item,index) => (
-									<div key={index}>
-									{
-										index > 0 && (
-											<button type='button' onClick={() => remove(index)} >
-											-
-											</button>
-										)
-									}
+									<Box key={index} bg="cyan.100" p="4" rounded="lg" mb="2">
 									{/* Item Name Field */}
 									<Field name={`${name}[${index}].name`}>
 										{
 											({field,form}) => (
-												<FormControl ml="2" isInvalid={
+												<FormControl isInvalid={
 														form.errors[name] && 
 														form.touched[name] && 
 														form.errors[name][index] &&
@@ -59,7 +55,7 @@ const MyItems = (props) => {
 									<Field name={`${name}[${index}].total`}>
 										{
 											({field,form}) => (
-												<FormControl ml="2" isInvalid={
+												<FormControl isInvalid={
 														form.errors[name] && 
 														form.touched[name] && 
 														form.errors[name][index] &&
@@ -85,10 +81,17 @@ const MyItems = (props) => {
 											)
 										}
 									</Field>
-									</div>
+									{
+										index > 0 && (
+											<Flex justify="flex-end" mt="2">
+												<Button size="sm" variantColor="red" leftIcon="minus" onClick={() => remove(index)}>Remove Item</Button>
+											</Flex>
+										)
+									}
+									</Box>
 								))
 							}
-							<button type='button' onClick={() => push({name: '', total: '', amount: 0})} >+</button>
+							<Button size="sm" my="2" mr="2" leftIcon="add" onClick={() => push({name: '', total: '', amount: 0})}>Add Item</Button>
 						</div>
 					)
 				}

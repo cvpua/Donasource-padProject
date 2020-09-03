@@ -13,6 +13,7 @@ import {
   Image,
   Stack,
   Grid,
+  Badge,
 } from '@chakra-ui/core'
 import { BiDonateHeart, BiCommentDots, BiMessageAltEdit} from 'react-icons/bi'
 import LikeButton from './LikeButton.js'
@@ -37,6 +38,7 @@ const Post = (props) => {
     likers,
     status: mainStatus,
     images,
+    datePosted,
 	} = data
   
   const{ _id: userId, name, username, avatar } = user;
@@ -57,6 +59,14 @@ const Post = (props) => {
 
   const [items, setItems] = useState([])
   const [status, setStatus] = useState('')
+
+  const currentDate = new Date()
+  const dateDeadline = new Date(deadline)
+  const timeRemaining = dateDeadline.getTime() - currentDate.getTime() 
+
+  const daysRemaining = Math.ceil(timeRemaining / (1000 * 3600 * 24))
+  const hoursRemaining = Math.ceil(timeRemaining / (1000 * 3600))
+  const minsRemaining = Math.ceil(timeRemaining / (1000 * 60))
 
   const donate = (newItems) => {
     setItems(newItems)
@@ -89,20 +99,42 @@ const Post = (props) => {
       				author={author} 
       				deadline={deadline}
               status={status}
+              username={username}
+              datePosted={datePosted}
             />
           	{/* Post Content */}
             <Box my="4">
-              <Text>{description}</Text>
+              {/* Title */}
+              <Text fontWeight="extrabold" fontFamily="heading" >{title}</Text>
+              {/* Deadline */}
+              <Box>
+                <Badge 
+                  variantColor={
+                    status === "PENDING" ? "pink"
+                    : status === "UNFULFILLED" ? "yellow"
+                    : "green"
+                  }
+                >
+                  {
+                    status !== "PENDING" ? status
+                    :hoursRemaining <= 1 ? `${minsRemaining} mins left`
+                    : daysRemaining <= 1 ? `${hoursRemaining} hrs left`
+                    : `${daysRemaining} days left`
+                  }
+                </Badge>
+              </Box>
+              <Text mt="4" fontSize="sm">{description}</Text>
             </Box>
           	{/* Item List */}
             <ItemList items={items} type={type}>
+            {/* Images */}
               {
                 images && isPostSection ?
                   (images.map((image) => (
-                    <Image src={image.image.url} w="full" h="64" mt="2" objectFit="cover" /> 
+                    <Image src={image.url} w="full" h="64" mt="2" objectFit="cover" /> 
                   )))
                 : images && images.length !== 0 ?
-                  <Image src={images[0].image.url} w="full" h="64" mt="2" objectFit="cover" /> 
+                  <Image src={images[0].url} w="full" h="64" mt="2" objectFit="cover" /> 
                 : ""
               }
             </ItemList>

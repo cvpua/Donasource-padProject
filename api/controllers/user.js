@@ -53,7 +53,7 @@ exports.getAllUsers = (req,res) => {
 }
 
 exports.getUser = (req,res) =>{
-    User.findOne({_id : req.params.userId})
+    User.findOne({username : req.params.username})
     .populate({
         path: 'posts',
         populate: {

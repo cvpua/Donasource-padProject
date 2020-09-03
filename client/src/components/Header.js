@@ -64,9 +64,11 @@ const Header = (props) => {
         color="cyan.50"
         margin="auto"
       >
-        { title }
+        <Link to="/">
+          { title }
+        </Link>
       </Text>
-
+    
       {/* Account */}
        <Flex alignItems="center" justify="flex-end" mr="4">
           <Menu>

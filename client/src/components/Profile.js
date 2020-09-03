@@ -16,8 +16,7 @@ import Feed from './Feed.js'
 import EditProfileFormContainer from './EditProfileFormContainer.js'
 import { UserContext } from '../App.js'
 import axios from 'axios'
-
-// Dapat pala userid na lang yung nilalagay sa Comment Form at Post Form
+import {useParams} from 'react-router-dom'
 
 const INIT_PROFILE = {
 	username: '',
@@ -40,6 +39,8 @@ const Profile = () => {
 	const [USER] = useContext(UserContext)
 	const { user } = USER
 	const { _id: userId } = user
+
+	const { username: username } = useParams()
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -70,7 +71,7 @@ const Profile = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const { data } = await axios.get(`/api/users/${userId}`)
+				const { data } = await axios.get(`/api/users/${username}`)
 				setProfile(prevState => ({
 					...prevState,
 					...data.user,
