@@ -1,46 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
-import {Box, Flex, Avatar, Text, Divider, Button, Collapse, Spinner} from '@chakra-ui/core'
+import {Box, Flex, Text, Divider, Spinner} from '@chakra-ui/core'
 import SectionHeader from './SectionHeader.js'
 import {BiMessageAltDetail, BiMessageAltX} from 'react-icons/bi'
 import Avail from './Avail.js'
 import axios from 'axios'
 import {UserContext} from '../App.js'
-
-const INIT_AVAILS =  [
-	{
-		name: {
-			firstName: "Marco",
-			lastName: "Mirandilla"
-		},
-		postId: "12345",
-		reason: "Gusto ko lang po ng ayuda.",
-		title: "Penge Ayuda",
-		date: new Date(),
-		avatar: null,
-	},
-	{
-		name: {
-			firstName: "Marco",
-			lastName: "Mirandilla"
-		},
-		postId: "12345",
-		reason: "Gusto ko lang po ng ayuda.",
-		title: "Penge Ayuda",
-		date: new Date(),
-		avatar: null,
-	},
-	{
-		name: {
-			firstName: "Marco",
-			lastName: "Mirandilla"
-		},
-		postId: "12345",
-		reason: "Gusto ko lang po ng ayuda.",
-		title: "Penge Ayuda",
-		date: new Date(),
-		avatar: null,
-	},
-]
+import Toast from './Toast.js'
 
 const AvailsSection = () => {
 	const [USER] = useContext(UserContext)
@@ -49,26 +14,35 @@ const AvailsSection = () => {
 
 	const [avails, setAvails] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
+	const [message, setMessage] = useState()
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try{
 				const { data } = await axios.get(`/api/users/${userId}/avails`)
+				console.log('Avails: ', data.avails)
 				setAvails(prevState => ([
 					...prevState,
-					data.avail,
+					...data.avails
 				]))
 				setIsLoading(false)
 			}catch(error){
-				alert(error.message)
+				setMessage({
+	        title: "Error",
+	        description: error.message,
+	        status: "error",
+	        duration: 2000,
+	        isClosable: true,
+	      })
 				setIsLoading(false)
 			}
 		}
 		fetchData()
-	}, [])
+	}, [userId])
 
 	return (
 		<React.Fragment>
+			<Toast message={message} />
 			<SectionHeader title="Avails" icon={BiMessageAltDetail} />
 			{
 				isLoading ? 
@@ -91,7 +65,9 @@ const AvailsSection = () => {
 					<Box mx="4" rounded="lg" bg="white" shadow="sm" pb="2">
 						<Divider />
 							{
+
 								avails.map((avail) => {
+									console.log('Avails length: ', avails.length)
 									return (<Avail avail={avail} />)
 								})
 							}

@@ -1,10 +1,11 @@
 import React, {useState, useEffect, useContext} from 'react'
-import { Box, Flex, Avatar, Text, Divider, Badge, Spinner } from '@chakra-ui/core'
+import { Box, Flex, Text, Divider, Spinner } from '@chakra-ui/core'
 import { BiBell, BiBellOff } from 'react-icons/bi'
 import SectionHeader from './SectionHeader.js'
 import Notification from './Notification.js'
 import axios from 'axios'
 import {UserContext} from '../App.js'
+import Toast from './Toast.js'
 
 // Like Notif: User liked your post
 // Comment Notif: User commented on your post
@@ -16,41 +17,6 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
-const INIT_NOTIF = [
-	{
-		type: "like",
-		name: {
-			firstName: "Marco",
-			lastName: "Mirandilla"
-		},
-		postId: "12345",
-		date: new Date(),
-		avatar: null,
-		title: "Penge Ayuda",
-	},
-	{
-		type: "comment",
-		name: {
-			firstName: "Marco",
-			lastName: "Mirandilla"
-		},
-		postId: "12345",
-		date: new Date(),
-		avatar: null,
-		title: "Penge Ayuda",
-	},
-	{
-		type: "reject",
-		name: {
-			firstName: "Marco",
-			lastName: "Mirandilla"
-		},
-		postId: "12345",
-		date: new Date(),
-		avatar: null,
-		title: "Penge Ayuda",
-	},
-]
 
 const NotificationSection = () => {
 	const [USER] = useContext(UserContext)
@@ -60,12 +26,19 @@ const NotificationSection = () => {
 	const [notifications, setNotifications] = useState([])
 
 	const [isLoading, setIsLoading] = useState(true)
+	const [message, setMessage] = useState()
 
 	const seenNotif = async (notifId) => {
 		try{
-			const { data } = await axios.patch(`/api/users/${userId}/notifications/${notifId}`)
+			const { data } = await axios.get(`/api/users/${userId}/notifications/${notifId}`)
 		}catch(error){
-			alert(error.message)
+			setMessage({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      })
 		}
 	}
 
@@ -108,10 +81,11 @@ const NotificationSection = () => {
 			}
 		}
 		fetchData()
-	}, [])
+	}, [userId])
 
 	return (
 		<React.Fragment>
+			<Toast message={message} />
 			<SectionHeader title="Notification" icon={BiBell} />
 			{
 				isLoading ? 

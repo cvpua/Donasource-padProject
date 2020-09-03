@@ -131,10 +131,12 @@ exports.makePost =  (req,res) => {
                 if(req.body.items && req.body.items.length > 0){
                     items = req.body.items.map(item =>{
                         
+                        const amount = req.body.type === "donation" ? item.total : item.amount
+
                         const newItem = new Item({
                             _id : new mongoose.Types.ObjectId(),
                             name : item.name,
-                            amount : item.amount,
+                            amount : amount,
                             total : item.total,
                             donor : [],
                             donee : []

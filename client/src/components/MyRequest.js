@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field } from 'formik'
-import { NumberInput,  NumberInputField, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/core'
+import { NumberInput, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/core'
 
 const MyRequest = (props) => {
 	const { label, name, index, amount, ...rest } = props
@@ -33,7 +33,7 @@ const MyRequest = (props) => {
 							{...rest} 
 							{...field} 
 							onChange={ (val) => {
-								form.setFieldValue(`${name}[${index}].amount`, val + amount)
+								form.setFieldValue(`${name}[${index}].amount`, amount - val)
 								form.setFieldValue(`${name}[${index}].amountRequested`, val)
 								form.setFieldValue('totalRequest', form.values.totalRequest + val)
 							}} 
@@ -43,7 +43,6 @@ const MyRequest = (props) => {
 								form.errors[name] && 
 								form.errors[name][index] &&
 								((
-									form.errors[name][index].donor &&
 									form.errors[name][index].amountRequested
 								) ||
 								form.errors[name][index].amount)

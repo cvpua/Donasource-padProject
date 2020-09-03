@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Flex, IconButton, Box, Text, PseudoBox } from '@chakra-ui/core'
-import { BiHomeSmile, BiBell, BiFace, BiMessageAltDetail, BiPlus } from 'react-icons/bi'
+import { Flex, Box, Text } from '@chakra-ui/core'
+import { BiHomeSmile, BiBell, BiFace, BiMessageAltDetail } from 'react-icons/bi'
 import { UserContext } from '../App.js'
 
 const Nav = (props) => {

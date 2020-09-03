@@ -9,10 +9,7 @@ import {
   Text, 
   PseudoBox, 
   useDisclosure, 
-  Button,
   Image,
-  Stack,
-  Grid,
   Badge,
 } from '@chakra-ui/core'
 import { BiDonateHeart, BiCommentDots, BiMessageAltEdit} from 'react-icons/bi'
@@ -53,9 +50,6 @@ const Post = (props) => {
   // See this docs for more information: https://chakra-ui.com/usedisclosure
   const { isOpen: isOpenComment, onOpen: onOpenComment, onClose: onCloseComment } = useDisclosure()
   const { isOpen, onOpen, onClose } = useDisclosure()
-
-  // Form modal will close if the form is successfully submitted
-  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [items, setItems] = useState([])
   const [status, setStatus] = useState('')

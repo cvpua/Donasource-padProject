@@ -1,10 +1,11 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
 import { FormErrorMessage, FormControl } from '@chakra-ui/core'
 import { UserContext } from '../App.js'
 import axios from 'axios'
+import Toast from './Toast.js'
 
 const DonateFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, items, donate, postId } = props
@@ -13,6 +14,8 @@ const DonateFormContainer = (props) => {
 	const { user } = USER
 
 	const { _id: userId } = user
+
+	const [message, setMessage] = useState()
 
 	const initialValues = {
 		items: 
@@ -56,13 +59,21 @@ const DonateFormContainer = (props) => {
 			handleIsSubmitting(false)
 			onClose()
 		}catch(error){
-			alert(error.message)
+			setMessage({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      })
 			handleIsSubmitting(false)
 			onClose()
 		}
 	}
 
 	return (
+		<React.Fragment>
+		<Toast message={message} />
 		<Formik
 			initialValues={initialValues}
 			validationSchema={validationSchema}
@@ -100,6 +111,7 @@ const DonateFormContainer = (props) => {
 				}
 			}
 		</Formik>
+		</React.Fragment>
 	)
 }
 

@@ -1,6 +1,6 @@
 import React,{ useContext, useState } from 'react'
 import { PostContext } from './PostProvider.js'
-import { Input, Button, InputGroup, InputLeftElement, Icon , Box, RadioButtonGroup, Text} from '@chakra-ui/core'
+import { Input, Button, InputGroup, InputLeftElement, Icon , Box, RadioButtonGroup } from '@chakra-ui/core'
 import { useHistory } from 'react-router-dom'
 
 const Search = () => {
@@ -34,13 +34,17 @@ const Search = () => {
                     let indicator = post.tags.map((item) => {
                         if (item.toLowerCase() === search.toLowerCase()){
                             return true;
+                        } else{
+                            return false
                         }
                     })
-                    if (indicator.includes(true) == true) {
+                    if (indicator.includes(true) === true) {
                         return true;
                     } else {
                         return false;
                     }
+                } else{
+                    return false
                 }
             }
         );

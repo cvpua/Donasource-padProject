@@ -1,15 +1,12 @@
 import React from 'react'
-import { Flex, Avatar, Text, Badge, Box } from '@chakra-ui/core'
+import { Flex, Avatar, Text } from '@chakra-ui/core'
 import { Link } from 'react-router-dom'
 
 const PostHeader = (props) => {
 	const { 
 		avatar, 
-		title,
     username,
 		author, 
-		deadline: mainDeadline,
-    status,
     datePosted
 	} = props
 // Compute for the the time remaining from the deadline
@@ -44,9 +41,9 @@ const PostHeader = (props) => {
         <Text fontSize="sm" color="gray.700">
 
           {
-            hours > 24 ? `${days}d ago`
-            : mins > 60 ? `${hours}hr ago`
-            : sec > 60 ? `${mins}min ago`
+            hours >= 24 ? `${days}d ago`
+            : mins >= 60 ? `${hours}hr ago`
+            : sec >= 60 ? `${mins}min ago`
             : `${sec} sec ago`
           }
         </Text>

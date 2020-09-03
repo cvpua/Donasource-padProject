@@ -13,7 +13,7 @@ const Notification = ({notif, seenNotif}) => {
 		seen,
 	} = notif
 
-	const { avatar, name } = user
+	const { avatar, name, username } = user
 
 	const fullName = name.firstName + " " + name.lastName
 	const currentDate = new Date()
@@ -44,7 +44,9 @@ const Notification = ({notif, seenNotif}) => {
 					rounded="lg"
 				>
 					{/* Avatar */}
-					<Avatar name="Bullet Pua" src={avatar} />
+					<Link to={`/${username}`}>
+						<Avatar name="Bullet Pua" src={avatar} />
+					</Link>
 					<Box ml="4">
 						{/* Response */}
 						<Text>
@@ -62,9 +64,9 @@ const Notification = ({notif, seenNotif}) => {
 						{/* time */}
 						<Text fontSize="sm" color="gray.700">
 							{
-								hours > 24 ? `${days}d ago`
-								: mins > 60 ? `${hours}hr ago`
-								: sec > 60 ? `${mins}min ago`
+								hours >= 24 ? `${days}d ago`
+								: mins >= 60 ? `${hours}hr ago`
+								: sec >= 60 ? `${mins}min ago`
 								: `${sec} sec ago`
 							}
 						</Text>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field } from 'formik'
-import { NumberInput,  NumberInputField, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/core'
+import { NumberInput, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/core'
 
 const MyNumeric = (props) => {
 	const { label, name, index, amount, ...rest } = props

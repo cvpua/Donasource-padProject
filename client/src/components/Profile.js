@@ -1,22 +1,20 @@
-import React,{ useContext, useState, useEffect } from 'react'
+import React,{ useState, useEffect } from 'react'
 import {	
 	Avatar, Text, Box, 
 	Flex, Stat, StatGroup, 
-	StatLabel, StatNumber, Menu, 
-	MenuItem, MenuButton, MenuList, 
+	StatLabel, StatNumber, 
 	IconButton, Spinner, useDisclosure,
 	Modal, ModalHeader, ModalBody, 
   ModalContent, ModalOverlay, ModalFooter, 
   ModalCloseButton, Button,
 } from '@chakra-ui/core'
 import SectionHeader from './SectionHeader.js'
-import { FaUserAlt, FaLocationArrow, FaSms, FaAt } from 'react-icons/fa'
 import {BiFace, BiEdit, BiCompass, BiEnvelope, BiPhone} from 'react-icons/bi'
 import Feed from './Feed.js'
 import EditProfileFormContainer from './EditProfileFormContainer.js'
-import { UserContext } from '../App.js'
 import axios from 'axios'
 import {useParams} from 'react-router-dom'
+import Toast from './Toast.js'
 
 const INIT_PROFILE = {
 	username: '',
@@ -36,16 +34,12 @@ const INIT_PROFILE = {
 
 
 const Profile = () => {
-	const [USER] = useContext(UserContext)
-	const { user } = USER
-	const { _id: userId } = user
-
-	const { username: username } = useParams()
+	const { username } = useParams()
 
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [isSubmitting, setIsSubmitting] = useState(false)
-
 	const [isLoading, setIsLoading] = useState(true)
+	const [message, setMessage] = useState()
 
 	const [profile, setProfile] = useState(INIT_PROFILE)
 
@@ -80,14 +74,21 @@ const Profile = () => {
 				setFeed(data.user.posts)
 				setIsLoading(false)
 			}catch(error){
-				alert(error.message)
+				setMessage({
+	        title: "Error",
+	        description: error.message,
+	        status: "error",
+	        duration: 2000,
+	        isClosable: true,
+	      })
 			}
  		}
  		fetchData()
-	}, [userId])
+	}, [username])
 
 	return (
 		<div>
+			<Toast message={message} />
 			<SectionHeader title="Profile" icon={BiFace} hasBackButton={true} />
 			{
 				isLoading ? 

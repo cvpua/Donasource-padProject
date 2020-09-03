@@ -1,8 +1,8 @@
 import React,{useState, useLayoutEffect} from 'react'
 import customTheme from './styles/theme'
-import { ThemeProvider,CSSReset,Flex, IconButton, Box } from '@chakra-ui/core'
-import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom'
-import { Header, Left, Nav, Logout, Middle, Home, Right } from './components'
+import { ThemeProvider,CSSReset,Flex } from '@chakra-ui/core'
+import { Route, Switch } from 'react-router-dom'
+import { Header, Left, Nav, Middle, Home, Right } from './components'
 import PostSection from './components/PostSection.js'
 import Profile from './components/Profile.js'
 import Search from './components/Search.js'
@@ -11,38 +11,8 @@ import SearchSection from './components/SearchSection.js'
 import axios from 'axios'
 import Toast from './components/Toast.js'
 import PostProvider from './components/PostProvider.js'
-import { BiHomeSmile, BiBell, BiFace, BiBox, BiPlus } from 'react-icons/bi'
 import NotificationSection from './components/NotificationSection.js'
 import AvailsSection from './components/AvailsSection.js'
-
-// To do: 
-// (Done) Add Avails Component
-// (Done) Add Notification Component
-
-/*
-  
-  (Done) Buttom Navigation for mobile
-  (Done) Spinner for Profile Section
-  (Done) Edit Profile Form
-  (Done) Add Image Feature
-  (Done) Add Empty Messages
-  (Done) Add design to Search
-  (Done) Add logout api
-  (Done) Add Deadline Featutre/Unfulfilled
-  (Done) Add  Search Section
-  (Done) Account Button
-  (Done) Prevent Search Section to render if there is no input
-  (Done) Fix logout
-  (Done) Don't send the complete user object in login
-  (Done) Change Password
-  (Done) Change user info to userId
-  (Done) Edit Profile
-  (Done) Add Back Button
-  
-  Add Error Toast Messages
-  Toast Message for every alert
-  
-*/
 
 // ThemeProvider - provides 'customTheme' to every component using context api
 // CSSReset - removes browser default styles
@@ -52,9 +22,9 @@ export const UserContext = React.createContext(null)
 
 
 const App = () => {
-  console.log('Theme: ', customTheme)
 
   const [user, setUser] = useState()
+
   // Toast Message
   const [message, setMessage] = useState()
 
@@ -67,13 +37,6 @@ const App = () => {
       }
       setUser(info)
       localStorage.setItem("user", JSON.stringify(info))
-      setMessage({
-        title: "Success",
-        description: data.message,
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-      })
     }catch(error){
       setMessage({
         title: "Error",
@@ -90,16 +53,16 @@ const App = () => {
       const { data } = await axios.post('/api/signup',user)
       setMessage({
         title: "Success",
-        description: data.message,
+        description: "You have successfully created your account.",
         status: "success",
         duration: 2000,
         isClosable: true,
       })
     }catch(error){
       setMessage({
-        title: "Success",
+        title: "Error",
         description: error.message,
-        status: "success",
+        status: "error",
         duration: 2000,
         isClosable: true,
       })

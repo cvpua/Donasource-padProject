@@ -6,6 +6,7 @@ import { BiNote } from 'react-icons/bi'
 import Post from './Post.js'
 import SectionHeader from './SectionHeader.js'
 import PostSkeleton from './PostSkeleton.js'
+import Toast from './Toast.js'
 
 const INIT_POST = {
 		avatar: null,
@@ -34,6 +35,8 @@ const PostSection = ({match}) => {
 	const [comments, setComments] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
 
+	const [message, setMessage] = useState()
+
 	const addComment = (comment) => {
 		console.log('Comment: ', comment)
     setComments((prevState) => ([
@@ -54,7 +57,13 @@ const PostSection = ({match}) => {
   			setComments(data.comments)
 				setIsLoading(false)
 	    }catch(error){
-	      alert(error)
+	      setMessage({
+	        title: "Error",
+	        description: error.message,
+	        status: "error",
+	        duration: 2000,
+	        isClosable: true,
+	      })
 	    }
   	}
   	fetchData()
@@ -62,6 +71,7 @@ const PostSection = ({match}) => {
 
 	return (
 		<div>
+			<Toast message={message} />
 			<SectionHeader title="Post" icon={BiNote} hasBackButton={true} />
 			{/* Post */}
 			<Box px="5" mb={{base: "20", md: "2"}} >

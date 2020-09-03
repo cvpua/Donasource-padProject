@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
+import Toast from './Toast.js'
 
 const EditProfileFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, profile, updateProfile } = props
@@ -19,6 +20,8 @@ const EditProfileFormContainer = (props) => {
 		contactNumber,
 		bio,
 	} = profile
+
+	const [message, setMessage] = useState()
 
 	const initialValues = {
 		username: username,
@@ -74,11 +77,19 @@ const EditProfileFormContainer = (props) => {
 			onClose()
 			history.push(`${username}`)
 		}catch(error){
-			alert(error.message)
+			setMessage({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      })
 		}
 	}
 
 	return (
+		<React.Fragment>
+		<Toast message={message} />
 		<Formik
 			initialValues={initialValues}
 			validationSchema={validationSchema}
@@ -101,6 +112,7 @@ const EditProfileFormContainer = (props) => {
 				}
 			}
 		</Formik>
+		</React.Fragment>
 	)
 }
 

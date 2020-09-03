@@ -1,11 +1,11 @@
 import React,{ useState, useEffect, useContext } from 'react'
-import { Box, Flex, Text } from '@chakra-ui/core'
+import { Box } from '@chakra-ui/core'
 import SectionHeader from './SectionHeader.js'
 import Feed from './Feed.js'
 import {BiHomeSmile} from 'react-icons/bi'
 import axios from 'axios'
 import { PostContext } from './PostProvider.js'
-
+import Toast from './Toast'
 
 const Home = () => {
 	const store = useContext(PostContext)
@@ -13,6 +13,7 @@ const Home = () => {
 	const [posts, setPosts] = post
 	// For better user experience; will set to false once the data fetching is done
 	const [isLoading, setIsLoading] = useState(true)
+	const [message, setMessage] = useState()
 
 	const createPost = (post) => {
 		setPosts((prevState) => ([
@@ -31,7 +32,13 @@ const Home = () => {
 	      setPosts(data.response)
 				setIsLoading(false)
 	    }catch(error){
-	      alert(error)
+	      setMessage({
+	        title: "Error",
+	        description: error.message,
+	        status: "error",
+	        duration: 2000,
+	        isClosable: true,
+	      })
 	    }
 	  }
 	  fetchData()
@@ -39,6 +46,7 @@ const Home = () => {
 
 	return (
 		<Box>
+			<Toast message={message} />
 			{/* Section Header */}
       <SectionHeader title="Home" icon={BiHomeSmile}/>
       {

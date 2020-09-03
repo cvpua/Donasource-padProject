@@ -2,7 +2,6 @@ import React,{ useState } from 'react'
 import { 
   Box,
 	Stack, 
-	Spinner, 
 	IconButton,
 	Button, 
   Flex,
@@ -14,7 +13,6 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton, 
-  Skeleton,
   Text,
 } from '@chakra-ui/core'
 import { BiGhost } from 'react-icons/bi'
