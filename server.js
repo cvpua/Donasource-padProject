@@ -40,5 +40,7 @@ const task = cron.schedule('59 23 * * *', () => {
 task.start()
 
 
-const port = process.env.PORT || 5000;
-app.listen(port,console.log(`Server started on port ${port}`));
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+	console.log(`Server started on port ${PORT}`)
+});
