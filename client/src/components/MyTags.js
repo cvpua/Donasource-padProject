@@ -1,6 +1,6 @@
 import React from 'react'
 import { Field, FieldArray } from 'formik'
-import { Input, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/core'
+import { Input, FormControl, FormLabel, FormErrorMessage, Flex, Button } from '@chakra-ui/core'
 
 const MyTags = (props) => {
 	const { label, name, ...rest } =props
@@ -18,18 +18,11 @@ const MyTags = (props) => {
 							{
 								tags.map((item,index) => (
 									<div key={index}>
-									{
-										index > 0 && (
-											<button type='button' onClick={() => remove(index)} >
-											-
-											</button>
-										)
-									}
 									{/* Item Name Field */}
 									<Field name={`${name}[${index}]`}>
 										{
 											({field,form}) => (
-												<FormControl ml="2" isInvalid={
+												<FormControl mt="2" ml="2" isInvalid={
 														form.errors[name] && 
 														form.touched[name] && 
 														form.errors[name][index] &&
@@ -45,10 +38,17 @@ const MyTags = (props) => {
 											)
 										}
 									</Field>
+									{
+										index > 0 && (
+											<Flex justify="flex-end" mt="2">
+												<Button size="sm" variantColor="red" leftIcon="minus" onClick={() => remove(index)}>Remove Tag</Button>
+											</Flex>
+										)
+									}
 									</div>
 								))
 							}
-							<button type='button' onClick={() => push('')} >+</button>
+							<Button size="sm" my="2" mr="2" leftIcon="add" onClick={() => push('')}>Add Tag</Button>
 						</div>
 					)
 				}

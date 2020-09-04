@@ -17,11 +17,11 @@ const SignupFormContainer = (props) => {
 	}
 
 	const validationSchema = Yup.object().shape({
-		username: Yup.string().required('Required'),
+		username: Yup.string().matches(/^\S*$/, "Invalid username").required('Required'),
 		firstName: Yup.string().required('Required'),
 		lastName: Yup.string().required('Required'),
 		email: Yup.string().email('Invalid email').required('Required'),
-		contactNumber: Yup.string().matches(/^(09|\+639)\d{9}$/, 'Enter valid phone number').required('Required'),
+		contactNumber: Yup.string().matches(/^(09|\+639)\d{9}$/, 'Enter a valid phone number').required('Required'),
 		password: Yup.string().required('Required'),
 		repassword: Yup.string().oneOf([Yup.ref('password')],'Password does not match').required('Required')
 	})

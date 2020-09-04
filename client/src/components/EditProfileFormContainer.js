@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
 import axios from 'axios'
+import { useHistory } from 'react-router-dom'
+import Toast from './Toast.js'
 
 const EditProfileFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, profile, updateProfile } = props
+
+	let history = useHistory()
+
 	const {
 		_id: userId,
 		username,
@@ -15,6 +20,8 @@ const EditProfileFormContainer = (props) => {
 		contactNumber,
 		bio,
 	} = profile
+
+	const [message, setMessage] = useState()
 
 	const initialValues = {
 		username: username,
@@ -29,7 +36,7 @@ const EditProfileFormContainer = (props) => {
 	}
 
 	const validationSchema = Yup.object().shape({
-		username: Yup.string().required('Required'),
+		username: Yup.string().matches(/^\S*$/, "Invalid username").required('Required'),
 		name: Yup.object().shape({
 			firstName: Yup.string().required('Required'),
 			lastName: Yup.string().required('Required'),
@@ -44,15 +51,45 @@ const EditProfileFormContainer = (props) => {
 		handleIsSubmitting(true)
 		try{
 			const { data } = await axios.patch(`/api/user/${userId}/editUser`, values)
-			updateProfile(data.user)
+			const { user: newUser } = data
+			updateProfile(newUser)
+
+			const { name, username, email, photo } = newUser
+			const USER = JSON.parse(localStorage.getItem("user"))
+			const { user: oldUser } = USER
+			
+			const user = {
+				...oldUser,
+				name,
+				username,
+				email,
+				photo
+			}
+
+			const NEW_USER = {
+				...USER,
+				user
+			}
+
+			localStorage.setItem("user", JSON.stringify(NEW_USER))
+
 			handleIsSubmitting(false)
 			onClose()
+			history.push(`${username}`)
 		}catch(error){
-			alert(error.message)
+			setMessage({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      })
 		}
 	}
 
 	return (
+		<React.Fragment>
+		<Toast message={message} />
 		<Formik
 			initialValues={initialValues}
 			validationSchema={validationSchema}
@@ -75,6 +112,7 @@ const EditProfileFormContainer = (props) => {
 				}
 			}
 		</Formik>
+		</React.Fragment>
 	)
 }
 

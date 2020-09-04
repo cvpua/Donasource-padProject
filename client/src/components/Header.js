@@ -13,6 +13,8 @@ import ChangePasswordFormContainer from './ChangePasswordFormContainer.js'
 import { UserContext } from '../App.js'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import Toast from './Toast.js'
+
 
 const Header = (props) => {
 	const { title } = props
@@ -27,6 +29,7 @@ const Header = (props) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [message, setMessage] = useState()
 
   const logout = async () => {
     try {
@@ -39,16 +42,22 @@ const Header = (props) => {
           }
         }
       )
-      alert(data.message)
       localStorage.removeItem("user")
       setUser()
     }catch(error){
-      alert(error.message)
+      setMessage({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      })
     }
   }
 
 	return (
     <React.Fragment>
+    <Toast message={message} />
 		<Grid 
       h="16" 
       bg="primary.600" 
@@ -64,14 +73,16 @@ const Header = (props) => {
         color="cyan.50"
         margin="auto"
       >
-        { title }
+        <Link to="/">
+          { title }
+        </Link>
       </Text>
-
+    
       {/* Account */}
        <Flex alignItems="center" justify="flex-end" mr="4">
           <Menu>
             <MenuButton as={Button} variantColor="black" px="2" variant="solid" rightIcon="chevron-down" _hover={{bg: "cyan.500"}} _active={{bg: "cyan.400"}} >
-              <Avatar src="photo" size="sm" name={fullName} mr={{base: "0", lg: "2"}} />
+              <Avatar src={photo} size="sm" name={fullName} mr={{base: "0", lg: "2"}} />
               <Text 
                 color="cyan.50" 
                 fontFamily="Ubuntu"

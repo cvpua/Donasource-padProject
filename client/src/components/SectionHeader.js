@@ -10,7 +10,7 @@ const SectionHeader = (props) => {
       h="16"  
       zIndex="sticky" 
       align="center"
-      pl="2"
+      pl="4"
       pos="sticky"
       top="0"
       bg="gray.100"

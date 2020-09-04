@@ -52,7 +52,7 @@ exports.getAllUsers = (req,res) => {
 }
 
 exports.getUser = (req,res) =>{
-    User.findOne({_id : req.params.userId})
+    User.findOne({username : req.params.username})
     .populate({
         path: 'posts',
         populate: {
@@ -125,7 +125,7 @@ exports.getAllNotifications = (req,res) => {
     .populate({path: 'notifications',
     populate : {
         path: 'user',
-        select : 'name avatar'
+        select : 'name avatar username'
     }
     })
     .exec()
@@ -266,8 +266,12 @@ exports.getAvails = (req,res) => {
     })
     .populate({path: 'avails',
         populate : {path: 'post',
-        select : 'title items',
-        populate : {path : "items"}
+        select : 'title',}
+    })
+    .populate({path: 'avails',
+        populate : {path: 'items',
+        populate: {path: 'itemId',
+        select: 'name'}
         }
     })
     .exec()

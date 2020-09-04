@@ -17,7 +17,7 @@ const ItemList = (props) => {
       	{/* Item */}
         {
         	items.map((item,i) => (
-        		<Item key={i} item={item} />
+        		<Item key={i} item={item} type={type} />
         	))
         }
       </List>

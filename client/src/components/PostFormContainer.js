@@ -1,15 +1,18 @@
-import React,{useContext} from 'react'
+import React,{ useContext, useState } from 'react'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
 import axios from 'axios'
 import { UserContext } from '../App.js'
+import Toast from './Toast.js'
 
 const PostFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, createPost } = props
 
 	const [ USER ] = useContext(UserContext)
 	const { user, token } = USER
+
+	const [message, setMessage] = useState()
 
 	const initialValues = {
 		userId: user._id,
@@ -81,7 +84,6 @@ const PostFormContainer = (props) => {
 					}
 				}
 			)
-			alert(data.message)
 			createPost({
 				...data.post,
 				user: {
@@ -91,13 +93,21 @@ const PostFormContainer = (props) => {
 			handleIsSubmitting(false)
 			onClose()
 		}catch(error){
-			alert(error.message)
+			setMessage({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      })
 			handleIsSubmitting(false)
 			onClose()
 		}
 	}
 
 	return (
+		<React.Fragment>
+		<Toast message={message} />
 		<Formik
 			initialValues={initialValues}
 			validationSchema={validationSchema}
@@ -120,8 +130,8 @@ const PostFormContainer = (props) => {
 					)
 				}
 			}
-			
 		</Formik>
+		</React.Fragment>
 	)
 }
 

@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Flex, IconButton, Box, Text, PseudoBox } from '@chakra-ui/core'
-import { BiHomeSmile, BiBell, BiFace, BiMessageAltDetail, BiPlus } from 'react-icons/bi'
+import { Flex, Box, Text } from '@chakra-ui/core'
+import { BiHomeSmile, BiBell, BiFace, BiMessageAltDetail } from 'react-icons/bi'
+import { UserContext } from '../App.js'
 
 const Nav = (props) => {
   const { variant, ...rest } = props
+
+  const [USER] = useContext(UserContext)
+  const { user } = USER
+  const { username } = user
 
 	return (
     variant === "side" ?
@@ -44,7 +49,7 @@ const Nav = (props) => {
         </Flex>
         <Flex 
           as={NavLink} 
-          to="/profile" 
+          to={`${username}`} 
           p="2" 
           activeClassname="active"
           rounded="full" 
@@ -87,7 +92,7 @@ const Nav = (props) => {
         {/* Profile */}
         <Box 
           as={NavLink} 
-          to="/profile"
+          to={`${username}`} 
           p="2"
           rounded="lg" 
           activeClassname="active"

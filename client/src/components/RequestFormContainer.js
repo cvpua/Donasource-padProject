@@ -1,9 +1,10 @@
-import React,{ useContext } from 'react'
+import React,{ useContext, useState } from 'react'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
 import axios from 'axios'
 import { UserContext } from '../App.js'
+import Toast from './Toast.js'
 
 const RequestFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, items, postId } = props
@@ -11,6 +12,8 @@ const RequestFormContainer = (props) => {
 	const [USER] = useContext(UserContext)
 	const { user } = USER
 	const { _id: userId } = user
+
+	const [message, setMessage] = useState()
 
 	const initialValues = {
 		items: 
@@ -33,25 +36,34 @@ const RequestFormContainer = (props) => {
 			Yup.object().shape({
 				name: Yup.string(),
 				total: Yup.number(),
-				amount: Yup.number().max(Yup.ref('total'), 'Too Much'),
+				amount: Yup.number().min(0, 'Too Much'),
 				amountRequested: Yup.number(),
 			})
 		).required('Required'),
+		reason: Yup.string().required('Required'),
 		totalRequest: Yup.number().min(1, "Request at least one item")
 	})
 
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
 		try {
-			const { data } = await axios.put(`/api/posts/${postId}/request`, values)
+			const { data } = await axios.patch(`/api/posts/${postId}/request`, values)
 			handleIsSubmitting(false)
 			onClose()
 		}catch (error){
-			alert(error.message)
+			setMessage({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      })
 		}
 	}
 
 	return (
+		<React.Fragment>
+		<Toast message={message} />
 		<Formik
 			initialValues={initialValues}
 			validationSchema={validationSchema}
@@ -81,6 +93,7 @@ const RequestFormContainer = (props) => {
 				}
 			}
 		</Formik>
+		</React.Fragment>
 	)
 }
 

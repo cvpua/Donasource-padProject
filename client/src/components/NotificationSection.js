@@ -1,10 +1,11 @@
 import React, {useState, useEffect, useContext} from 'react'
-import { Box, Flex, Avatar, Text, Divider, Badge, Spinner } from '@chakra-ui/core'
+import { Box, Flex, Text, Divider, Spinner } from '@chakra-ui/core'
 import { BiBell, BiBellOff } from 'react-icons/bi'
 import SectionHeader from './SectionHeader.js'
 import Notification from './Notification.js'
 import axios from 'axios'
 import {UserContext} from '../App.js'
+import Toast from './Toast.js'
 
 // Like Notif: User liked your post
 // Comment Notif: User commented on your post
@@ -16,41 +17,6 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
-const INIT_NOTIF = [
-	{
-		type: "like",
-		name: {
-			firstName: "Marco",
-			lastName: "Mirandilla"
-		},
-		postId: "12345",
-		date: new Date(),
-		avatar: null,
-		title: "Penge Ayuda",
-	},
-	{
-		type: "comment",
-		name: {
-			firstName: "Marco",
-			lastName: "Mirandilla"
-		},
-		postId: "12345",
-		date: new Date(),
-		avatar: null,
-		title: "Penge Ayuda",
-	},
-	{
-		type: "reject",
-		name: {
-			firstName: "Marco",
-			lastName: "Mirandilla"
-		},
-		postId: "12345",
-		date: new Date(),
-		avatar: null,
-		title: "Penge Ayuda",
-	},
-]
 
 const NotificationSection = () => {
 	const [USER] = useContext(UserContext)
@@ -60,12 +26,19 @@ const NotificationSection = () => {
 	const [notifications, setNotifications] = useState([])
 
 	const [isLoading, setIsLoading] = useState(true)
+	const [message, setMessage] = useState()
 
 	const seenNotif = async (notifId) => {
 		try{
-			const { data } = await axios.patch(`/api/users/${userId}/notifications/${notifId}`)
+			const { data } = await axios.get(`/api/users/${userId}/notifications/${notifId}`)
 		}catch(error){
-			alert(error.message)
+			setMessage({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      })
 		}
 	}
 
@@ -78,28 +51,16 @@ const NotificationSection = () => {
 				const currentDay = Math.floor(currentDate.getTime() / (1000 * 3600 * 24))
 
 				let index = 0
-				let prevDay = currentDay
+				let prevDay = 0
 
 				data.notifications.forEach((item) => {
 					const itemDate = new Date(item.date)
 					const notifDay = Math.floor(itemDate.getTime() / (1000 * 3600 * 24))
-					const label = `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}`
+					const isToday = notifDay === currentDay ? true : false
+					const isYesterday = notifDay === currentDay - 1 ? true : false
+					const label = isToday ? "Today" : isYesterday ? "Yesterday" : `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}`
 
-					if (notifDay === currentDay && notifications.length === 0) {
-						notifications.push({
-							label: "Today",
-							contents: [item]
-						})
-					}
-					else if (notifDay === currentDay - 1 && notifications.length === 1) {
-						notifications.push({
-							label: "Yesterday",
-							contents: [item]
-						})
-						prevDay = notifDay
-						index = index + 1
-					}
-					else if (prevDay !== notifDay){
+					if (prevDay !== notifDay){
 						notifications.push(
 							{
 								label: label,
@@ -110,7 +71,7 @@ const NotificationSection = () => {
 						prevDay = notifDay
 					}
 					else {
-						notifications[index].contents.push(item)
+						notifications[index - 1].contents.push(item)
 					}
 				})
 				setNotifications(notifications)
@@ -120,10 +81,11 @@ const NotificationSection = () => {
 			}
 		}
 		fetchData()
-	}, [])
+	}, [userId])
 
 	return (
 		<React.Fragment>
+			<Toast message={message} />
 			<SectionHeader title="Notification" icon={BiBell} />
 			{
 				isLoading ? 

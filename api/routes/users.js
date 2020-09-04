@@ -9,7 +9,7 @@ router.get('/api/users',UserController.getAllUsers)
 
 
 // get one user
-router.get('/api/users/:userId',UserController.getUser)
+router.get('/api/users/:username',UserController.getUser)
 
 
 
