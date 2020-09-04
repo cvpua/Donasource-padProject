@@ -304,73 +304,91 @@ exports.respondToAvails = (req,res) => {
             .then(avail => {
                 
             let message, status;
-            
+            let validRequest = true;
+
             if(avail.post.status != "FULFILLED"){
                 const request = avail.items.map(item => item.itemId)
                 const availableItems =  avail.post.items.map(item => item._id)
 
-                request.forEach((item,index) => {
-                    const itemIndex = availableItems.indexOf(item);
-                    const donee = new Donee({
-                        _id : mongoose.Types.ObjectId(),
-                        user : avail.user,
-                        reason : avail.reason,
-                        amountRequested : avail.items[index].amountRequested
-                    })
-                    avail.post.items[itemIndex].amount = avail.post.items[itemIndex].amount - avail.items[index].amountRequested; 
-                    avail.post.items[itemIndex].donee.push(donee)
-                    avail.post.items[itemIndex].save()
-                    .then(
-                        donee.save()
-                        .then(console.log("Donee saved!"))
-                    )
-                })
-                message = "Item/s were given to the donee"
-                status = "SUCCESS"
-
-                let isFulfilled = true;
-                avail.post.items.forEach(item => {
-                    if(item.amount !== 0){
-                        isFulfilled = false;
+                for(let i = 0; i < request.length; i ++){
+                    const itemIndex = availableItems.indexOf(request[i]);
+                    if(avail.post.items[itemIndex].amount - avail.items[i].amountRequested < 0){
+                        validRequest = false;
+                        break;
                     }
-                });
-                if (isFulfilled){
-                    avail.post.status = "FULFILLED"
-                    avail.post.save()
-                    .then(console.log("Post fulfilled!"))
+                }
+                if(validRequest){
+                    request.forEach((item,index) => {
+                        const itemIndex = availableItems.indexOf(item);
+                        const donee = new Donee({
+                            _id : mongoose.Types.ObjectId(),
+                            user : avail.user,
+                            reason : avail.reason,
+                            amountRequested : avail.items[index].amountRequested
+                        })
+                        avail.post.items[itemIndex].amount = avail.post.items[itemIndex].amount - avail.items[index].amountRequested; 
+                        avail.post.items[itemIndex].donee.push(donee)
+                        avail.post.items[itemIndex].save()
+                        .then(
+                            donee.save()
+                            .then(console.log("Donee saved!"))
+                        )
+                        message = "Item/s were given to the donee"
+                        status = "SUCCESS"
+                    })
+                    
+    
+                    let isFulfilled = true;
+                    avail.post.items.forEach(item => {
+                        if(item.amount !== 0){
+                            isFulfilled = false;
+                        }
+                    });
+                    if (isFulfilled){
+                        avail.post.status = "FULFILLED"
+                        avail.post.save()
+                        .then(console.log("Post fulfilled!"))
+                    }
+    
+                    const notification = new Notification({
+                        _id: mongoose.Types.ObjectId(),
+                        type : "accept",
+                        postId : avail.post._id,
+                        user : req.params.userId,
+                        title : avail.post.title,
+                        date : Date.now()
+                    })
+                    notification.save(err => {
+                        if(err) throw err;
+                    })
+                    avail.user.notifications.push(notification)
+                    avail.user.donationRequested = avail.user.donationRequested + 1
+                    avail.user.save()
+                    .then(console.log("Notif sent to the donee"))
+    
+                    avail.status = "ACCEPTED"
+                    avail.save()
+                    .then(console.log(`Avail ${avail._id} updated`))
                 }
 
-                const notification = new Notification({
-                    _id: mongoose.Types.ObjectId(),
-                    type : "accept",
-                    postId : avail.post._id,
-                    user : req.params.userId,
-                    title : avail.post.title,
-                    date : Date.now()
-                })
-                notification.save(err => {
-                    if(err) throw err;
-                })
-                avail.user.notifications.push(notification)
-                avail.user.donationRequested = avail.user.donationRequested + 1
-                avail.user.save()
-                .then(console.log("Notif sent to the donee"))
-
-                avail.status = "ACCEPTED"
-                avail.save()
-                .then(console.log(`Avail ${avail._id} updated`))
+                
             }
             else{
                 message = "No items remaining, post were already fulfilled"
                 status = "FAILED"
             }
-
+            if(!validRequest){
                 user.avails = user.avails.filter(request => request != String(avail._id) )
                 user.save(err => {
                     if(err) throw err;
                 })
-
+                
+                res.json({message: "Cannot accept request. Insufficient items",status: "PENDING"})
+            }else{
+              
                 res.json({message,status})
+            }
+                
             })
 
         })
