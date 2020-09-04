@@ -58,7 +58,7 @@ const NotificationSection = () => {
 					const notifDay = Math.floor(itemDate.getTime() / (1000 * 3600 * 24))
 					const isToday = notifDay === currentDay ? true : false
 					const isYesterday = notifDay === currentDay - 1 ? true : false
-					const label = isToday ? "Today" : isYesterday ? "Yesterday" : `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}`
+					const label = isToday ? "Today" : isYesterday ? "Yesterday" : `${monthNames[itemDate.getMonth()]} ${itemDate.getDate()}`
 
 					if (prevDay !== notifDay){
 						notifications.push(

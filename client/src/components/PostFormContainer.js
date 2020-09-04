@@ -61,6 +61,8 @@ const PostFormContainer = (props) => {
 				formData.append(key,JSON.stringify(values[key]));	
 			}else if (key === "name"){
 				formData.append(key, JSON.stringify(values[key]));
+			}else if (key === "tags"){
+				formData.append(key, JSON.stringify(values[key]));
 			}else if(key === "images"){
 				const imageLength = values[key].length;
 				for(let i = 0; i < imageLength ; i++){

@@ -174,7 +174,7 @@ exports.makePost =  (req,res) => {
                 description : req.body.description,
                 items : items,
                 location : req.body.location,
-                tags : req.body.tags,
+                tags : JSON.parse(req.body.tags),
                 datePosted : Date.now(),
                 deadline: req.body.deadline,
                 images : imageArray,
