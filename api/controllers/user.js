@@ -131,6 +131,7 @@ exports.getAllNotifications = (req,res) => {
     })
     .exec()
     .then(user => {
+            
         res.status(200).json(
             {
                 notificationCount : user.notifications.length,
@@ -291,6 +292,23 @@ exports.respondToAvails = (req,res) => {
     if(req.body.response === "ACCEPT"){
         User.findById(req.params.userId)
         .select('username name avatar avails')
+        .populate({path: 'avails', 
+        populate : {path: 'user',
+        select : 'username name avatar'
+            }
+        })
+        .populate({path: 'avails',
+            options : {sort : {date : -1}},
+            populate : {path: 'post',
+            select : 'title'}
+        })
+        .populate({path: 'avails',
+            options : {sort : {date : -1}},
+            populate : {path: 'items',
+            populate: {path: 'itemId',
+            select: 'name'}
+            }
+        })
         .exec()
         .then(user => {
         
@@ -378,15 +396,16 @@ exports.respondToAvails = (req,res) => {
                 status = "FAILED"
             }
             if(!validRequest){
-                user.avails = user.avails.filter(request => request != String(avail._id) )
+               
+                
+                res.json({message: "Cannot accept request. Insufficient items",status: "PENDING",avails : user.avails})
+            }else{
+                user.avails = user.avails.filter(request => request._id != String(avail._id) )
                 user.save(err => {
                     if(err) throw err;
                 })
                 
-                res.json({message: "Cannot accept request. Insufficient items",status: "PENDING"})
-            }else{
-              
-                res.json({message,status})
+                res.json({message,status,avails : user.avails})
             }
                 
             })
@@ -401,6 +420,23 @@ exports.respondToAvails = (req,res) => {
 
         User.findById(req.params.userId)
         .select('username name avatar avails')
+        .populate({path: 'avails', 
+        populate : {path: 'user',
+        select : 'username name avatar'
+            }
+        })
+        .populate({path: 'avails',
+            options : {sort : {date : -1}},
+            populate : {path: 'post',
+            select : 'title'}
+        })
+        .populate({path: 'avails',
+            options : {sort : {date : -1}},
+            populate : {path: 'items',
+            populate: {path: 'itemId',
+            select: 'name'}
+            }
+        })
         .exec()
         .then(user => {
             Avail.findById(req.params.availId)
@@ -427,11 +463,11 @@ exports.respondToAvails = (req,res) => {
                 avail.user.save()
                 .then(console.log("Notif sent to the donee"))
 
-                user.avails = user.avails.filter(request => request != String(avail._id) )
+                user.avails = user.avails.filter(request => request._id != String(avail._id) )
                 user.save(err => {
                     if(err) throw err;
                 })
-                res.json({message : "Avail rejected!",status:"REJECTED"})
+                res.json({message : "Avail rejected!",status:"REJECTED",avails : user.avails})
             })
         })
 
