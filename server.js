@@ -21,7 +21,7 @@ mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
 // body-parser
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
-
+app.use(express.static('build'))
 
 app.use('/',postsApi);
 app.use('/',usersApi);

@@ -54,7 +54,6 @@ const DonateFormContainer = (props) => {
 
 		try {
 			const { data } = await axios.put(`/api/posts/${postId}/donate`, values)
-			alert(data.message)
 			donate(data.items)
 			handleIsSubmitting(false)
 			onClose()
