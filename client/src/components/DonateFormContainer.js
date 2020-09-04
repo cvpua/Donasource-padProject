@@ -87,7 +87,7 @@ const DonateFormContainer = (props) => {
 								{
 									
 									initialValues.items.map((item,index) => (
-										item.remaining !== 0 ? <FormikControl 
+										item.amount !== item.total ? <FormikControl 
 											control="numeric" 
 											label={item.name} 
 											index={index}

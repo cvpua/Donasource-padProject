@@ -75,7 +75,7 @@ const RequestFormContainer = (props) => {
 							<Form id="requestForm">
 								{
 									initialValues.items.map((item,index) => (
-										item.remaining !== 0 ? <FormikControl 
+										item.amount > 0 ? <FormikControl 
 											control="request" 
 											label={item.name} 
 											index={index}
