@@ -29,14 +29,13 @@ app.use('/',postsApi);
 app.use('/',usersApi);
 app.use('/',signupApi);
 app.use('/',updateApi);
-app.use('/assets',express.static('assets'))
 
 
 
-const task = cron.schedule('59 23 * * *', () => {
+
+const task = cron.schedule('5 * * * *', () => {
    axios.get('http://localhost:5000/api/checkDeadlines')
 })
-
 task.start()
 
 
