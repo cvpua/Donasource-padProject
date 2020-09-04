@@ -18,10 +18,12 @@ mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
 
+app.use(express.static('build'))
+
 // body-parser
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
-app.use(express.static('build'))
+
 
 app.use('/',postsApi);
 app.use('/',usersApi);
