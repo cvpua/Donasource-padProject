@@ -565,7 +565,9 @@ exports.request = (req,res) => {
                 title : post.title,
                 date : Date.now()
             })
-
+            notification.save(err=>{
+                if(err) throw err;
+            })
 
             post.user.avails.push(avail)
             avail.save()

@@ -123,6 +123,7 @@ exports.getAllNotifications = (req,res) => {
 
     User.findById(req.params.userId)
     .populate({path: 'notifications',
+    options : {sort : {date : -1}},
     populate : {
         path: 'user',
         select : 'name avatar username'
@@ -259,16 +260,18 @@ exports.changePassword = (req,res) => {
 exports.getAvails = (req,res) => {
     User.findById(req.params.userId)
     .select('username avatar name avails')
-    .populate({path: 'avails',
+    .populate({path: 'avails', 
         populate : {path: 'user',
         select : 'username name avatar'
         }
     })
     .populate({path: 'avails',
+        options : {sort : {date : -1}},
         populate : {path: 'post',
         select : 'title',}
     })
     .populate({path: 'avails',
+        options : {sort : {date : -1}},
         populate : {path: 'items',
         populate: {path: 'itemId',
         select: 'name'}
@@ -290,8 +293,9 @@ exports.respondToAvails = (req,res) => {
         .select('username name avatar avails')
         .exec()
         .then(user => {
+        
             Avail.findById(req.params.availId)
-            .populate({path: 'post',select : 'items title',
+            .populate({path: 'post',select : 'items title status',
                 populate : { path : 'items',
                 }
             })
@@ -299,10 +303,11 @@ exports.respondToAvails = (req,res) => {
             .exec()
             .then(avail => {
                 
+            let message, status;
+            
+            if(avail.post.status != "FULFILLED"){
                 const request = avail.items.map(item => item.itemId)
                 const availableItems =  avail.post.items.map(item => item._id)
-                console.log(request)
-                console.log(availableItems)
 
                 request.forEach((item,index) => {
                     const itemIndex = availableItems.indexOf(item);
@@ -320,9 +325,11 @@ exports.respondToAvails = (req,res) => {
                         .then(console.log("Donee saved!"))
                     )
                 })
+                message = "Item/s were given to the donee"
+                status = "SUCCESS"
 
-            let isFulfilled = true;
-            avail.post.items.forEach(item => {
+                let isFulfilled = true;
+                avail.post.items.forEach(item => {
                     if(item.amount !== 0){
                         isFulfilled = false;
                     }
@@ -352,13 +359,18 @@ exports.respondToAvails = (req,res) => {
                 avail.status = "ACCEPTED"
                 avail.save()
                 .then(console.log(`Avail ${avail._id} updated`))
+            }
+            else{
+                message = "No items remaining, post were already fulfilled"
+                status = "FAILED"
+            }
 
                 user.avails = user.avails.filter(request => request != String(avail._id) )
                 user.save(err => {
                     if(err) throw err;
                 })
 
-                res.json({message : "Item/s were given to the donee"})
+                res.json({message,status})
             })
 
         })
@@ -401,7 +413,7 @@ exports.respondToAvails = (req,res) => {
                 user.save(err => {
                     if(err) throw err;
                 })
-                res.json({message : "Avail rejected!"})
+                res.json({message : "Avail rejected!",status:"REJECTED"})
             })
         })
 
