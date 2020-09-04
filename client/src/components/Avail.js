@@ -5,9 +5,9 @@ import axios from 'axios'
 import Toast from './Toast.js'
 import { BiCheckboxSquare } from 'react-icons/bi'
 
-const Avail = ({avail, userId}) => {
+const Avail = ({avail,userId}) => {
 	const {
-		_id: availId, 
+		_id: availId,
 		user, 
 		post, 
 		reason,  
@@ -17,6 +17,7 @@ const Avail = ({avail, userId}) => {
 
 	const { avatar, name, username } = user
 	const { _id: postId, title } = post
+
 
 	const fullName = name.firstName + " " + name.lastName
 	const currentDate = new Date()

@@ -67,8 +67,9 @@ const AvailsSection = () => {
 							{
 
 								avails.map((avail) => {
+									console.log(userId)
 									console.log('Avails length: ', avails.length)
-									return (<Avail avail={avail} />)
+									return (<Avail avail={avail} userId={userId} />)
 								})
 							}
 					</Box>

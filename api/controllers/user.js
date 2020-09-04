@@ -123,6 +123,7 @@ exports.getAllNotifications = (req,res) => {
 
     User.findById(req.params.userId)
     .populate({path: 'notifications',
+    options : {sort : {date : -1}},
     populate : {
         path: 'user',
         select : 'name avatar username'
@@ -259,16 +260,18 @@ exports.changePassword = (req,res) => {
 exports.getAvails = (req,res) => {
     User.findById(req.params.userId)
     .select('username avatar name avails')
-    .populate({path: 'avails',
+    .populate({path: 'avails', 
         populate : {path: 'user',
         select : 'username name avatar'
         }
     })
     .populate({path: 'avails',
+        options : {sort : {date : -1}},
         populate : {path: 'post',
         select : 'title',}
     })
     .populate({path: 'avails',
+        options : {sort : {date : -1}},
         populate : {path: 'items',
         populate: {path: 'itemId',
         select: 'name'}
@@ -286,62 +289,135 @@ exports.getAvails = (req,res) => {
 exports.respondToAvails = (req,res) => {
     
     if(req.body.response === "ACCEPT"){
-        Avail.findById(req.params.availId)
-        .populate({path: 'post',select : 'items title',
-            populate : { path : 'items',
-            }
-        })
-        .populate({path: 'user',select: 'avatar username name notifications donationRequested'})
+        User.findById(req.params.userId)
+        .select('username name avatar avails')
         .exec()
-        .then(avail => {
-            
-            const request = avail.items.map(item => item.itemId)
-            const availableItems =  avail.post.items.map(item => item._id)
-            console.log(request)
-            console.log(availableItems)
-
-            request.forEach((item,index) => {
-                const itemIndex = availableItems.indexOf(item);
-                const donee = new Donee({
-                    _id : mongoose.Types.ObjectId(),
-                    user : avail.user,
-                    reason : avail.reason,
-                    amountRequested : avail.items[index].amountRequested
-                })
-                avail.post.items[itemIndex].amount = avail.post.items[itemIndex].amount - avail.items[index].amountRequested; 
-                avail.post.items[itemIndex].donee.push(donee)
-                avail.post.items[itemIndex].save()
-                .then(
-                    donee.save()
-                    .then(console.log("Donee saved!"))
-                )
-            })
-
-           let isFulfilled = true;
-           avail.post.items.forEach(item => {
-                if(item.amount !== 0){
-                    isFulfilled = false;
+        .then(user => {
+        
+            Avail.findById(req.params.availId)
+            .populate({path: 'post',select : 'items title status',
+                populate : { path : 'items',
                 }
-            });
-            if (isFulfilled){
-                avail.post.status = "FULFILLED"
-                avail.post.save()
-                .then(console.log("Post fulfilled!"))
+            })
+            .populate({path: 'user',select: 'avatar username name notifications donationRequested avails'})
+            .exec()
+            .then(avail => {
+                
+            let message, status;
+            
+            if(avail.post.status != "FULFILLED"){
+                const request = avail.items.map(item => item.itemId)
+                const availableItems =  avail.post.items.map(item => item._id)
+
+                request.forEach((item,index) => {
+                    const itemIndex = availableItems.indexOf(item);
+                    const donee = new Donee({
+                        _id : mongoose.Types.ObjectId(),
+                        user : avail.user,
+                        reason : avail.reason,
+                        amountRequested : avail.items[index].amountRequested
+                    })
+                    avail.post.items[itemIndex].amount = avail.post.items[itemIndex].amount - avail.items[index].amountRequested; 
+                    avail.post.items[itemIndex].donee.push(donee)
+                    avail.post.items[itemIndex].save()
+                    .then(
+                        donee.save()
+                        .then(console.log("Donee saved!"))
+                    )
+                })
+                message = "Item/s were given to the donee"
+                status = "SUCCESS"
+
+                let isFulfilled = true;
+                avail.post.items.forEach(item => {
+                    if(item.amount !== 0){
+                        isFulfilled = false;
+                    }
+                });
+                if (isFulfilled){
+                    avail.post.status = "FULFILLED"
+                    avail.post.save()
+                    .then(console.log("Post fulfilled!"))
+                }
+
+                const notification = new Notification({
+                    _id: mongoose.Types.ObjectId(),
+                    type : "accept",
+                    postId : avail.post._id,
+                    user : req.params.userId,
+                    title : avail.post.title,
+                    date : Date.now()
+                })
+                notification.save(err => {
+                    if(err) throw err;
+                })
+                avail.user.notifications.push(notification)
+                avail.user.donationRequested = avail.user.donationRequested + 1
+                avail.user.save()
+                .then(console.log("Notif sent to the donee"))
+
+                avail.status = "ACCEPTED"
+                avail.save()
+                .then(console.log(`Avail ${avail._id} updated`))
+            }
+            else{
+                message = "No items remaining, post were already fulfilled"
+                status = "FAILED"
             }
 
-            const notification = new Notification({
-                _id: mongoose.Types.ObjectId(),
-                type : "accept",
-                postId : avail.post._id,
-                user : req.params.userId,
-                title : avail.post.title,
-                date : Date.now()
+                user.avails = user.avails.filter(request => request != String(avail._id) )
+                user.save(err => {
+                    if(err) throw err;
+                })
+
+                res.json({message,status})
             })
-            avail.user.notifications.push(notification)
-            avail.user.donationRequested = avail.user.donationRequested + 1
-            avail.user.save()
-            .then(console.log("Notif sent to the donee"))
-            res.json({message : "Item/s were given to the donee"})
+
         })
+
+
+
+        
+    }
+    if(req.body.response === "REJECT"){
+
+        User.findById(req.params.userId)
+        .select('username name avatar avails')
+        .exec()
+        .then(user => {
+            Avail.findById(req.params.availId)
+            .populate({path: 'post',select : 'items title',
+                populate : { path : 'items',
+                }
+            })
+            .populate({path: 'user',select: 'avatar username name notifications avails'})
+            .exec()
+            .then(avail => {
+                const notification = new Notification({
+                    _id: mongoose.Types.ObjectId(),
+                    type : "reject",
+                    postId : avail.post._id,
+                    user : req.params.userId,
+                    title : avail.post.title,
+                    date : Date.now()
+                })
+                notification.save(err => {
+                    if(err) throw err;
+                })
+
+                avail.user.notifications.push(notification)
+                avail.user.save()
+                .then(console.log("Notif sent to the donee"))
+
+                user.avails = user.avails.filter(request => request != String(avail._id) )
+                user.save(err => {
+                    if(err) throw err;
+                })
+                res.json({message : "Avail rejected!",status:"REJECTED"})
+            })
+        })
+
+        
+
     }
 }
