@@ -79,7 +79,8 @@ exports.signup = (req,res) => {
 exports.login = (req,res) => {
     
     User.findOne({email : req.body.email})
-    .select("_id name username photo email password")
+    .select("_id name username email password")
+    .populate("avatar")
     .exec()
     .then(user => {
         if (!user ){

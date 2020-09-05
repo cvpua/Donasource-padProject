@@ -36,7 +36,7 @@ const Avail = ({avail, accept, reject}) => {
 				<Flex align="center"rounded="lg" pb="4">
 					{/* Avatar */}
 					<Link to={`/${username}`}>
-						<Avatar name={fullName} src={avatar} />
+						<Avatar name={fullName} src={avatar && avatar.url} />
 					</Link>
 					<Box ml="4">
 					{/* Name */}

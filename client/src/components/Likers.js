@@ -16,7 +16,7 @@ const Likers = ({likers}) => {
 	            if (!user.name) {
 	            	return(null)
 	            }
-	            return <Avatar src={user.avatar} name={`${user.name.firstName} ${user.name.lastName}`} />
+	            return <Avatar key={user._id} src={user.avatar && user.avatar.url} name={`${user.name.firstName} ${user.name.lastName}`} />
 	          })
 	        }
 	      </AvatarGroup>
@@ -34,11 +34,11 @@ const Likers = ({likers}) => {
           			if (!user.name) {
           				return(null)
           			}
-          			return <React.Fragment>
+          			return <React.Fragment key={user._id}>
           				
           				<Flex align="center">
           					<Link to={`/${user.username}`}>
-          					<Avatar size="sm" mr="2" src={user.avatar} name={`${user.name.firstName} ${user.name.lastName}`} />
+          					<Avatar size="sm" mr="2" src={user.avatar && user.avatar.url} name={`${user.name.firstName} ${user.name.lastName}`} />
           					</Link>
           					<Box>
           						<Text fontSize="sm" fontWeight="semibold" mr="1">{`${user.name.firstName} ${user.name.lastName}`}</Text>

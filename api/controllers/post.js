@@ -49,11 +49,20 @@ exports.getAllPosts = (req,res) => {
 
     Post.find()
     .sort({datePosted : -1})
-    .populate("user","avatar name username")
+    .populate("user","name username")
+    .populate({
+        path: "user",
+        populate: {
+            path: "avatar"
+        }
+    })
     .populate("comments")
     .populate({
         path: 'likers',
-        select: 'name avatar username'
+        select: 'name username',
+        populate: {
+            path: 'avatar'
+        }
     })
     .populate({
         path: 'items',
@@ -62,7 +71,10 @@ exports.getAllPosts = (req,res) => {
             select: 'amountDonated',
             populate : {
                 path: 'user',
-                select : 'name username avatar'
+                select : 'name username',
+                populate: {
+                    path: 'avatar'
+                }
             }
         }
     })
@@ -73,7 +85,10 @@ exports.getAllPosts = (req,res) => {
             select: 'amountRequested',
             populate : {
                 path: 'user',
-                select : 'name username avatar'
+                select : 'name username',
+                populate: {
+                    path: 'avatar'
+                }
             }
         }
     })
@@ -91,19 +106,28 @@ exports.getAllPosts = (req,res) => {
 
 exports.getPost = (req,res) => {
     Post.findOne({_id : req.params.postId})
-    .populate("user","avatar name username")
+    .populate("user","name username")
+    .populate({
+        path: 'user',
+        populate: {
+            path: 'avatar'
+        }
+    })
     .populate({
         path: 'likers',
+        select: 'name username',
         populate: {
-            path: 'user',
-            select: 'name avatar username'
+            path: 'avatar',
         }
     })
     .populate({
         path: 'comments',
         populate: {
             path: 'user',
-            select: 'name username avatar'
+            select: 'name username',
+            populate: {
+                path: 'avatar'
+            }
         }
     })
     .populate({
@@ -113,7 +137,10 @@ exports.getPost = (req,res) => {
             select: 'amountDonated',
             populate : {
                 path: 'user',
-                select : 'name username avatar amountDonated'
+                select : 'name username amountDonated',
+                populate: {
+                    path: 'avatar'
+                }
             }
         }
     })
@@ -124,7 +151,10 @@ exports.getPost = (req,res) => {
             select: 'amountRequested',
             populate : {
                 path: 'user',
-                select : 'name username avatar amountRequested'
+                select : 'name username amountRequested',
+                populate: {
+                    path: 'avatar'
+                }
             }
         }
     })

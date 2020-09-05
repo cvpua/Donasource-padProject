@@ -47,16 +47,14 @@ const Nav = (props) => {
           <Box ml="4" as={BiMessageAltDetail} size="8" color="primary.600" />
           <Text color="primary.600" fontWeight="bold" fontFamily="Ubuntu" fontSize="xl" lineHeight="tall" ml="1">Avails</Text>
         </Flex>
+        <NavLink exact to={`/${username}`} activeclassname="active">
         <Flex 
-          as={NavLink} 
-          to={`${username}`} 
           p="2" 
-          activeClassname="active"
-          rounded="full" 
         >
           <Box ml="4" as={BiFace} size="8" color="primary.600" />
           <Text color="primary.600" fontWeight="bold" fontFamily="Ubuntu" fontSize="xl" lineHeight="tall" ml="1">Profile</Text>
         </Flex>
+        </NavLink>
       </Flex>
     : 
       <Flex pos="fixed" bottom="0" bg="gray.50" justify="space-evenly" w="full" py="2" {...rest} >

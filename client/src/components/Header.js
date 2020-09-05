@@ -22,7 +22,7 @@ const Header = (props) => {
   const [USER, setUser] = useContext(UserContext)
   const { user, token } = USER
   const {
-    photo,
+    avatar,
     name,
   } = user
   const fullName = name.firstName + " " + name.lastName
@@ -82,7 +82,7 @@ const Header = (props) => {
        <Flex alignItems="center" justify="flex-end" mr="4">
           <Menu>
             <MenuButton as={Button} variantColor="black" px="2" variant="solid" rightIcon="chevron-down" _hover={{bg: "cyan.500"}} _active={{bg: "cyan.400"}} >
-              <Avatar src={photo} size="sm" name={fullName} mr={{base: "0", lg: "2"}} />
+              <Avatar src={avatar && avatar.url} size="sm" name={fullName} mr={{base: "0", lg: "2"}} />
               <Text 
                 color="cyan.50" 
                 fontFamily="Ubuntu"

@@ -29,7 +29,7 @@ const PostHeader = (props) => {
 		<Flex align="center" mb="2">
     	{/* Avatar */}
       <Link to={`/${username}`}>
-        <Avatar size="md" name={author} src={avatar} mr="4"/>
+        <Avatar size="md" name={author} src={avatar && avatar.url} mr="4"/>
       </Link>
       <Flex flexDirection="column" w="full">
         {/* Author */}

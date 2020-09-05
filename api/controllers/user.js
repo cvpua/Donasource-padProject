@@ -59,7 +59,10 @@ exports.getUser = (req,res) =>{
         path: 'posts',
         populate: {
             path: 'user',
-            select: 'username avatar name'
+            select: 'username name',
+            populate: {
+                path: 'avatar'
+            }
         }})
     .populate({
         path: 'posts',
@@ -70,7 +73,10 @@ exports.getUser = (req,res) =>{
                 select: 'amountDonated',
                 populate : {
                     path: 'user',
-                    select : 'name username avatar'
+                    select : 'name username',
+                    populate: {
+                        path: 'avatar'
+                    }
                 }
             }
         }
@@ -84,7 +90,10 @@ exports.getUser = (req,res) =>{
                 select: 'amountRequested',
                 populate : {
                     path: 'user',
-                    select : 'name username avatar'
+                    select : 'name username',
+                    populate: {
+                        path: 'avatar'
+                    }
                 }
             }
         }
@@ -93,7 +102,10 @@ exports.getUser = (req,res) =>{
         path: 'posts',
         populate: {
             path: 'likers',
-            select: 'name username avatar'
+            select: 'name username',
+            populate: {
+                path: 'avatar'
+            }
         }
     })
     .populate({
@@ -151,7 +163,10 @@ exports.getAllNotifications = (req,res) => {
     options : {sort : {date : -1}},
     populate : {
         path: 'user',
-        select : 'name avatar username'
+        select : 'name username',
+        populate: {
+            path: 'avatar'
+        }
     }
     })
     .exec()
@@ -318,7 +333,10 @@ exports.getAvails = (req,res) => {
     .select('username avatar name avails')
     .populate({path: 'avails', 
         populate : {path: 'user',
-        select : 'username name avatar'
+        select : 'username name',
+        populate: {
+            path: 'avatar'
+        }
         }
     })
     .populate({path: 'avails',
@@ -478,7 +496,10 @@ exports.respondToAvails = (req,res) => {
         .select('username name avatar avails')
         .populate({path: 'avails', 
         populate : {path: 'user',
-        select : 'username name avatar'
+        select : 'username name',
+        populate: {
+            path: 'avatar'
+        }
             }
         })
         .populate({path: 'avails',
@@ -500,7 +521,9 @@ exports.respondToAvails = (req,res) => {
                 populate : { path : 'items',
                 }
             })
-            .populate({path: 'user',select: 'avatar username name notifications avails'})
+            .populate({path: 'user',select: 'username name notifications avails',populate: {
+            path: 'avatar'
+        }})
             .exec()
             .then(avail => {
                 const notification = new Notification({

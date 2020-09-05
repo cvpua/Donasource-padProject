@@ -50,12 +50,12 @@ const People = ({items, type}) => {
       <Text fontSize="sm" mr="2">{type === "request" ? "Donor" : "Donee"}:</Text>
       <AvatarGroup size="sm" max={3} >
        	{
-          people.map((user) => {
+          people.map((user,i) => {
           	if (!user.name){
           		return(null)
           	}
           	const fullName = user.name.firstName + " " + user.name.lastName
-          	return <Avatar src={user.avatar} name={fullName} />	
+          	return <Avatar key={i} src={user.avatar && user.avatar.url} name={fullName} />	
           })
        	}
       </AvatarGroup>
@@ -69,14 +69,14 @@ const People = ({items, type}) => {
 	        <ModalCloseButton />
 	        <ModalBody>
 	        	{
-	        		people.map((user) => {
+	        		people.map((user,i) => {
 	        			if (!user.name){
 	        				return(null)
 	        			}
-	        			return <React.Fragment>
+	        			return <React.Fragment key={i}>
 	        				<Flex align="center" mb="1">
 	        					<Link to={`/${user.username}`}>
-	        						<Avatar size="sm" mr="2" src={user.avatar} name={`${user.name.firstName} ${user.name.lastName}`} />
+	        						<Avatar size="sm" mr="2" src={user.avatar && user.avatar.url} name={`${user.name.firstName} ${user.name.lastName}`} />
 	        					</Link>
 	        					<Box>
 	        						<Text fontSize="sm" fontWeight="semibold" mr="1">{`${user.name.firstName} ${user.name.lastName}`}</Text>

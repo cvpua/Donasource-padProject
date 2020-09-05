@@ -106,7 +106,7 @@ const Profile = () => {
 						</Flex>
 						<Flex pb="4" borderBottom="4px" borderColor="gray.200" mb="4" flexDirection="column" justify="center" align="center">
 							{/* Avatar */}
-							<Avatar size="2xl" src={profile.photo} name={fullName} mb="2"/>
+							<Avatar size="2xl" src={profile.avatar.url} name={fullName} mb="2"/>
 							{/* Name */}
 							<Text fontSize="2xl" fontWeight="semibold">{fullName}</Text>
 							{/* Username */}

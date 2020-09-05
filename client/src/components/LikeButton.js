@@ -47,7 +47,7 @@ const LikeButton = (props) => {
 	}
 
 	useEffect(() => {
-		const state = likers.find((liker) => (liker === userId ? true : false))
+		const state = likers.find((liker) => (liker._id === userId ? true : false))
 		setIsLiked(state)
 	}, [likers, userId])
 

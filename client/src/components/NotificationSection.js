@@ -107,8 +107,8 @@ const NotificationSection = () => {
         :
 					<Box mx={{base: "0", sm: "4"}} mb={{base: "24", md: "2"}} rounded="lg" bg="white" shadow="sm" pb="2">
 						{
-							notifications.map((notification) => {
-								return(<React.Fragment>
+							notifications.map((notification,i) => {
+								return(<React.Fragment key={i}>
 									<Text ml="6" fontSize="sm" fontWeight="semibold" pt="4" pb="2" color="gray.800">{notification.label}</Text>
 									<Divider />
 									{

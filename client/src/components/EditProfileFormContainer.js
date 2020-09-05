@@ -61,6 +61,8 @@ const EditProfileFormContainer = (props) => {
 		for(var key in values){
 			if (key === "name"){
 				formData.append(key, JSON.stringify(values[key]));
+			}else if(key === "avatar" && values[key]){
+				formData.append(key,values[key]._id)
 			}
 			else{
 				formData.append(key,values[key]);
@@ -104,6 +106,7 @@ const EditProfileFormContainer = (props) => {
 			onClose()
 			history.push(`${username}`)
 		}catch(error){
+			handleIsSubmitting(true)
 			setMessage({
         title: "Error",
         description: error.response.data.message,

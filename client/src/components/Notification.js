@@ -27,8 +27,8 @@ const Notification = ({notif, seenNotif}) => {
 
 	return (
 		<React.Fragment>
-			<Link to={`/profile/post/${postId}`} onClick={() => seenNotif(notifId)} >
 				<Flex 
+					pos="relative"
 					pl="4" 
 					py="4" 
 					align="center" 
@@ -43,9 +43,10 @@ const Notification = ({notif, seenNotif}) => {
 					mx="4" 
 					rounded="lg"
 				>
+					<Box as={Link} to={`/${username}/post/${postId}`} w="full" h="full" pos="absolute" top="0" left="0" bottom="0" right="0"></Box>
 					{/* Avatar */}
 					<Link to={`/${username}`}>
-						<Avatar name="Bullet Pua" src={avatar} />
+						<Avatar name="Bullet Pua" src={avatar && avatar.url} />
 					</Link>
 					<Box ml="4">
 						{/* Response */}
@@ -72,7 +73,6 @@ const Notification = ({notif, seenNotif}) => {
 						</Text>
 					</Box>
 				</Flex>
-			</Link>
 			<Divider />
 		</React.Fragment>
 	)
