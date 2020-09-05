@@ -581,27 +581,12 @@ exports.request = (req,res) => {
                 
             })
 
-            const notification = new Notification({
-                _id: mongoose.Types.ObjectId(),
-                type : "request",
-                postId : req.params.postId,
-                user : req.body.userId,
-                title : post.title,
-                date : Date.now()
-            })
-            notification.save(err=>{
-                if(err) throw err;
-            })
-
             post.user.avails.push(avail)
             avail.save()
             .then(response =>{
-                post.user.notifications.push(notification)
-                post.user.save()
-                .then(response => {
                     res.json({
                         message : "Request sent to the OP"
-                    })
+                    
                 })
             })
         })
