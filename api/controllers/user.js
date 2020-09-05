@@ -159,7 +159,7 @@ exports.seeNotification = (req,res) => {
 }
 
 exports.editUser = (req,res) => {
-   
+    fs.ensureDirSync('./uploads');
     upload(req,res, async function(err){
         
         if(err){
@@ -201,6 +201,13 @@ exports.editUser = (req,res) => {
                 } catch(err){
                         console.log(err)
                 } 
+
+                fs.rmdir('./uploads', { recursive: true }, (err) => {
+                    if (err) {
+                        throw err;
+                    }
+                    console.log(`./uploads deleted!`);
+                });
             }
 
             User.updateOne({_id : req.params.userId},{$set : toUpdate})
