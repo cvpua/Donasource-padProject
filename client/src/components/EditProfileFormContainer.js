@@ -57,15 +57,12 @@ const EditProfileFormContainer = (props) => {
 		handleIsSubmitting(true)
 
 		let formData = new FormData();
+	
 		for(var key in values){
 			if (key === "name"){
 				formData.append(key, JSON.stringify(values[key]));
-			}else if(key === "avatar"){
-				const imageLength = values[key].length;
-				for(let i = 0; i < imageLength ; i++){
-					formData.append(key,values[key][i]);
-				}
-			}else{
+			}
+			else{
 				formData.append(key,values[key]);
 			}
 		}

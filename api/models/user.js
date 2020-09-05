@@ -20,7 +20,7 @@ const user = new Schema({
         firstName : {type: String, required : true},
         lastName : {type: String, required : true},
     },
-    avatar : {type : Image.schema, default : null},
+    avatar : {type: mongoose.Schema.Types.ObjectId, ref: 'Image',default:null},
     email : {
         type: String, 
         required : true,

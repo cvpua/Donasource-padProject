@@ -233,6 +233,7 @@ exports.makePost =  (req,res) => {
                         image.publicId = uploadedResponse.public_id;
                         image.save()
                         .then(console.log("Image saved!"))
+                        .catch(err => console.log(err))
                     } catch(err){
                             console.log(err)
                     } 
@@ -288,6 +289,8 @@ exports.makePost =  (req,res) => {
                     res.json({message :err})
                 }) 
             })
+            .catch(err => console.log(err))
+            
         }
     });    
     

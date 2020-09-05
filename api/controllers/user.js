@@ -17,7 +17,7 @@ const Donee = require("../models/donee");
 
 const storage = multer.diskStorage({
     destination: function(req,file,cb){
-        cb(null, './profilePictures'); 
+        cb(null, './uploads'); 
     },
     filename : function(req,file,cb){
         cb(null, new Date().toISOString() + file.originalname);
@@ -101,6 +101,7 @@ exports.getUser = (req,res) =>{
         populate: {
             path: 'images'
         }})
+    .populate('avatar')
     .exec()
     .then( user => {
         if (!user){
@@ -201,15 +202,14 @@ exports.editUser = (req,res) => {
                 toUpdate[property[0]] = property[1];
                 }
             }    
-
-            if(req.files && req.files.length > 0){
+            
+            if(req.file){
                 const image = new Image ({
                     _id : mongoose.Types.ObjectId(),
-                    imageName : req.files[0].filename,
-                    imagePath : req.files[0].filepath,
+                    imageName : req.file.filename,
+                    imagePath : req.file.path,
                 })
-                toUpdate[avatar] = image;
-
+                
                 try{
                     let dir = 'users/icon/'+toUpdate.name.lastName+toUpdate.name.firstName+'/';
                     const path = image.imagePath;
@@ -221,12 +221,14 @@ exports.editUser = (req,res) => {
                         function(error,result){ console.log("Images uploaded to folder")});
                     image.url = uploadedResponse.url;
                     image.publicId = uploadedResponse.public_id;
+                    toUpdate["avatar"] = image._id;
                     image.save()
-                    .then(console.log("Image saved!"))
-                } catch(err){
+                    .then(response => {
+                        console.log("Image saved!")
+                    })
+                } catch(err){ 
                         console.log(err)
                 } 
-
                 fs.rmdir('./uploads', { recursive: true }, (err) => {
                     if (err) {
                         throw err;
@@ -234,14 +236,16 @@ exports.editUser = (req,res) => {
                     console.log(`./uploads deleted!`);
                 });
             }
-
+            
             User.updateOne({_id : req.params.userId},{$set : toUpdate})
             .exec()
             .then(response => {
                 User.findById(req.params.userId)
+                .populate('avatar')
                 .exec()
                 .then(user => { 
-                    res.json({message : "User updated!", user});
+                    res.json({message : "User updated!", user})
+                
                 })
             })
             .catch(err => {
