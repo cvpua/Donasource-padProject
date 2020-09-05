@@ -2,10 +2,9 @@ import React,{useState} from 'react'
 import { Box, Flex, Avatar, Text, Collapse, Button, Divider, Badge } from '@chakra-ui/core'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import Toast from './Toast.js'
 import { BiCheckboxSquare } from 'react-icons/bi'
 
-const Avail = ({avail,userId}) => {
+const Avail = ({avail, accept, reject, isSubmitting}) => {
 	const {
 		_id: availId,
 		user, 
@@ -30,46 +29,9 @@ const Avail = ({avail,userId}) => {
   const sec = Math.floor(time / (1000))
 
   const [show, setShow] = useState(false)
-  const [message, setMessage] = useState()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-	const acceptRequest = async () => {
-		console.log('Accept Request')
-		setIsSubmitting(true)
-		try{
-			const { data } = await axios.patch(`/api/users/${userId}/avails/${availId}`, {response: "ACCEPT"})
-			setIsSubmitting(false)
-		}catch(error){
-			alert(error.message)
-			setMessage({
-        title: "Error",
-        description: error.message,
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      })
-		}
-	}
-
-	const rejectRequest = async () => {
-		setIsSubmitting(true)
-		try{
-			const { data } = await axios.patch(`/api/users/${userId}/avails/${availId}`, {response: "REJECT"})
-			setIsSubmitting(false)
-		}catch(error){
-			setMessage({
-        title: "Error",
-        description: error.message,
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-      })
-		}
-	}
 
 	return (
 		<React.Fragment>
-			<Toast message={message} />
 			<Box pt="4" px="6">
 				<Flex align="center"rounded="lg" pb="4">
 					{/* Avatar */}
@@ -115,8 +77,8 @@ const Avail = ({avail,userId}) => {
 		      </Button>
 		     </Box>
 		    <Flex justify="flex-end">
-					<Button size="sm" isLoading={isSubmitting} onClick={() => rejectRequest()} >Reject</Button>
-					<Button size="sm" isLoading={isSubmitting} onClick={() => acceptRequest()} variantColor="cyan" ml="2">Accept</Button>
+					<Button size="sm" isLoading={isSubmitting} onClick={() => reject(availId)} >Reject</Button>
+					<Button size="sm" isLoading={isSubmitting} onClick={() => accept(availId)} variantColor="cyan" ml="2">Accept</Button>
 				</Flex>
 			</Box>
 			<Divider />

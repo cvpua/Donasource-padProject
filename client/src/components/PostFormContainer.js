@@ -72,7 +72,7 @@ const PostFormContainer = (props) => {
 				formData.append(key,values[key]);
 			}
 		}
-
+		
 		// --------------------------------
 
 		try {
@@ -97,7 +97,7 @@ const PostFormContainer = (props) => {
 		}catch(error){
 			setMessage({
         title: "Error",
-        description: error.message,
+        description: error.response.data.message,
         status: "error",
         duration: 2000,
         isClosable: true,

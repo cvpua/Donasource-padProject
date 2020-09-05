@@ -49,13 +49,12 @@ const Profile = () => {
 	
 	const createPost = (post) => {
 		setFeed((prevState) => ([
-			...prevState,
 			post,
+			...prevState,
 		]))
 	}
 
 	const updateProfile = (user) => {
-		console.log('Updated User: ', user)
 		setProfile((prevState) => ({
 			...prevState,
 			...user,
@@ -70,13 +69,12 @@ const Profile = () => {
 					...prevState,
 					...data.user,
 				}))
-				console.log('Feed: ', data.user.posts)
 				setFeed(data.user.posts)
 				setIsLoading(false)
 			}catch(error){
 				setMessage({
 	        title: "Error",
-	        description: error.message,
+	        description: error.response.data.message,
 	        status: "error",
 	        duration: 2000,
 	        isClosable: true,
@@ -102,7 +100,7 @@ const Profile = () => {
 						/>
 					</Flex>
         :
-        	<Box mx="4" mb={{base: "24", md: "2"}} shadow="sm" bg="white" rounded="lg">
+        	<Box mx={{base: "0", sm: "4"}} mb={{base: "24", md: "2"}} shadow="sm" bg="white" rounded="lg">
 						<Flex justify="flex-end">
 							<IconButton onClick={onOpen} variant="ghost" icon={BiEdit} size="lg" m="2"/>
 						</Flex>

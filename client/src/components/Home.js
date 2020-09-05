@@ -17,8 +17,8 @@ const Home = () => {
 
 	const createPost = (post) => {
 		setPosts((prevState) => ([
-			...prevState,
 			post,
+			...prevState,
 		]))
 	}
 
@@ -34,7 +34,7 @@ const Home = () => {
 	    }catch(error){
 	      setMessage({
 	        title: "Error",
-	        description: error.message,
+	        description: error.response.data.message,
 	        status: "error",
 	        duration: 2000,
 	        isClosable: true,

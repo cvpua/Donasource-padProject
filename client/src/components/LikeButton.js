@@ -1,5 +1,5 @@
 import React,{ useState, useContext, useEffect } from 'react'
-import { IconButton } from '@chakra-ui/core'
+import { IconButton, Flex, Box } from '@chakra-ui/core'
 import {AiOutlineHeart,AiFillHeart} from 'react-icons/ai'
 import { UserContext } from '../App.js'
 import axios from 'axios'
@@ -17,17 +17,20 @@ const LikeButton = (props) => {
 	const [isLiked, setIsLiked] = useState(false)
 	const [isLoading, setIsLoading] = useState(false)
 	const [message, setMessage] = useState()
+	const [likes, setLikes] = useState(likers.length)
+
 
 	const toggle = async () => {
 		setIsLoading(true)
 		try{
 			const { data } = await axios.patch(`/api/posts/${postId}/likes`, {userId, name, username})
-			setIsLoading(false)
+			setLikes(prevState => (isLiked ? prevState - 1 : prevState + 1))
 			setIsLiked(!isLiked)
+			setIsLoading(false)
 		}catch(error){
 			setMessage({
         title: "Error",
-        description: error.message,
+        description: error.response.data.message,
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -42,16 +45,21 @@ const LikeButton = (props) => {
 
 	return (
 		<React.Fragment>
-		<Toast message={message} />
-		<IconButton 
-			variant="ghost"
-			icon={isLiked ? AiFillHeart : AiOutlineHeart} 
-			isRound 
-			size="lg"
-			onClick={toggle} 
-			color={isLiked ? "red.800" : ""} 
-			isLoading={isLoading}			
-		/>
+			<Toast message={message} />
+			<Flex align="center"> 
+				<IconButton 
+					variant="ghost"
+					icon={isLiked ? AiFillHeart : AiOutlineHeart} 
+					rounded="full" 
+					size="lg"
+					onClick={toggle} 
+					color={isLiked ? "red.800" : ""} 
+					isLoading={isLoading}	
+				/>
+				<Box visibility={likes === 0 ? "hidden" : "visible"}>
+					{likes}
+				</Box>
+			</Flex>
 		</React.Fragment>
 	)
 }

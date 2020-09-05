@@ -15,12 +15,52 @@ const AvailsSection = () => {
 	const [avails, setAvails] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
 	const [message, setMessage] = useState()
+	const [isSubmitting, setIsSubmitting] = useState(false)
+
+	const accept = async (availId) => {
+		setIsSubmitting(true)
+		try{
+			const { data } = await axios.patch(`/api/users/${userId}/avails/${availId}`, {response: "ACCEPT"})
+			setAvails(prevState => ([
+				...prevState,
+				...data.avails
+			]))
+			setIsSubmitting(false)
+		}catch(error){
+			setMessage({
+        title: "Error",
+        description: error.response.data.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      })
+		}
+	}
+
+	const reject = async (availId) => {
+		setIsSubmitting(true)
+		try{
+			const { data } = await axios.patch(`/api/users/${userId}/avails/${availId}`, {response: "REJECT"})
+			setAvails(prevState => ([
+				...prevState,
+				...data.avails
+			]))
+			setIsSubmitting(false)
+		}catch(error){
+			setMessage({
+        title: "Error",
+        description: error.response.data.message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      })
+		}
+	}
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try{
 				const { data } = await axios.get(`/api/users/${userId}/avails`)
-				console.log('Avails: ', data.avails)
 				setAvails(prevState => ([
 					...prevState,
 					...data.avails
@@ -29,7 +69,7 @@ const AvailsSection = () => {
 			}catch(error){
 				setMessage({
 	        title: "Error",
-	        description: error.message,
+	        description: error.response.data.message,
 	        status: "error",
 	        duration: 2000,
 	        isClosable: true,
@@ -62,14 +102,12 @@ const AvailsSection = () => {
             <Text>You can post more donations to get more request.</Text>
           </Flex>
         :
-					<Box mx="4" rounded="lg" bg="white" shadow="sm" pb="2">
+					<Box mx={{base: "0", sm: "4"}} mb={{base: "24", md: "2"}} rounded="lg" bg="white" shadow="sm" pb="2">
 						<Divider />
 							{
 
 								avails.map((avail) => {
-									console.log(userId)
-									console.log('Avails length: ', avails.length)
-									return (<Avail avail={avail} userId={userId} />)
+									return (<Avail avail={avail} accept={accept} reject={reject} isSubmitting={isSubmitting} />)
 								})
 							}
 					</Box>

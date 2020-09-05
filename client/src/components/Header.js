@@ -47,7 +47,7 @@ const Header = (props) => {
     }catch(error){
       setMessage({
         title: "Error",
-        description: error.message,
+        description: error.response.data.message,
         status: "error",
         duration: 2000,
         isClosable: true,
