@@ -31,7 +31,7 @@ const ChangePasswordFormContainer = (props) => {
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
 		try {
-			const { data } = await axios.patch(`/api/user/${userId}/changePassword`, values)
+			const { data } = await axios.patch(`/api/users/${userId}/changePassword`, values)
 			handleIsSubmitting(false)
 			onClose()
 		}catch (error){

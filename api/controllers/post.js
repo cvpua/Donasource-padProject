@@ -401,12 +401,12 @@ exports.likePost = (req,res) => {
                                             res.status(200).json({message : "Post liked!"})
                                         })
                                         .catch(err =>{
-                                            console.log({message:err})
+                                            console.log(err)
                                             res.json({message:err})
                                         })
                                     })
                                     .catch(err =>{
-                                        console.log(message:err)
+                                        console.log(err)
                                         res.json({message:err})
                                         
                                     })
@@ -627,19 +627,20 @@ exports.deletePost = (req,res) => {
                 .then(response => {
                     res.status(200).json({message : "Post deleted!",post})
                 })
-                .catch( err =>
+                .catch( err =>{
                     console.log(err)
                     res.json({message:err})
-                )
+
+                })
             })
-            .catch( err =>
-                console.log(err)
-                res.json({message:err})
+            .catch( err => {
+                    console.log(err)
+                    res.json({message:err})
+                }
             )
         })
         .catch(err => {
-            res.status(500).json({message: "Unable to delete post",
-            err})
+            res.status(500).json({message: "Unable to delete post",err})
     })
     })
     .catch(err =>{

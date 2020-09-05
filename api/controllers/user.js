@@ -158,49 +158,67 @@ exports.seeNotification = (req,res) => {
     .catch()
 }
 
-exports.editUser = async(req,res) => {
-    const toUpdate = {}
-    for(const property of Object.entries(req.body)){
-        if( toUpdate[property[0]] === "name"){
-            toUpdate[property[0]] = JSON.parse(property[1])
+exports.editUser = (req,res) => {
+   
+    upload(req,res, async function(err){
+        
+        if(err){
+            res.status(415).json({
+                message:"Error in uploading images in the uploads folder",
+                response: err
+            });
         }else{
-        toUpdate[property[0]] = property[1];
+            const toUpdate = {}
+            for(const property of Object.entries(req.body)){
+                if( property[0] === "name"){  
+                    toUpdate[property[0]] = JSON.parse(property[1])
+                }else{
+                toUpdate[property[0]] = property[1];
+                }
+            }    
+
+            if(req.files && req.files.length > 0){
+                const image = new Image ({
+                    _id : mongoose.Types.ObjectId(),
+                    imageName : req.files[0].filename,
+                    imagePath : req.files[0].filepath,
+                })
+                toUpdate[avatar] = image;
+
+                try{
+                    let dir = 'users/icon/'+toUpdate.name.lastName+toUpdate.name.firstName+'/';
+                    const path = image.imagePath;
+                    const uploadedResponse = await cloudinary.uploader.upload(path,
+                        {
+                        folder : dir,
+                        public_id : image.imageName
+                        }, 
+                        function(error,result){ console.log("Images uploaded to folder")});
+                    image.url = uploadedResponse.url;
+                    image.publicId = uploadedResponse.public_id;
+                    image.save()
+                    .then(console.log("Image saved!"))
+                } catch(err){
+                        console.log(err)
+                } 
+            }
+
+            User.updateOne({_id : req.params.userId},{$set : toUpdate})
+            .exec()
+            .then(response => {
+                User.findById(req.params.userId)
+                .exec()
+                .then(user => { 
+                    res.json({message : "User updated!", user});
+                })
+            })
+            .catch(err => {
+                res.json({message: "User not updated", err})
+            })
         }
-    }    
-
-    if(req.files && req.files.length > 0){
-        const image = new Image ({
-            _id : mongoose.Types.ObjectId(),
-            imageName : req.files[0].filename,
-            imagePath : req.files[0].filepath,
-        })
-        toUpdate[avatar] = image;
-
-        try{
-            const path = image.imagePath;
-            const uploadedResponse = await cloudinary.uploader.upload(path);
-            image.url = uploadedResponse.url;
-            image.publicId = uploadedResponse.public_id;
-            image.save()
-            .then(console.log("Image saved!"))
-        } catch(err){
-                console.log(err)
-        } 
-    }
-
-    User.updateOne({_id : req.params.userId},{$set : toUpdate})
-    .exec()
-    .then(response => {
-        User.findById(req.params.userId)
-        .exec()
-        .then(user => { 
-            res.json({message : "User updated!", user});
-        })
-    })
-    .catch(err => {
-        res.json({message: "User not updated", err})
-    })
+     })  
 }
+
 
 exports.changePassword = (req,res) => {
     User.findById(req.params.userId)
@@ -255,6 +273,7 @@ exports.changePassword = (req,res) => {
     })
     .catch(err =>{
         console.log(err)
+        res.json({message: "User not found"})
     })
 }
 
