@@ -61,7 +61,7 @@ const EditProfileFormContainer = (props) => {
 		for(var key in values){
 			if (key === "name"){
 				formData.append(key, JSON.stringify(values[key]));
-			}else if(key === "avatar" && values[key]){
+			}else if(key === "avatar" && values[key] && values[key]._id){
 				formData.append(key,values[key]._id)
 			}
 			else{
