@@ -401,12 +401,12 @@ exports.likePost = (req,res) => {
                                             res.status(200).json({message : "Post liked!"})
                                         })
                                         .catch(err =>{
-                                            console.log({message:err})
+                                            console.log(err)
                                             res.json({message:err})
                                         })
                                     })
                                     .catch(err =>{
-                                        console.log(message:err)
+                                        console.log(err)
                                         res.json({message:err})
                                         
                                     })
@@ -581,27 +581,12 @@ exports.request = (req,res) => {
                 
             })
 
-            const notification = new Notification({
-                _id: mongoose.Types.ObjectId(),
-                type : "request",
-                postId : req.params.postId,
-                user : req.body.userId,
-                title : post.title,
-                date : Date.now()
-            })
-            notification.save(err=>{
-                if(err) throw err;
-            })
-
             post.user.avails.push(avail)
             avail.save()
             .then(response =>{
-                post.user.notifications.push(notification)
-                post.user.save()
-                .then(response => {
                     res.json({
                         message : "Request sent to the OP"
-                    })
+                    
                 })
             })
         })
@@ -627,19 +612,20 @@ exports.deletePost = (req,res) => {
                 .then(response => {
                     res.status(200).json({message : "Post deleted!",post})
                 })
-                .catch( err =>
+                .catch( err =>{
                     console.log(err)
                     res.json({message:err})
-                )
+
+                })
             })
-            .catch( err =>
-                console.log(err)
-                res.json({message:err})
+            .catch( err => {
+                    console.log(err)
+                    res.json({message:err})
+                }
             )
         })
         .catch(err => {
-            res.status(500).json({message: "Unable to delete post",
-            err})
+            res.status(500).json({message: "Unable to delete post",err})
     })
     })
     .catch(err =>{

@@ -26,7 +26,7 @@ router.get('/api/users/:userId/notifications/:notifId',UserController.seeNotific
 
 
 // {field/s : updatedValue}
-router.patch('/api/user/:userId/editUser',checkAuth,UserController.editUser)
+router.patch('/api/users/:userId/editUser',checkAuth,UserController.editUser)
 
 
 //oldPassword

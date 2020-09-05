@@ -49,8 +49,32 @@ const EditProfileFormContainer = (props) => {
 
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
+
+		let formData = new FormData();
+		for(var key in values){
+			if (key === "name"){
+				formData.append(key, JSON.stringify(values[key]));
+			}else if(key === "images"){
+				const imageLength = values[key].length;
+				for(let i = 0; i < imageLength ; i++){
+					formData.append(key,values[key][i]);
+				}
+			}else{
+				formData.append(key,values[key]);
+			}
+		}
+
+
+
 		try{
-			const { data } = await axios.patch(`/api/user/${userId}/editUser`, values)
+			const { data } = await axios.patch(`/api/users/${userId}/editUser`, 
+				formData,
+				{
+				headers: {
+				'Content-Type' : "multipart/form-data; boundary=<calculated when request is sent>"
+				}
+			}
+				)
 			const { user: newUser } = data
 			updateProfile(newUser)
 
