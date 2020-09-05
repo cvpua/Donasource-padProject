@@ -4,6 +4,8 @@ const multer = require('multer');
 const fs = require('fs-extra');
 const bcrypt = require('bcrypt');
 
+const {cloudinary} = require('../../config/cloudinary');
+
 const Image = require('../models/image');
 const User = require('../models/user');
 const Notification = require('../models/notification');
