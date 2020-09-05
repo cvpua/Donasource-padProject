@@ -23,7 +23,7 @@ const LikeButton = (props) => {
 	const toggle = async () => {
 		setIsLoading(true)
 		try{
-			const { data } = await axios.patch(
+			await axios.patch(
 				`/api/posts/${postId}/likes`, 
 				{userId, name, username},
 				{

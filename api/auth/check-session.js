@@ -4,7 +4,7 @@ const { response } = require('express');
 
 
 module.exports = (req,res,next) => {
-    
+    console.log('Authorization: ', req.headers.authorization)
     const token = req.headers.authorization.split(" ")[1]
     blacklist.findOne({token : token})
     .exec()

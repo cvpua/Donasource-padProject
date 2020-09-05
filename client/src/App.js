@@ -1,6 +1,6 @@
 import React,{useState, useLayoutEffect} from 'react'
 import customTheme from './styles/theme'
-import { ThemeProvider,CSSReset,Flex } from '@chakra-ui/core'
+import { ThemeProvider,CSSReset,Flex, Spinner } from '@chakra-ui/core'
 import { Route, Switch } from 'react-router-dom'
 import { Header, Left, Nav, Middle, Home, Right } from './components'
 import PostSection from './components/PostSection.js'
@@ -27,6 +27,7 @@ const App = () => {
 
   // Toast Message
   const [message, setMessage] = useState()
+  const [isLoading, setIsLoading] = useState(true)
 
   const login = async (user) => {
     try{
@@ -50,7 +51,7 @@ const App = () => {
 
   const signup = async (user) => {
     try{
-      const { data } = await axios.post('/api/signup',user)
+      await axios.post('/api/signup',user)
       setMessage({
         title: "Success",
         description: "You have successfully created your account.",
@@ -70,7 +71,37 @@ const App = () => {
   }
 
   useLayoutEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user")))
+    const USER = JSON.parse(localStorage.getItem("user"))
+    const fetchData = async () =>{
+      try {
+        const { data } = await axios.get('/api/checkSession',{
+          headers: {
+          'Authorization': 'Bearer ' + USER.token,
+          }
+        })
+
+        if (!data.isvalidToken) {
+          localStorage.clear()
+          setIsLoading(false)
+        }else{
+          setUser(USER)
+          setIsLoading(false)
+        }
+      }catch(error){
+        setMessage({
+          title: "Error",
+          description: error.message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+        })
+      }
+    }
+    if (USER){
+      fetchData()
+    }else{
+      setIsLoading(false)
+    }
   }, [])
 
   return (
@@ -79,6 +110,17 @@ const App = () => {
       <UserContext.Provider value={[user,setUser]}>
         <Toast message={message} />
         {
+          isLoading ? 
+            <Flex h="100vh" justify="center" align="center" >
+              <Spinner
+                thickness="6px"
+                speed="0.65s"
+                emptyColor="gray.200"
+                color="primary.600"
+                size="xl"
+              />
+            </Flex>
+          :
           !user ? <LoginSignup login={login} signup={signup} />
           : <div>
               {/* Header */}

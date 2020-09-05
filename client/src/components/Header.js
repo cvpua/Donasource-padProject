@@ -33,7 +33,7 @@ const Header = (props) => {
 
   const logout = async () => {
     try {
-      const { data } = await axios.post(
+      await axios.post(
         '/api/logout',
         {}, 
         {

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 
 const Notification = ({notif, seenNotif}) => {
 	const {
-		_id: notifId,
 		user,
 		type,
 		postId,

@@ -7,6 +7,7 @@ import Post from './Post.js'
 import SectionHeader from './SectionHeader.js'
 import PostSkeleton from './PostSkeleton.js'
 import Toast from './Toast.js'
+import { Link } from 'react-router-dom'
 
 const INIT_POST = {
 		avatar: null,
@@ -86,7 +87,9 @@ const PostSection = ({match}) => {
 			              <Box key={comment._id} borderTop="1px" borderColor="gray.200" mb="4" pt="4">
 			                <Flex mb="2">
 			                  {/* Avatar */}
-			                  <Avatar size="md" name={author} src={comment.user.avatar && comment.user.avatar.url} mr="4"/>
+			                  <Link to={`/${comment.user.username}`}>
+			                  	<Avatar size="md" name={author} src={comment.user.avatar && comment.user.avatar.url} mr="4"/>
+			                  </Link>
 			                  {/* Author */}
 			                  <Box>
 				                  <Text fontWeight="bold" >{author}</Text>

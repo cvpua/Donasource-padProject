@@ -30,7 +30,7 @@ const NotificationSection = () => {
 
 	const seenNotif = async (notifId) => {
 		try{
-			const { data } = await axios.get(`/api/users/${userId}/notifications/${notifId}`)
+			await axios.get(`/api/users/${userId}/notifications/${notifId}`)
 		}catch(error){
 			setMessage({
         title: "Error",

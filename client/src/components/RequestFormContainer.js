@@ -47,7 +47,7 @@ const RequestFormContainer = (props) => {
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
 		try {
-			const { data } = await axios.patch(
+			await axios.patch(
 				`/api/posts/${postId}/request`, 
 				values,
 				{
