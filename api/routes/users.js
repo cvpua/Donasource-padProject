@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const UserController = require('../controllers/user');
-
+const checkAuth = require('../auth/check-auth');
 
 // get all user
 router.get('/api/users',UserController.getAllUsers)
@@ -26,17 +26,17 @@ router.get('/api/users/:userId/notifications/:notifId',UserController.seeNotific
 
 
 // {field/s : updatedValue}
-router.patch('/api/user/:userId/editUser',UserController.editUser)
+router.patch('/api/user/:userId/editUser',checkAuth,UserController.editUser)
 
 
 //oldPassword
 //newPassword
 //newPasswordCopy
-router.patch('/api/users/:userId/changePassword',UserController.changePassword)
+router.patch('/api/users/:userId/changePassword',checkAuth,UserController.changePassword)
 
 router.get('/api/users/:userId/avails',UserController.getAvails)
 
 //respond to request
-router.patch('/api/users/:userId/avails/:availId',UserController.respondToAvails);
+router.patch('/api/users/:userId/avails/:availId',checkAuth,UserController.respondToAvails);
 
 module.exports = router;
