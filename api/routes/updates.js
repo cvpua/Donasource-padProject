@@ -5,6 +5,7 @@ const User = require('../models/user');
 const Post = require('../models/post');
 const { response } = require('express');
 
+const checkSession = require('../auth/check-session');
 
 // req.body === properties to be updated : initial value
 
@@ -99,7 +100,7 @@ router.get('/api/checkDeadlines', (req,res) =>{
     })
 })
 
-
+router.get('/api/checkSession',checkSession);
 
 
 module.exports = router;
