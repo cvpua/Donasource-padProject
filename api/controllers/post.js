@@ -213,24 +213,43 @@ exports.makePost =  (req,res) => {
                 .then(
                     post.save()
                     .then(
-                        res.status(200).json({
-                            message:"Post created!",
-                            post,
-                            user: {
-                                name: user.name,
-                                avatar: user.avatar,
-                                username: user.username
+                        Post.find()
+                        .populate("user","avatar name username")
+                        .populate("comments")
+                        .populate({path: 'items',
+                            populate : {
+                                path :' donor',
+                                populate : {
+                                    path: 'user',
+                                    select : 'name avatar'
+                                }
                             }
                         })
+                        .populate('images')
+                        .exec()
+                        .then(posts => {
+                            console.log(posts)
+                            res.status(200).json({
+                                message:"Post created!",
+                                post,
+                                user: {
+                                    name: user.name,
+                                    avatar: user.avatar,
+                                    username: user.username
+                                },
+                                postList : posts
+                            })
+                        })
+                        
                     )
                     .catch(err => {
                         console.log(err)
-                        res.json(err)
+                        res.json({message :err})
                     })
                 )
                 .catch(err => {
                     console.log(err)
-                    res.json(err)
+                    res.json({message :err})
                 }) 
             })
         }
@@ -292,7 +311,7 @@ exports.makeComment = (req,res) => {
                                 
                             })
                         })
-                        .catch(err => console.log({err,message: "Comment not created (1)"}))
+                        .catch(err => console.log({err,message: "Comment not created because user not found"}))
 
                         
                     })
@@ -302,7 +321,7 @@ exports.makeComment = (req,res) => {
                 })
             })
             .catch(err =>{
-                res.status(500).json({message : "Comment not created (2)",err:err.response})
+                res.status(500).json({message : "Comment not created because post was not saved",err:err.response})
             })
     })
     .catch(err => {
@@ -382,11 +401,14 @@ exports.likePost = (req,res) => {
                                             res.status(200).json({message : "Post liked!"})
                                         })
                                         .catch(err =>{
-                                            console.log(err)
+                                            console.log({message:err})
+                                            res.json({message:err})
                                         })
                                     })
                                     .catch(err =>{
-                                        console.log(err)
+                                        console.log(message:err)
+                                        res.json({message:err})
+                                        
                                     })
                                      
                                 })     
@@ -512,10 +534,12 @@ exports.donate = (req,res) => {
                             })
                             .catch(err =>{
                                 console.log(err)
+                                res.json({message:err})
                             })
                         })
                         .catch(err =>{
                             console.log(err)
+                            res.json({message:err})
                         })
                     })
                 })
@@ -605,10 +629,12 @@ exports.deletePost = (req,res) => {
                 })
                 .catch( err =>
                     console.log(err)
+                    res.json({message:err})
                 )
             })
             .catch( err =>
                 console.log(err)
+                res.json({message:err})
             )
         })
         .catch(err => {
@@ -618,6 +644,7 @@ exports.deletePost = (req,res) => {
     })
     .catch(err =>{
         console.log(err)
+        res.json({message:err})
     })
     
     

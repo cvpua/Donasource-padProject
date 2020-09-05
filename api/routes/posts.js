@@ -18,20 +18,20 @@ router.get('/api/posts/images',PostController.getImages)
 router.post('/api/posts',checkAuth,PostController.makePost);
 
 //make a comment
-router.patch('/api/posts/:postId/comments',PostController.makeComment);
+router.patch('/api/posts/:postId/comments',checkAuth,PostController.makeComment);
 
 //like/unlike a post
-router.patch('/api/posts/:postId/likes',PostController.likePost);
+router.patch('/api/posts/:postId/likes',checkAuth,PostController.likePost);
 
 //donate 
-router.put('/api/posts/:postId/donate',PostController.donate);
+router.put('/api/posts/:postId/donate',checkAuth,PostController.donate);
 
 //request
-router.patch('/api/posts/:postId/request',PostController.request);
+router.patch('/api/posts/:postId/request',checkAuth,PostController.request);
 
 
 // delete a post
-router.delete('/api/posts/:postId',PostController.deletePost);
+router.delete('/api/posts/:postId',checkAuth,PostController.deletePost);
 
 
 module.exports = router;

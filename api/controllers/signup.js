@@ -18,46 +18,58 @@ exports.signup = (req,res) => {
                 message : "Email is already used"
             })
         }else{
-            
-            const salt = req.body.username;
-            
-            bcrypt.genSalt(10,(err,salt) => {
-                bcrypt.hash(req.body.password,salt,(err,hash) => {
 
-                    if(err){
-                        res.status(500).json({err});
-                        return;
-                    }else{
-                        const newUser = new User({
-                            _id: new mongoose.Types.ObjectId(),
-                            username : req.body.username,
-                            password : hash,  
-                            name : {
-                                firstName : req.body.firstName,
-                                lastName : req.body.lastName
-                            },
-                            email : req.body.email,
-                            location : req.body.location,
-                            contactNumber : req.body.contactNumber
-                        })
-
-                        newUser.save()
-                        .then( user => {
-                            if (user){
-                                res.status(200).json({
-                                    message : "User created!"
+            User.find({username : req.body.username})
+            .exec()
+            .then(user => {
+                if(user.length >= 1){
+                    return res.status(409).json({
+                        message : "Email is already used"
+                    })
+                }else{
+                    const salt = req.body.username;
+            
+                    bcrypt.genSalt(10,(err,salt) => {
+                        bcrypt.hash(req.body.password,salt,(err,hash) => {
+        
+                            if(err){
+                                res.status(500).json({err});
+                                return;
+                            }else{
+                                const newUser = new User({
+                                    _id: new mongoose.Types.ObjectId(),
+                                    username : req.body.username,
+                                    password : hash,  
+                                    name : {
+                                        firstName : req.body.firstName,
+                                        lastName : req.body.lastName
+                                    },
+                                    email : req.body.email,
+                                    location : req.body.location,
+                                    contactNumber : req.body.contactNumber
+                                })
+        
+                                newUser.save()
+                                .then( user => {
+                                    if (user){
+                                        res.status(200).json({
+                                            message : "User created!"
+                                        })
+                                    }
+                                })
+                                .catch(error =>{
+                                    const message = error.keyValue ? "Username is already used" : "Invalid email format"
+                                        res.status(401).json({
+                                            error
+                                        })
                                 })
                             }
-                        })
-                        .catch(error =>{
-                            const message = error.keyValue ? "Username is already used" : "Invalid email format"
-                                res.status(401).json({
-                                    error
-                                })
-                        })
-                    }
-                });
-            });
+                        });
+                    });
+                }
+            })
+            
+           
             
             
         }
@@ -98,10 +110,6 @@ exports.login = (req,res) => {
             })
                 return res.status(200).json({
                     message : "Logged in",
-                    // userId : user._id,
-                    // username: user.username,                    
-                    // email : user.email,
-                    // name : user.name.firstName + " " + user.name.lastName,
                     user:user,
                     isLoggedIn : true,
                     token : token
@@ -130,6 +138,7 @@ exports.logout = (req,res) => {
     })
     .catch(err => {
         console.log(err)
+        res.json({message:err})
     })
 }
 
