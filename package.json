@@ -8,8 +8,7 @@
     "start": "node server",
     "server": "nodemon --exec babel-node server.js",
     "client": "cd client && npm start",
-    "dev": "concurrently  \" npm run server \" \" npm run client \"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "dev": "concurrently  \" npm run server \" \" npm run client \""
   },
   "author": "",
   "license": "ISC",
