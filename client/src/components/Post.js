@@ -192,6 +192,7 @@ const Post = (props) => {
         isOpen={isOpenComment} 
         onClose={onCloseComment}
         addComment={addComment} 
+        postId={postId}
       />
     </div>
 	)
