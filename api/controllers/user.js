@@ -65,11 +65,33 @@ exports.getUser = (req,res) =>{
             path: 'items',
             populate : {
                 path :' donor',
+                select: 'amountDonated',
                 populate : {
                     path: 'user',
                     select : 'name username avatar'
                 }
             }
+        }
+    })
+    .populate({
+        path: 'posts',
+        populate: {
+            path: 'items',
+            populate : {
+                path :' donee',
+                select: 'amountRequested',
+                populate : {
+                    path: 'user',
+                    select : 'name username avatar'
+                }
+            }
+        }
+    })
+    .populate({
+        path: 'posts',
+        populate: {
+            path: 'likers',
+            select: 'name username avatar'
         }
     })
     .populate({
@@ -158,6 +180,8 @@ exports.seeNotification = (req,res) => {
 }
 
 exports.editUser = async(req,res) => {
+    console.log('Body: ', req.body)
+    console.log('Files: ', req.files)
     const toUpdate = {}
     for(const property of Object.entries(req.body)){
         if( toUpdate[property[0]] === "name"){
