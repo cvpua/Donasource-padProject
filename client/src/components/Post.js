@@ -6,16 +6,12 @@ import {
   Box, 
   Flex, 
   IconButton, 
-  Button,
   Text, 
   PseudoBox, 
   useDisclosure, 
   Image,
   Badge,
-  AvatarGroup,
-  Avatar,
   Divider,
-  Stack,
 } from '@chakra-ui/core'
 import { BiDonateHeart, BiCommentDots, BiMessageAltEdit} from 'react-icons/bi'
 import LikeButton from './LikeButton.js'
@@ -43,7 +39,6 @@ const Post = (props) => {
     status: mainStatus,
     images,
     datePosted,
-    likes,
     comments,
 	} = data
   
@@ -120,9 +115,9 @@ const Post = (props) => {
                 >
                   {
                     status !== "PENDING" ? status
-                    :hoursRemaining <= 1 ? `${minsRemaining}min left`
-                    : daysRemaining <= 1 ? `${hoursRemaining}hr left`
-                    : `${daysRemaining}d left`
+                    :hoursRemaining <= 1 ? `${minsRemaining} mins left`
+                    : daysRemaining <= 1 ? `${hoursRemaining} hrs left`
+                    : `${daysRemaining} days left`
                   }
                 </Badge>
               </Box>

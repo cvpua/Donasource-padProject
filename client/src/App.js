@@ -38,7 +38,6 @@ const App = () => {
       setUser(info)
       localStorage.setItem("user", JSON.stringify(info))
     }catch(error){
-      console.log('Error: ', error)
       setMessage({
         title: "Error",
         description: error.response.data.message,
@@ -60,7 +59,6 @@ const App = () => {
         isClosable: true,
       })
     }catch(error){
-      console.log('Error: ', error)
       setMessage({
         title: "Error",
         description: error.response.data.message,

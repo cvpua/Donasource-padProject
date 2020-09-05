@@ -10,7 +10,7 @@ const RequestFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, items, postId } = props
 
 	const [USER] = useContext(UserContext)
-	const { user } = USER
+	const { user, token } = USER
 	const { _id: userId } = user
 
 	const [message, setMessage] = useState()
@@ -47,7 +47,15 @@ const RequestFormContainer = (props) => {
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
 		try {
-			const { data } = await axios.patch(`/api/posts/${postId}/request`, values)
+			const { data } = await axios.patch(
+				`/api/posts/${postId}/request`, 
+				values,
+				{
+					headers: {
+						'Authorization': 'Bearer ' + token,
+					}
+				}
+			)
 			handleIsSubmitting(false)
 			onClose()
 		}catch (error){

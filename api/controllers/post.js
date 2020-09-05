@@ -442,7 +442,7 @@ exports.likePost = (req,res) => {
                                         })
                                     })
                                     .catch(err =>{
-                                        console.log(message:err)
+                                        console.log({message:err})
                                         res.json({message:err})
                                         
                                     })
@@ -569,12 +569,10 @@ exports.donate = (req,res) => {
                                 
                             })
                             .catch(err =>{
-                                console.log(err)
                                 res.json({message:err})
                             })
                         })
                         .catch(err =>{
-                            console.log(err)
                             res.json({message:err})
                         })
                     })
@@ -664,12 +662,10 @@ exports.deletePost = (req,res) => {
                     res.status(200).json({message : "Post deleted!",post})
                 })
                 .catch( err =>
-                    console.log(err)
                     res.json({message:err})
                 )
             })
             .catch( err =>
-                console.log(err)
                 res.json({message:err})
             )
         })
@@ -679,7 +675,6 @@ exports.deletePost = (req,res) => {
     })
     })
     .catch(err =>{
-        console.log(err)
         res.json({message:err})
     })
     

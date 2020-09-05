@@ -38,7 +38,6 @@ const PostSection = ({match}) => {
 	const [message, setMessage] = useState()
 
 	const addComment = (comment) => {
-		console.log('Comment: ', comment)
     setComments((prevState) => ([
       ...prevState,
       comment,
@@ -49,7 +48,6 @@ const PostSection = ({match}) => {
   	const fetchData = async () => {
   		try{
 	      const { data } = await axios.get(`/api/posts/${postId}`)
-	      console.log('Post: ', data)
   			setPost(prevState => ({
   				...prevState,
   				...data,

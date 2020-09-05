@@ -52,7 +52,7 @@ const People = ({items, type}) => {
        	{
           people.map((user) => {
           	if (!user.name){
-          		return
+          		return(null)
           	}
           	const fullName = user.name.firstName + " " + user.name.lastName
           	return <Avatar src={user.avatar} name={fullName} />	
@@ -71,7 +71,7 @@ const People = ({items, type}) => {
 	        	{
 	        		people.map((user) => {
 	        			if (!user.name){
-	        				return
+	        				return(null)
 	        			}
 	        			return <React.Fragment>
 	        				<Flex align="center" mb="1">

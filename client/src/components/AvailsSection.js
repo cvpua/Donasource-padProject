@@ -9,20 +9,26 @@ import Toast from './Toast.js'
 
 const AvailsSection = () => {
 	const [USER] = useContext(UserContext)
-	const { user } = USER
+	const { user, token } = USER
 	const { _id: userId } = user
 
 	const [avails, setAvails] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
 	const [message, setMessage] = useState()
-	const [isSubmitting, setIsSubmitting] = useState(false)
 
-	const accept = async (availId) => {
+	const accept = async (availId, setIsSubmitting) => {
 		setIsSubmitting(true)
 		try{
-			const { data } = await axios.patch(`/api/users/${userId}/avails/${availId}`, {response: "ACCEPT"})
+			const { data } = await axios.patch(
+				`/api/users/${userId}/avails/${availId}`, 
+				{response: "ACCEPT"},
+				{
+					headers: {
+						'Authorization': 'Bearer ' + token,
+					}
+				}
+			)
 			setAvails(prevState => ([
-				...prevState,
 				...data.avails
 			]))
 			setIsSubmitting(false)
@@ -37,12 +43,19 @@ const AvailsSection = () => {
 		}
 	}
 
-	const reject = async (availId) => {
+	const reject = async (availId, setIsSubmitting) => {
 		setIsSubmitting(true)
 		try{
-			const { data } = await axios.patch(`/api/users/${userId}/avails/${availId}`, {response: "REJECT"})
+			const { data } = await axios.patch(
+				`/api/users/${userId}/avails/${availId}`, 
+				{response: "REJECT"},
+				{
+					headers: {
+						'Authorization': 'Bearer ' + token
+					}
+				}
+			)
 			setAvails(prevState => ([
-				...prevState,
 				...data.avails
 			]))
 			setIsSubmitting(false)
@@ -107,7 +120,7 @@ const AvailsSection = () => {
 							{
 
 								avails.map((avail) => {
-									return (<Avail avail={avail} accept={accept} reject={reject} isSubmitting={isSubmitting} />)
+									return (<Avail avail={avail} accept={accept} reject={reject} />)
 								})
 							}
 					</Box>

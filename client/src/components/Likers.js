@@ -14,7 +14,7 @@ const Likers = ({likers}) => {
 	        {
 	          likers.map((user) => {
 	            if (!user.name) {
-	            	return
+	            	return(null)
 	            }
 	            return <Avatar src={user.avatar} name={`${user.name.firstName} ${user.name.lastName}`} />
 	          })
@@ -32,7 +32,7 @@ const Likers = ({likers}) => {
           	{
           		likers.map((user) => {
           			if (!user.name) {
-          				return
+          				return(null)
           			}
           			return <React.Fragment>
           				

@@ -107,7 +107,6 @@ const EditProfileFormContainer = (props) => {
 			onClose()
 			history.push(`${username}`)
 		}catch(error){
-			console.log('Error: ', error)
 			setMessage({
         title: "Error",
         description: error.response.data.message,

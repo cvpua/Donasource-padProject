@@ -10,7 +10,7 @@ const CommentFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, addComment, postId } = props
 
 	const [USER] = useContext(UserContext)
-	const { user } = USER
+	const { user, token } = USER
 	const { _id: userId } = user
 
 	const [message, setMessage] = useState()
@@ -27,7 +27,15 @@ const CommentFormContainer = (props) => {
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
 		try {
-			const { data } = await axios.patch(`/api/posts/${postId}/comments`, values)
+			const { data } = await axios.patch(
+				`/api/posts/${postId}/comments`, 
+				values,
+				{
+					headers: {
+						'Authorization': 'Bearer ' + token,
+					}
+				}
+			)
 			if (addComment) {
 				addComment({
 					...data.comment,

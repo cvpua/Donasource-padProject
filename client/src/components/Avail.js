@@ -1,10 +1,9 @@
 import React,{useState} from 'react'
 import { Box, Flex, Avatar, Text, Collapse, Button, Divider, Badge } from '@chakra-ui/core'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
 import { BiCheckboxSquare } from 'react-icons/bi'
 
-const Avail = ({avail, accept, reject, isSubmitting}) => {
+const Avail = ({avail, accept, reject}) => {
 	const {
 		_id: availId,
 		user, 
@@ -29,6 +28,7 @@ const Avail = ({avail, accept, reject, isSubmitting}) => {
   const sec = Math.floor(time / (1000))
 
   const [show, setShow] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
 	return (
 		<React.Fragment>
@@ -77,8 +77,8 @@ const Avail = ({avail, accept, reject, isSubmitting}) => {
 		      </Button>
 		     </Box>
 		    <Flex justify="flex-end">
-					<Button size="sm" isLoading={isSubmitting} onClick={() => reject(availId)} >Reject</Button>
-					<Button size="sm" isLoading={isSubmitting} onClick={() => accept(availId)} variantColor="cyan" ml="2">Accept</Button>
+					<Button size="sm" isLoading={isSubmitting} onClick={() => reject(availId, setIsSubmitting)} >Reject</Button>
+					<Button size="sm" isLoading={isSubmitting} onClick={() => accept(availId, setIsSubmitting)} variantColor="cyan" ml="2">Accept</Button>
 				</Flex>
 			</Box>
 			<Divider />

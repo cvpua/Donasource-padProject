@@ -11,7 +11,7 @@ const DonateFormContainer = (props) => {
 	const { onClose, handleIsSubmitting, items, donate, postId } = props
 
 	const [USER] = useContext(UserContext)
-	const { user } = USER
+	const { user, token } = USER
 
 	const { _id: userId } = user
 
@@ -53,7 +53,15 @@ const DonateFormContainer = (props) => {
 		handleIsSubmitting(true)
 
 		try {
-			const { data } = await axios.put(`/api/posts/${postId}/donate`, values)
+			const { data } = await axios.put(
+				`/api/posts/${postId}/donate`, 
+				values,
+				{
+					headers: {
+						'Authorization': 'Bearer ' + token,
+					}
+				}
+			)
 			donate(data.items)
 			handleIsSubmitting(false)
 			onClose()

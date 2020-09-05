@@ -10,7 +10,7 @@ const ChangePasswordFormContainer = (props) => {
 	const { onClose, handleIsSubmitting } = props
 
 	const [USER] = useContext(UserContext)
-	const { user } = USER
+	const { user, token } = USER
 	const { _id: userId } = user
 
 	const [message, setMessage] = useState()
@@ -31,7 +31,14 @@ const ChangePasswordFormContainer = (props) => {
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
 		try {
-			const { data } = await axios.patch(`/api/user/${userId}/changePassword`, values)
+			const { data } = await axios.patch(`/api/user/${userId}/changePassword`, 
+				values,
+				{
+					headers: {
+						'Authorization': 'Bearer ' + token,
+					}
+				}
+			)
 			handleIsSubmitting(false)
 			onClose()
 		}catch (error){
