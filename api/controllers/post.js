@@ -213,15 +213,34 @@ exports.makePost =  (req,res) => {
                 .then(
                     post.save()
                     .then(
-                        res.status(200).json({
-                            message:"Post created!",
-                            post,
-                            user: {
-                                name: user.name,
-                                avatar: user.avatar,
-                                username: user.username
+                        Post.find()
+                        .populate("user","avatar name username")
+                        .populate("comments")
+                        .populate({path: 'items',
+                            populate : {
+                                path :' donor',
+                                populate : {
+                                    path: 'user',
+                                    select : 'name avatar'
+                                }
                             }
                         })
+                        .populate('images')
+                        .exec()
+                        .then(posts => {
+                            console.log(posts)
+                            res.status(200).json({
+                                message:"Post created!",
+                                post,
+                                user: {
+                                    name: user.name,
+                                    avatar: user.avatar,
+                                    username: user.username
+                                },
+                                postList : posts
+                            })
+                        })
+                        
                     )
                     .catch(err => {
                         console.log(err)
