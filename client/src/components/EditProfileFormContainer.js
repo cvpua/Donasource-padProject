@@ -70,17 +70,17 @@ const EditProfileFormContainer = (props) => {
 			}
 		}
 
+
 		try{
-			const { data } = await axios.patch(
-				`/api/user/${userId}/editUser`, 
+			const { data } = await axios.patch(`/api/users/${userId}/editUser`, 
 				formData,
 				{
-					headers: {
-						'Authorization': 'Bearer ' + token,
-						'Content-Type' : "multipart/form-data; boundary=<calculated when request is sent>"
-					}
+				headers: {
+				'Authorization': 'Bearer ' + token,
+				'Content-Type' : "multipart/form-data; boundary=<calculated when request is sent>"
 				}
-			)
+			}
+				)
 			const { user: newUser } = data
 			updateProfile(newUser)
 
