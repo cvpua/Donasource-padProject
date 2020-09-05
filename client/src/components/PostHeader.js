@@ -33,10 +33,8 @@ const PostHeader = (props) => {
       </Link>
       <Flex flexDirection="column" w="full">
         {/* Author */}
-        <Flex>
-          <Text fontSize="sm" fontWeight="semibold" mr="1">{author}</Text>
-          <Text fontSize="sm" color="gray.700">{`@${username}`}</Text>
-        </Flex>
+        <Text fontSize="sm" fontWeight="semibold" mr="1">{author}</Text>
+        <Text fontSize="sm" color="gray.700">{`@${username}`}</Text>
         {/* time */}
         <Text fontSize="sm" color="gray.700">
 

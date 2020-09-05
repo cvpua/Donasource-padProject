@@ -9,6 +9,7 @@ import MyPassword from './MyPassword.js'
 import MyNumeric from './MyNumeric.js'
 import MyDate from './MyDate.js'
 import MyRequest from './MyRequest.js'
+import MyImage from './MyImage.js'
 
 const FormikControl = (props) => {
 	const { control, ...rest } = props
@@ -23,6 +24,7 @@ const FormikControl = (props) => {
 		case 'items': return <MyItems {...rest} />
 		case 'tags' : return <MyTags {...rest} />
 		case 'images': return <MyImages {...rest} />
+		case 'image': return <MyImage {...rest} />
 		case 'password': return <MyPassword {...rest} />
 		case 'numeric': return <MyNumeric {...rest} />
 		case 'request': return <MyRequest {...rest} />

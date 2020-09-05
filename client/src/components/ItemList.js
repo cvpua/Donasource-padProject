@@ -6,8 +6,8 @@ const ItemList = (props) => {
 	const { items, type } = props	
 
 	return (
-		<Box border="2px" rounded="lg" borderColor="cyan.400" p="4">
-      <Text>
+		<Box border="2px" rounded="lg" borderColor="cyan.400" p="4" mb="2">
+      <Text fontSize="sm">
         {
           type === "request" ? "Need:"
           : "Giving:"

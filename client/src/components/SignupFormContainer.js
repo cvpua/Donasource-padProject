@@ -29,7 +29,6 @@ const SignupFormContainer = (props) => {
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
 		signup(values)
-		console.log('Values: ', values)
 		handleIsSubmitting(false)
 	}
 

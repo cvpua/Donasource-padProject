@@ -34,7 +34,7 @@ const NotificationSection = () => {
 		}catch(error){
 			setMessage({
         title: "Error",
-        description: error.message,
+        description: error.response.data.message,
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -105,7 +105,7 @@ const NotificationSection = () => {
             <Text>Stay tuned! Notifications about your activity will show up here.</Text>
           </Flex>
         :
-					<Box mx="4" rounded="lg" bg="white" shadow="sm" pb="2">
+					<Box mx={{base: "0", sm: "4"}} mb={{base: "24", md: "2"}} rounded="lg" bg="white" shadow="sm" pb="2">
 						{
 							notifications.map((notification) => {
 								return(<React.Fragment>

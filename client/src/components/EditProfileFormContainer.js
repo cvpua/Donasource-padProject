@@ -1,18 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import FormikControl from './FormikControl.js'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
 import Toast from './Toast.js'
+import { UserContext } from '../App.js'
 
 const EditProfileFormContainer = (props) => {
+	const [ USER ] = useContext(UserContext)
+	const { token } = USER
+
 	const { onClose, handleIsSubmitting, profile, updateProfile } = props
 
 	let history = useHistory()
 
 	const {
 		_id: userId,
+		avatar,
 		username,
 		name,
 		location,
@@ -24,6 +29,7 @@ const EditProfileFormContainer = (props) => {
 	const [message, setMessage] = useState()
 
 	const initialValues = {
+		avatar: avatar,
 		username: username,
 		name: {
 			firstName: name.firstName,
@@ -49,8 +55,32 @@ const EditProfileFormContainer = (props) => {
 
 	const onSubmit = async (values) => {
 		handleIsSubmitting(true)
+
+		let formData = new FormData();
+		for(var key in values){
+			if (key === "name"){
+				formData.append(key, JSON.stringify(values[key]));
+			}else if(key === "avatar"){
+				const imageLength = values[key].length;
+				for(let i = 0; i < imageLength ; i++){
+					formData.append(key,values[key][i]);
+				}
+			}else{
+				formData.append(key,values[key]);
+			}
+		}
+
 		try{
-			const { data } = await axios.patch(`/api/user/${userId}/editUser`, values)
+			const { data } = await axios.patch(
+				`/api/user/${userId}/editUser`, 
+				formData,
+				{
+					headers: {
+						'Authorization': 'Bearer ' + token,
+						'Content-Type' : "multipart/form-data; boundary=<calculated when request is sent>"
+					}
+				}
+			)
 			const { user: newUser } = data
 			updateProfile(newUser)
 
@@ -77,9 +107,10 @@ const EditProfileFormContainer = (props) => {
 			onClose()
 			history.push(`${username}`)
 		}catch(error){
+			console.log('Error: ', error)
 			setMessage({
         title: "Error",
-        description: error.message,
+        description: error.response.data.message,
         status: "error",
         duration: 2000,
         isClosable: true,
@@ -99,6 +130,7 @@ const EditProfileFormContainer = (props) => {
 				(formikProps) => {
 					return (<div>
 							<Form id="editProfileForm">
+								<FormikControl control="image" label="Change Avatar" name="avatar" type="file" accept="image/*" form={formikProps}/>
 								<FormikControl control="input" label="Username" name="username" />
 								<FormikControl control="input" label="First Name" name="name.firstName" />
 								<FormikControl control="input" label="Last Name" name="name.lastName" />

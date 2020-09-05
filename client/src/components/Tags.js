@@ -9,12 +9,12 @@ const Tags = (props) => {
 
 	return (
     	<Flex align="center" my="2">
-            <Text>Tags:</Text>
+            <Text fontSize="sm" mr="2">Tags:</Text>
             <Stack spacing={1} isInline >
             	{/* Tag */}
             	{
             		tags.map((tag,i) => (
-            			<Tag key={i}>{tag}</Tag>
+            			<Tag key={i} size="sm">{tag}</Tag>
             		))
             	}
             </Stack>
