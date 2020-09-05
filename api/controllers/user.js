@@ -283,6 +283,7 @@ exports.getAvails = (req,res) => {
         res.json(user)
     })
     .catch(error => {
+        res.json({message:err})
         console.log(err)
     })
 }
