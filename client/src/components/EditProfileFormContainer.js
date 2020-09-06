@@ -83,7 +83,7 @@ const EditProfileFormContainer = (props) => {
 			const { user: newUser } = data
 			updateProfile(newUser)
 
-			const { name, username, email, photo } = newUser
+			const { name, username, email, avatar } = newUser
 			const USER = JSON.parse(localStorage.getItem("user"))
 			const { user: oldUser } = USER
 			
@@ -92,7 +92,7 @@ const EditProfileFormContainer = (props) => {
 				name,
 				username,
 				email,
-				photo
+				avatar
 			}
 
 			const NEW_USER = {
