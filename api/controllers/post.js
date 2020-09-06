@@ -281,7 +281,13 @@ exports.makePost =  (req,res) => {
                     post.save()
                     .then(
                         Post.find()
-                        .populate("user","avatar name username")
+                        .populate("user","name username")
+                        .populate({
+                            path: 'user',
+                            populate: {
+                                path: 'avatar'
+                            }
+                        })
                         .populate("comments")
                         .populate({path: 'items',
                             populate : {

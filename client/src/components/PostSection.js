@@ -73,7 +73,7 @@ const PostSection = ({match}) => {
 			<Toast message={message} />
 			<SectionHeader title="Post" icon={BiNote} hasBackButton={true} />
 			{/* Post */}
-			<Box px="5" mb={{base: "20", md: "2"}} >
+			<Box px={{base: "0", md: "5"}} mb={{base: "20", md: "2"}} >
 			{
 				isLoading ? <PostSkeleton />
 				:
