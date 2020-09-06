@@ -21,21 +21,7 @@ mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
 
 let protected = ['transformed.js', 'main.css', 'favicon.ico']
 
-app.use(express.static('build'));
-
-app.get("*", (req, res) => {
-
-  let path = req.params['0'].substring(1)
-
-  if (protected.includes(path)) {
-    // Return the actual file
-    res.sendFile(`${__dirname}/build/${path}`);
-  } else {
-    // Otherwise, redirect to /build/index.html
-    res.sendFile(`${__dirname}/build/index.html`);
-  }
-});
-
+app.use(express.static(path.resolve(__dirname, '..', 'build')));
 
 // body-parser
 app.use(express.json());
