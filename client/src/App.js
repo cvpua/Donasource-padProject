@@ -80,17 +80,19 @@ const App = () => {
           }
         })
 
-        if (!data.isvalidToken) {
-          localStorage.clear()
+        if (data.isvalidToken) {
+          setUser(USER)
           setIsLoading(false)
         }else{
-          setUser(USER)
+          localStorage.clear()
           setIsLoading(false)
         }
       }catch(error){
+        localStorage.clear()
+        setIsLoading(false)
         setMessage({
           title: "Error",
-          description: error.message,
+          description: error.response.data.message,
           status: "error",
           duration: 2000,
           isClosable: true,
