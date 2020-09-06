@@ -27,10 +27,10 @@ app.get("*", (req, res) => {
 
   if (protected.includes(path)) {
     // Return the actual file
-    res.sendFile(`./build/${path}`);
+    res.sendFile(`Donasource/build/${path}`);
   } else {
     // Otherwise, redirect to /build/index.html
-    res.sendFile(`./build/index.html`);
+    res.sendFile(`Donasource/build/index.html`);
   }
 });
 
