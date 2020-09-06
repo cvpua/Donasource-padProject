@@ -33,7 +33,7 @@ app.use('/',signupApi);
 app.use('/',updateApi);
 
 const task = cron.schedule('* * * * *', () => {
-   axios.get('http://localhost:5000/api/checkDeadlines')
+   axios.get('/api/checkDeadlines')
 })
 task.start()
 
