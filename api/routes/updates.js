@@ -79,26 +79,6 @@ router.get('/api/update/postSchema', (req,res)=> {
 })
 
 
-router.get('/api/checkDeadlines', (req,res) =>{
-    Post.find()
-    .exec()
-    .then(posts => {
-        posts.map(post => {
-            if (post.deadline - Date.now() <= 0 && post.status === "PENDING"){
-                post.status = "UNFULFILLED";
-                post.save()
-                .then(response => console.log("Post updated!"))
-                .catch(err => console.log(err))
-            }
-            
-        })
-        res.json({message : "Done checking"})
-        console.log("Done checking!")
-    })
-    .catch(err => {
-        console.log(err)
-    })
-})
 
 router.get('/api/checkSession',checkSession);
 

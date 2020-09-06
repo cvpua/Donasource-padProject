@@ -5,6 +5,7 @@ const db = require('./config/keys').mongoURI;
 const cron = require('node-cron');
 const axios = require('axios');
 const path = require('path');
+const updates = require('./api/controllers/updates');
 
 
 const postsApi = require('./api/routes/posts');
@@ -33,7 +34,7 @@ app.use('/',signupApi);
 app.use('/',updateApi);
 
 const task = cron.schedule('* * * * *', () => {
-   axios.get('/api/checkDeadlines')
+   updates.checkDeadlines();
 })
 task.start()
 
