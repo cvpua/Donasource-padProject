@@ -32,6 +32,11 @@ app.use('/',usersApi);
 app.use('/',signupApi);
 app.use('/',updateApi);
 
+const task = cron.schedule('* * * * *', () => {
+   axios.get('http://localhost:5000/api/checkDeadlines')
+})
+task.start()
+
 app.get('*', function (req, res) {
    res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
@@ -39,10 +44,7 @@ app.get('*', function (req, res) {
 
 
 
-const task = cron.schedule('* * * * *', () => {
-   axios.get('http://localhost:5000/api/checkDeadlines')
-})
-task.start()
+
 
 
 const PORT = process.env.PORT || 3001;
