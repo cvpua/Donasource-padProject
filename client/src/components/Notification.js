@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 const Notification = ({notif, seenNotif}) => {
 	const {
+		_id: notifId,
 		user,
 		type,
 		postId,
@@ -42,7 +43,19 @@ const Notification = ({notif, seenNotif}) => {
 					mx="4" 
 					rounded="lg"
 				>
-					<Box as={Link} to={`/${username}/post/${postId}`} w="full" h="full" pos="absolute" top="0" left="0" bottom="0" right="0"></Box>
+					<Box 
+						as={Link} 
+						to={`/${username}/post/${postId}`} 
+						w="full" 
+						h="full" 
+						pos="absolute" 
+						top="0" 
+						left="0" 
+						bottom="0" 
+						right="0"
+						onClick={() => seenNotif(notifId)}
+					>
+					</Box>
 					{/* Avatar */}
 					<Link to={`/${username}`}>
 						<Avatar name="Bullet Pua" src={avatar && avatar.url} />
