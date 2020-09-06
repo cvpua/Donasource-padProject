@@ -21,9 +21,6 @@ mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
 
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/*', function (req, res) {
-   res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
 
 // body-parser
 app.use(express.json());
@@ -35,10 +32,14 @@ app.use('/',usersApi);
 app.use('/',signupApi);
 app.use('/',updateApi);
 
+app.get('*', function (req, res) {
+   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 
 
-const task = cron.schedule('5 * * * *', () => {
+
+const task = cron.schedule('* * * * *', () => {
    axios.get('http://localhost:5000/api/checkDeadlines')
 })
 task.start()
