@@ -21,7 +21,10 @@ mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
 
 let protected = ['transformed.js', 'main.css', 'favicon.ico']
 
+let path = req.params['0'].substring(1)
+
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
+
 
 // body-parser
 app.use(express.json());
