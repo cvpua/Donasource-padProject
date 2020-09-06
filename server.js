@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const db = require('./config/keys').mongoURI;
 const cron = require('node-cron');
 const axios = require('axios');
-
+const path = require('path');
 
 
 const postsApi = require('./api/routes/posts');
@@ -19,12 +19,7 @@ mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
 
-let protected = ['transformed.js', 'main.css', 'favicon.ico']
-
-let path = req.params['0'].substring(1)
-
 app.use(express.static(path.resolve(__dirname, '..', 'build')));
-
 
 // body-parser
 app.use(express.json());
