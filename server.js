@@ -21,6 +21,8 @@ mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
 
 let protected = ['transformed.js', 'main.css', 'favicon.ico']
 
+app.use(express.static('build'));
+
 app.get("*", (req, res) => {
 
   let path = req.params['0'].substring(1)
