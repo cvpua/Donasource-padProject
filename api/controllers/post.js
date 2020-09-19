@@ -651,9 +651,12 @@ exports.request = (req,res) => {
             post.user.avails.push(avail)
             avail.save()
             .then(response =>{
-                    res.json({
-                        message : "Request sent to the OP"
-                    
+                post.user.save()
+                .then( response => {        
+                        res.json({
+                            message : "Request sent to the OP"
+                        
+                    })
                 })
             })
         })

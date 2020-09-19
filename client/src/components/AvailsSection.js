@@ -74,6 +74,7 @@ const AvailsSection = () => {
 		const fetchData = async () => {
 			try{
 				const { data } = await axios.get(`/api/users/${userId}/avails`)
+				console.log('Avails: ', data)
 				setAvails(prevState => ([
 					...prevState,
 					...data.avails
