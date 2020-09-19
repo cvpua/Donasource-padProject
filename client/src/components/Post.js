@@ -40,6 +40,7 @@ const Post = (props) => {
     images,
     datePosted,
     comments,
+    location,
 	} = data
   
   const{ _id: userId, name, username, avatar } = user;
@@ -122,6 +123,10 @@ const Post = (props) => {
                 </Badge>
               </Box>
               <Text mt="4" fontSize="sm">{description}</Text>
+              <Flex mt="4">
+                <Text fontSize="sm" mr="2">Location:</Text>
+                <Text fontSize="sm" fontWeight="bold">{location}</Text>
+              </Flex>
             </Box>
           	{/* Item List */}
             <ItemList items={items} type={type}>

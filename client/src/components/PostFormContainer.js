@@ -86,12 +86,8 @@ const PostFormContainer = (props) => {
 					}
 				}
 			)
-			createPost({
-				...data.post,
-				user: {
-					...data.user
-				}
-			})
+			console.log('Post Data: ', data.post)
+			createPost(data.post)
 			handleIsSubmitting(false)
 			onClose()
 		}catch(error){
